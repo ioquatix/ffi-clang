@@ -11,6 +11,20 @@ module Clang
 
     def parse_translation_unit(source_file, command_line_args = nil, opts = {})
       command_line_args = Array(command_line_args)
+
+      tu = Lib.parse_translation_unit(@ptr,
+                                      source_file,
+                                      args_pointer_from(command_line_args),
+                                      command_line_args.size, nil, 0, options_bitmask_from(opts))
+
+      raise Error, "error parsing #{source_file.inspect}" if tu.nil? || tu.null?
+
+      TranslationUnit.new tu
+    end
+
+    private
+
+    def args_pointer_from(command_line_args)
       args_pointer = FFI::MemoryPointer.new(:pointer)
 
       strings = command_line_args.map do |arg|
@@ -18,13 +32,11 @@ module Clang
       end
 
       args_pointer.put_array_of_pointer(strings) unless strings.empty?
+      args_pointer
+    end
 
-      raise NotImplementedError, "options for #{self.class}#parse_translation_unit" unless opts.empty?
-      tu = Lib.parse_translation_unit(@ptr, source_file, args_pointer, command_line_args.size, nil, 0, 0)
-
-      raise Error, "error parsing #{source_file.inspect}" if tu.nil? || tu.null?
-
-      TranslationUnit.new tu
+    def options_bitmask_from(opts)
+      Lib.bitmask_from Lib::TranslationUnitFlags, opts
     end
 
   end

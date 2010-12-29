@@ -4,6 +4,12 @@ module Clang
 
     ffi_lib "clang"
 
+
+    TranslationUnitFlags     = enum [:none, :detailed_preprocessing_record, :incomplete, :precompiled_preamble, :cache_completion_results]
+    DiagnosticDisplayOptions = enum [:source_location, 0x01,
+                                     :column,          0x02,
+                                     :source_ranges,   0x04]
+
     enum :diagnostic_severity, [:ignored, :note, :warning, :error, :fatal]
 
     attach_function :create_index, :clang_createIndex, [:int, :int], :pointer
@@ -20,6 +26,8 @@ module Clang
     attach_function :get_diagnostic_location, :clang_getDiagnosticLocation, [:pointer], :pointer
     attach_function :get_diagnostic_spelling, :clang_getDiagnosticSpelling, [:pointer], :pointer
     attach_function :get_diagnostic_severity, :clang_getDiagnosticSeverity, [:pointer], :diagnostic_severity
+    attach_function :get_diagnostic_num_ranges, :clang_getDiagnosticNumRanges, [:pointer], :uint
+    attach_function :get_diagnostic_range, :clang_getDiagnosticRange, [:pointer, :uint], :pointer
     attach_function :equal_locations, :clang_equalLocations, [:pointer, :pointer], :uint
 
     def self.extract_string(cxstring)
@@ -27,6 +35,22 @@ module Clang
 
       dispose_string cxstring
       result
+    end
+
+    def self.bitmask_from(enum, opts)
+      bitmask = 0
+
+      opts.each do |key, val|
+        next unless val
+
+        if int = enum[key]
+          bitmask |= int
+        else
+          raise Error, "unknown option: #{key.inspect}, expected one of #{enum.symbols}"
+        end
+      end
+
+      bitmask
     end
   end
 end
