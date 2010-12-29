@@ -10,5 +10,17 @@ module Clang
       str.should =~ /second parameter of 'main'/
     end
 
+    # it "returns the source location" do
+    #   diag.source_location.should be_kind_of(SourceLocation)
+    # end
+
+    it "returns the text of the diagnostic" do
+      diag.spelling.should be_kind_of(String)
+    end
+
+    it "returns the severity of the diagnostic" do
+      diag.severity.should == :error
+    end
+
   end
 end

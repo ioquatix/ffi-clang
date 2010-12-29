@@ -8,18 +8,20 @@ module Clang
       raise NotImplementedError, "#{self.class}#format options" unless opts.empty?
 
       cxstring = Lib.format_diagnostic(@ptr, Lib.default_diagnostic_display_options)
-      result = Lib.get_c_string(cxstring)
-      Lib.dispose_string(cxstring)
 
-      result
+      Lib.extract_string cxstring
     end
 
     def severity
-      raise NotImplementedError
+      Lib.get_diagnostic_severity(@ptr)
     end
 
     def source_location
       SourceLocation.new(Lib.get_diagnostic_location(@ptr))
+    end
+
+    def spelling
+      Lib.get_c_string(Lib.get_diagnostic_spelling(@ptr))
     end
 
     def fixits
@@ -29,10 +31,6 @@ module Clang
       #                                     unsigned FixIt,
       #                                     CXSourceRange *ReplacementRange);
 
-    end
-
-    def spelling
-      raise NotImplementedError
     end
 
   end
