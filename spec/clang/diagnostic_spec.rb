@@ -15,9 +15,9 @@ module Clang
       diagnostic.format(:source_location => true).should include("list.c:5")
     end
 
-    # it "returns the source location" do
-    #   diagnostic.source_location.should be_kind_of(SourceLocation)
-    # end
+    it "returns the source location" do
+      diagnostic.source_location.should be_kind_of(SourceLocation)
+    end
 
     it "returns the text of the diagnostic" do
       diagnostic.spelling.should be_kind_of(String)
