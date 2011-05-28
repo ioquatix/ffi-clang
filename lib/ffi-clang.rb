@@ -1,7 +1,23 @@
 require 'ffi'
+require "rbconfig"
 
 module Clang
   class Error < StandardError
+  end
+
+  def self.platform
+    os = RbConfig::CONFIG["host_os"]
+
+    case os
+    when /darwin/
+      :osx
+    when /linux/
+      :linux
+    when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+      :windows
+    else
+      os
+    end
   end
 end
 
