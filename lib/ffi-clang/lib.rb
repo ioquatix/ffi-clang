@@ -2,7 +2,7 @@ module Clang
   module Lib
     extend FFI::Library
 
-    ffi_lib "clang"
+    ffi_lib ["/usr/lib/llvm/libclang.so", "clang"]
 
 
     TranslationUnitFlags     = enum [:none, :detailed_preprocessing_record, :incomplete, :precompiled_preamble, :cache_completion_results]
