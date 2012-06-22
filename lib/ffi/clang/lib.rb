@@ -4,7 +4,15 @@ module FFI
       extend FFI::Library
 
       libs = ["clang"]
-      libs.unshift "/usr/lib/llvm/libclang.so" if Clang.platform == :linux
+
+      if Clang.platform == :linux
+        libs += [
+          "/usr/lib/llvm/libclang.so",
+          "/usr/lib64/llvm/libclang.so",
+          "/usr/lib/llvm-2.7/libclang.so",
+          "/usr/lib64/llvm-2.7/libclang.so"
+        ]
+      end
 
       ffi_lib libs
 
