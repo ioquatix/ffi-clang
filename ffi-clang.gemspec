@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "ffi-clang/version"
+require "ffi/clang/version"
 
 Gem::Specification.new do |s|
   s.name        = "ffi-clang"
-  s.version     = Clang::VERSION
+  s.version     = FFI::Clang::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jari Bakken"]
   s.email       = ["jari.bakken@gmail.com"]
