@@ -8,3 +8,4 @@ install:
     - sudo add-apt-repository --yes ppa:h-rayflood/llvm
     - sudo apt-get -qq update
     - sudo apt-get -qq install libstdc++-4.8-dev llvm-3.2 clang-3.2
+    - bundle install
