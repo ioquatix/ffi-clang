@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - "2.0"
+install:
+# libstdc++-4.8-dev
+    - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+# clang++-3.2
+    - sudo add-apt-repository --yes ppa:h-rayflood/llvm
+    - sudo apt-get -qq update
+    - sudo apt-get -qq install libstdc++-4.8-dev llvm-3.2 clang-3.2
