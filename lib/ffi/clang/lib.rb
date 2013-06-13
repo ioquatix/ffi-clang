@@ -30,8 +30,8 @@ module FFI
 				libs += [
 					"/usr/lib/llvm/libclang.so",
 					"/usr/lib64/llvm/libclang.so",
-					"/usr/lib/llvm-2.7/libclang.so",
-					"/usr/lib64/llvm-2.7/libclang.so"
+					"/usr/lib/llvm-3.2/libclang.so",
+					"/usr/lib64/llvm-3.2/libclang.so"
 				]
 			end
 
