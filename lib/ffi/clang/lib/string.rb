@@ -19,28 +19,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require 'ffi/clang/lib'
+
 module FFI
 	module Clang
-		class SourceRange
-			def initialize(ptr)
-				@ptr = ptr
+		module Lib
+			class CXString < FFI::Struct
+				layout(
+					:data, :pointer,
+					:private_flags, :uint
+				)
 			end
 
-			def start
-				Lib.get_range_start @ptr
-			end
+			attach_function :get_string, :clang_getCString, [CXString.by_value], :string
+			attach_function :dispose_string, :clang_disposeString, [CXString.by_value], :void
 
-			def end
-				Lib.get_range_end @ptr
-			end
+			def self.extract_string(cxstring)
+				result = get_string(cxstring)
+				dispose_string cxstring
 
-			# act like a Ruby Range
-
-			alias_method :begin, :start
-			alias_method :last, :end
-
-			def cover?(other)
-				start <= other && last >= other
+				return result
 			end
 		end
 	end

@@ -19,28 +19,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require 'ffi/clang/lib'
+
 module FFI
 	module Clang
-		class SourceLocation
-			def initialize(diagnostic, ptr)
-				@diagnostic = diagnostic
-				@ptr = ptr
-			end
-
-			attr :diagnostic
-
-			def ==(other)
-				return unless other.kind_of? self.class
-				Lib.equal_locations(@ptr, other.ptr) != 0
-			end
-
-			alias_method :eql?, :==
-
-			protected
-
-			def ptr
-				@ptr
-			end
+		module Lib
+			typedef :pointer, :CXIndex
+			
+			# Source code index:
+			attach_function :create_index, :clang_createIndex, [:int, :int], :CXIndex
+			attach_function :dispose_index, :clang_disposeIndex, [:CXIndex], :void
 		end
 	end
 end

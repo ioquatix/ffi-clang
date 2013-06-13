@@ -19,33 +19,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi'
-require "rbconfig"
+require 'ffi/clang/lib/index'
 
-module FFI::Clang
-	class Error < StandardError
-	end
+module FFI
+	module Clang
+		module Lib
+			typedef :pointer, :CXTranslationUnit
 
-	def self.platform
-		os = RbConfig::CONFIG["host_os"]
+			TranslationUnitFlags = enum [:none, :detailed_preprocessing_record, :incomplete, :precompiled_preamble, :cache_completion_results]
 
-		case os
-		when /darwin/
-			:osx
-		when /linux/
-			:linux
-		when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-			:windows
-		else
-			os
+			# Source code translation units:
+			attach_function :parse_translation_unit, :clang_parseTranslationUnit, [:CXIndex, :string, :pointer, :int, :pointer, :uint, :uint], :CXTranslationUnit
+			attach_function :dispose_translation_unit, :clang_disposeTranslationUnit, [:CXTranslationUnit], :void
 		end
 	end
 end
-
-require 'ffi/clang/lib'
-require 'ffi/clang/index'
-require 'ffi/clang/translation_unit'
-require 'ffi/clang/diagnostic'
-#require 'ffi/clang/source_location'
-#require 'ffi/clang/source_range'
-

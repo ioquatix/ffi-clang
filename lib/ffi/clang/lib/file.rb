@@ -19,33 +19,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi'
-require "rbconfig"
+require 'ffi/clang/lib/string'
+require 'ffi/clang/lib/translation_unit'
 
-module FFI::Clang
-	class Error < StandardError
-	end
-
-	def self.platform
-		os = RbConfig::CONFIG["host_os"]
-
-		case os
-		when /darwin/
-			:osx
-		when /linux/
-			:linux
-		when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-			:windows
-		else
-			os
+module FFI
+	module Clang
+		module Lib
+			typedef :pointer, :CXFile
+			
+			# Retrieve a file handle within the given translation unit.
+			attach_function :get_file, :clang_getFile, [:CXTranslationUnit, :string], :CXFile
+			
+			# Retrieve the complete file and path name of the given file.
+			attach_function :get_file_name, :clang_getFileName, [:CXFile], CXString.by_value
 		end
 	end
 end
-
-require 'ffi/clang/lib'
-require 'ffi/clang/index'
-require 'ffi/clang/translation_unit'
-require 'ffi/clang/diagnostic'
-#require 'ffi/clang/source_location'
-#require 'ffi/clang/source_range'
-

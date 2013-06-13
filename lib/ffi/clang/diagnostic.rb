@@ -19,30 +19,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require 'ffi/clang/lib/diagnostic'
+
 module FFI
 	module Clang
-		class Diagnostic
-			def initialize(tu, ptr)
-				@tu = tu
-				@ptr = AutoPointer.new(ptr, Lib.method(:dispose_diagnostic_debug))
+		class SourceRange
+			def initialize(range_struct)
+			end
+		end
+		
+		class Diagnostic < AutoPointer
+			def initialize(translation_unit, pointer)
+				super pointer
+				
+				@translation_unit = translation_unit
+			end
+			
+			def self.release(pointer)
+				Lib.dispose_diagnostic(pointer)
 			end
 
 			def format(opts = {})
-				cxstring = Lib.format_diagnostic(@ptr, display_opts(opts))
+				cxstring = Lib.format_diagnostic(self, display_opts(opts))
 				Lib.extract_string cxstring
 			end
 
 			def severity
-				Lib.get_diagnostic_severity @ptr
-			end
-
-			def source_location
-				sl = Lib.get_diagnostic_location @ptr
-				SourceLocation.new(self, sl)
+				Lib.get_diagnostic_severity self
 			end
 
 			def spelling
-				Lib.get_c_string Lib.get_diagnostic_spelling(@ptr)
+				Lib.get_string Lib.get_diagnostic_spelling(self)
 			end
 
 			def fixits
@@ -55,15 +62,15 @@ module FFI
 			end
 
 			def ranges
-				0.upto(range_count - 1).map { |idx|
-					SourceRange.new Lib.get_diagnostic_range(@ptr, idx)
-				}
+				n = Lib.get_diagnostic_num_ranges(self)
+				
+				n.times.map {|i| SourceRange.new Lib.get_diagnostic_range(self, i)}
 			end
 
 			private
 
 			def range_count
-				Lib.get_diagnostic_num_ranges @ptr
+				
 			end
 
 			def display_opts(opts)

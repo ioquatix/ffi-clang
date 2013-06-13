@@ -19,28 +19,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require 'ffi/clang/lib/index'
+
 module FFI
 	module Clang
-		class Index
-			def initialize(opts = {})
-				exclude_declarations_from_pch = opts[:exclude_declarations_from_pch] ? 1 : 0
-				display_diagnostics = opts[:display_diagnostics] ? 1 : 0
+		class Index < AutoPointer
+			def initialize(exclude_declarations = true, display_diagnostics = false)
+				super Lib.create_index(exclude_declarations ? 1 : 0, display_diagnostics ? 1 : 0)
+			end
 
-				@ptr = AutoPointer.new Lib.create_index(exclude_declarations_from_pch, display_diagnostics),
-				Lib.method(:dispose_index_debug)
+			def self.release(pointer)
+				Lib.dispose_index_debug(pointer)
 			end
 
 			def parse_translation_unit(source_file, command_line_args = nil, opts = {})
 				command_line_args = Array(command_line_args)
 
-				tu = Lib.parse_translation_unit(@ptr,
-				source_file,
-				args_pointer_from(command_line_args),
-				command_line_args.size, nil, 0, options_bitmask_from(opts))
+				translation_unit_pointer = Lib.parse_translation_unit(self, source_file, args_pointer_from(command_line_args), command_line_args.size, nil, 0, options_bitmask_from(opts))
 
-				raise Error, "error parsing #{source_file.inspect}" if tu.nil? || tu.null?
+				raise Error, "error parsing #{source_file.inspect}" unless translation_unit_pointer
 
-				TranslationUnit.new tu
+				TranslationUnit.new translation_unit_pointer
 			end
 
 			private
