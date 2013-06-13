@@ -28,10 +28,8 @@ module FFI
 
 			if Clang.platform == :linux
 				libs += [
-					"/usr/lib/llvm/libclang.so",
-					"/usr/lib64/llvm/libclang.so",
-					"/usr/lib/llvm-3.2/libclang.so",
-					"/usr/lib64/llvm-3.2/libclang.so"
+					"/usr/lib/llvm-3.2/lib/libclang.so",
+					"/usr/lib64/llvm-3.2/lib/libclang.so"
 				]
 			end
 
