@@ -20,31 +20,24 @@
 # THE SOFTWARE.
 
 require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
+require 'ffi/clang/lib/diagnostic'
 
 module FFI
-	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer)
-				super pointer
-			end
-
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
-			end
-
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
-				end
-			end
-
-      def cursor
-        Cursor.new(Lib.get_translation_unit_cursor(self))
+  module Clang
+    module Lib
+      class CXCursor < FFI::Struct
+        layout(
+               :kind, :uint,
+               :xdata, :int,
+               :data, [:pointer, 3]
+               )
       end
-
-		end
-	end
+      attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
+      attach_function :get_null_cursor, :clang_getNullCursor, [], CXCursor.by_value
+      attach_function :get_cursor_location, :clang_getCursorLocation, [CXCursor.by_value], CXSourceLocation.by_value
+      attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
+      attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
+    end
+  end
 end
+

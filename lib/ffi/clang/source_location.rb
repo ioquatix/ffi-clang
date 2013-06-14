@@ -19,32 +19,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
+require 'ffi/clang/lib/source_location'
+require 'ffi/clang/lib/file'
 
 module FFI
-	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer)
-				super pointer
-			end
+  module Clang
+    class SourceLocation
+      def initialize(location)
+        @cxsourcelocation = location
 
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
-			end
+        cxfile = MemoryPointer.new :pointer
+        line   = MemoryPointer.new :uint
+        column = MemoryPointer.new :uint
+        offset = MemoryPointer.new :uint
 
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
-				end
-			end
+        Lib::get_file_location(@cxsourcelocation, cxfile, line, column, offset)
 
-      def cursor
-        Cursor.new(Lib.get_translation_unit_cursor(self))
+        @file   = Lib.extract_string Lib.get_file_name(cxfile.read_pointer)
+        @line   = line.get_uint(0)
+        @column = column.get_uint(0)
+        @offset = offset.get_uint(0)
       end
 
-		end
-	end
+      attr_reader :file, :line, :column, :offset
+    end
+  end
 end

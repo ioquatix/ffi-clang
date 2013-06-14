@@ -19,32 +19,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
+require 'ffi/clang/lib/cursor'
+require 'ffi/clang/source_location'
 
 module FFI
-	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer)
-				super pointer
-			end
-
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
-			end
-
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
-				end
-			end
-
-      def cursor
-        Cursor.new(Lib.get_translation_unit_cursor(self))
+  module Clang
+    class Cursor
+      def initialize( cxcursor )
+        @cursor = cxcursor
       end
 
-		end
-	end
+      def location
+        sl = Lib.get_cursor_location(@cursor)
+        SourceLocation.new sl
+      end
+    end
+  end
 end

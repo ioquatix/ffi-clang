@@ -20,19 +20,12 @@
 # THE SOFTWARE.
 
 require 'ffi/clang/lib/translation_unit'
+require 'ffi/clang/lib/source_location'
 require 'ffi/clang/lib/string'
 
 module FFI
 	module Clang
 		module Lib
-			class CXSourceLocation < FFI::Struct
-				layout(
-					:ptr_data1, :pointer,
-					:ptr_data2, :pointer,
-					:int_data, :uint
-				)
-			end
-			
 			class CXSourceRange < FFI::Struct
 				layout(
 					:ptr_data1, :pointer,

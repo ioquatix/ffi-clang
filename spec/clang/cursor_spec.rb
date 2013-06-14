@@ -19,32 +19,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
+require 'spec_helper'
 
-module FFI
-	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer)
-				super pointer
-			end
+describe Cursor do
+  let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
-			end
+  it "can be obtained from a translation unit" do
+    cursor.should be_kind_of(Cursor)
+  end
 
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
-				end
-			end
+  it "returns the source location of the cursor" do
+    location = cursor.location
+    location.should be_kind_of(SourceLocation)
+  end
 
-      def cursor
-        Cursor.new(Lib.get_translation_unit_cursor(self))
-      end
-
-		end
-	end
 end
