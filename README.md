@@ -36,6 +36,7 @@ TODO: Write usage instructions here
 
 Copyright, 2010-2012 by Jari Bakken.
 Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

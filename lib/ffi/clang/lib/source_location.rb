@@ -20,18 +20,16 @@
 # THE SOFTWARE.
 
 module FFI
-  module Clang
-    module Lib
+	module Clang
+		module Lib
 			class CXSourceLocation < FFI::Struct
 				layout(
-               :ptr_data1, :pointer,
-               :ptr_data2, :pointer,
-               :int_data, :uint
-               )
+							 :ptr_data, [:pointer, 2],
+							 :int_data, :uint
+							 )
 			end
 
-			attach_function :get_file_location, :clang_getFileLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void
-
-    end
-  end
+			attach_function :get_expansion_location, :clang_getExpansionLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void
+		end
+	end
 end

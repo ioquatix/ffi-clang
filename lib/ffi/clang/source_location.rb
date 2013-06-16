@@ -23,25 +23,25 @@ require 'ffi/clang/lib/source_location'
 require 'ffi/clang/lib/file'
 
 module FFI
-  module Clang
-    class SourceLocation
-      def initialize(location)
-        @cxsourcelocation = location
+	module Clang
+		class SourceLocation
+			def initialize(location)
+				@location = location
 
-        cxfile = MemoryPointer.new :pointer
-        line   = MemoryPointer.new :uint
-        column = MemoryPointer.new :uint
-        offset = MemoryPointer.new :uint
+				cxfile = MemoryPointer.new :pointer
+				line   = MemoryPointer.new :uint
+				column = MemoryPointer.new :uint
+				offset = MemoryPointer.new :uint
 
-        Lib::get_file_location(@cxsourcelocation, cxfile, line, column, offset)
+				Lib::get_expansion_location(@location, cxfile, line, column, offset)
 
-        @file   = Lib.extract_string Lib.get_file_name(cxfile.read_pointer)
-        @line   = line.get_uint(0)
-        @column = column.get_uint(0)
-        @offset = offset.get_uint(0)
-      end
+				@file   = Lib.extract_string Lib.get_file_name(cxfile.read_pointer)
+				@line   = line.get_uint(0)
+				@column = column.get_uint(0)
+				@offset = offset.get_uint(0)
+			end
 
-      attr_reader :file, :line, :column, :offset
-    end
-  end
+			attr_reader :file, :line, :column, :offset
+		end
+	end
 end

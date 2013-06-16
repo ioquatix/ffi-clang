@@ -23,16 +23,16 @@ require 'ffi/clang/lib/cursor'
 require 'ffi/clang/source_location'
 
 module FFI
-  module Clang
-    class Cursor
-      def initialize( cxcursor )
-        @cursor = cxcursor
-      end
+	module Clang
+		class Cursor
+			def initialize( cxcursor )
+				@cursor = cxcursor
+			end
 
-      def location
-        sl = Lib.get_cursor_location(@cursor)
-        SourceLocation.new sl
-      end
-    end
-  end
+			def location
+				sl = Lib.get_cursor_location(@cursor)
+				SourceLocation.new sl
+			end
+		end
+	end
 end

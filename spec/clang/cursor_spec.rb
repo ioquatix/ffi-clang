@@ -22,15 +22,14 @@
 require 'spec_helper'
 
 describe Cursor do
-  let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
+	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 
-  it "can be obtained from a translation unit" do
-    cursor.should be_kind_of(Cursor)
-  end
+	it "can be obtained from a translation unit" do
+		cursor.should be_kind_of(Cursor)
+	end
 
-  it "returns the source location of the cursor" do
-    location = cursor.location
-    location.should be_kind_of(SourceLocation)
-  end
-
+	it "returns the source location of the cursor" do
+		location = cursor.location
+		location.should be_kind_of(SourceLocation)
+	end
 end

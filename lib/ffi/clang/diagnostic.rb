@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # 
@@ -50,6 +51,11 @@ module FFI
 
 			def spelling
 				Lib.get_string Lib.get_diagnostic_spelling(self)
+			end
+
+			def location
+				sl = Lib.get_diagnostic_location(self)
+				SourceLocation.new sl
 			end
 
 			def fixits

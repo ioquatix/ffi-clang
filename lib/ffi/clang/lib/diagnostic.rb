@@ -28,11 +28,10 @@ module FFI
 		module Lib
 			class CXSourceRange < FFI::Struct
 				layout(
-					:ptr_data1, :pointer,
-					:ptr_data2, :pointer,
-					:begin_int_data, :uint,
-					:end_int_data, :uint
-				)
+							 :ptr_data, [:pointer, 2],
+							 :begin_int_data, :uint,
+							 :end_int_data, :uint
+							 )
 			end
 			
 			typedef :pointer, :CXDiagnostic
