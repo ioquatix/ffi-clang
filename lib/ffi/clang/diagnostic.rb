@@ -21,14 +21,10 @@
 # THE SOFTWARE.
 
 require 'ffi/clang/lib/diagnostic'
+require 'ffi/clang/source_range'
 
 module FFI
-	module Clang
-		class SourceRange
-			def initialize(range_struct)
-			end
-		end
-		
+	module Clang		
 		class Diagnostic < AutoPointer
 			def initialize(translation_unit, pointer)
 				super pointer

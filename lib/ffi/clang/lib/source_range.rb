@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
@@ -20,39 +21,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/lib/diagnostic'
+require 'ffi/clang/lib/source_location'
 
 module FFI
 	module Clang
 		module Lib
-
-			enum :kind, [:cursor_struct, 2,
-									 :cursor_function, 8,
-									 :cursor_translation_unit, 300]
-
-			class CXCursor < FFI::Struct
+			class CXSourceRange < FFI::Struct
 				layout(
-							 :kind, :kind,
-							 :xdata, :int,
-							 :data, [:pointer, 3]
+							 :ptr_data, [:pointer, 2],
+							 :begin_int_data, :uint,
+							 :end_int_data, :uint
 							 )
 			end
-			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
-			attach_function :get_null_cursor, :clang_getNullCursor, [], CXCursor.by_value
-			attach_function :get_cursor_location, :clang_getCursorLocation, [CXCursor.by_value], CXSourceLocation.by_value
-			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
-			attach_function :get_cursor_display_name, :clang_getCursorDisplayName, [CXCursor.by_value], CXString.by_value
-			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
-			
-			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
 
-      enum :child_visit_result, [:break, :continue, :recurse]
-
-			callback :visit_children_function, [CXCursor.by_value, CXCursor.by_value, :pointer], :child_visit_result
-			attach_function :visit_children, :clang_visitChildren, [CXCursor.by_value, :visit_children_function, :pointer], :uint
-
+			attach_function :get_range_start, :clang_getRangeStart, [CXSourceRange.by_value], CXSourceLocation.by_value
+			attach_function :get_range_end, :clang_getRangeEnd, [CXSourceRange.by_value], CXSourceLocation.by_value
 		end
 	end
 end
-

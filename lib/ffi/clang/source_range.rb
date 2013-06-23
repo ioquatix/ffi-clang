@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,41 +21,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/cursor'
-require 'ffi/clang/source_location'
-
 module FFI
 	module Clang
-		class Cursor
-			def initialize( cxcursor )
-				@cursor = cxcursor
+		class SourceRange
+			def initialize(range)
+				@range = range
 			end
 
-			def location
-				SourceLocation.new(Lib.get_cursor_location(@cursor))
+			def start
+				SourceLocation.new(Lib.get_range_start @range)
 			end
 
-			def extent
-				SourceRange.new(Lib.get_cursor_extent(@cursor))
-			end
-
-			def displayName
-				Lib.extract_string Lib.get_cursor_display_name(@cursor)
-			end
-
-			def spelling
-				Lib.extract_string Lib.get_cursor_spelling(@cursor)
-			end
-
-			def kind
-				@cursor[:kind]
-			end
-
-			def visit_children( &block )
-				adapter = Proc.new do | cxcursor, parent_cursor, unused |
-					block.call Cursor.new(cxcursor), Cursor.new(parent_cursor)
-				end
-				Lib.visit_children(@cursor, adapter, nil)
+			def end
+				SourceLocation.new(Lib.get_range_end @range)
 			end
 		end
 	end
