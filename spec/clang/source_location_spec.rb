@@ -1,5 +1,6 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,32 +20,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
+require 'spec_helper'
 
-module FFI
-	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer)
-				super pointer
-			end
+describe SourceLocation do
+	let(:tu)                   { Index.new.parse_translation_unit(fixture_path("list.c")) }
+	let(:tu_location)          { tu.cursor.location }
+	let(:diagnostic_location)  { tu.diagnostics.first.location }
 
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
-			end
-
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
-				end
-			end
-
-			def cursor
-				Cursor.new(Lib.get_translation_unit_cursor(self))
-			end
-
-		end
+	it "should have a nil File if the SourceLocation is for a Translation Unit" do
+		tu_location.file.should == nil
 	end
+
+	it "should provide a File, line and column for a Diagnostic" do
+		diagnostic_location.file.should eq(fixture_path("list.c"))
+		diagnostic_location.line.should equal(5)
+		diagnostic_location.column.should equal(9)
+	end
+
 end
