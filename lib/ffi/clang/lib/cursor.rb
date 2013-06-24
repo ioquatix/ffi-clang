@@ -29,6 +29,7 @@ module FFI
 
 			enum :kind, [:cursor_struct, 2,
 									 :cursor_function, 8,
+									 :cursor_invalid_file, 70,
 									 :cursor_translation_unit, 300]
 
 			class CXCursor < FFI::Struct

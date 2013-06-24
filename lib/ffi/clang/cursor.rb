@@ -25,6 +25,10 @@ require 'ffi/clang/source_location'
 module FFI
 	module Clang
 		class Cursor
+			def self.null_cursor
+				Cursor.new Lib.get_null_cursor
+			end
+
 			def initialize( cxcursor )
 				@cursor = cxcursor
 			end

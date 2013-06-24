@@ -40,6 +40,10 @@ end
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 
+	it "can be a null cursor" do
+		Cursor.null_cursor.kind.should equal(:cursor_invalid_file)
+	end
+
 	it "can be obtained from a translation unit" do
 		cursor.should be_kind_of(Cursor)
 		cursor.kind.should equal(:cursor_translation_unit)
