@@ -39,14 +39,29 @@ module FFI
 							 :data, [:pointer, 3]
 							 )
 			end
+
 			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
+
 			attach_function :get_null_cursor, :clang_getNullCursor, [], CXCursor.by_value
+
+			attach_function :cursor_is_null, :clang_Cursor_isNull, [CXCursor.by_value], :int
+
 			attach_function :get_cursor_location, :clang_getCursorLocation, [CXCursor.by_value], CXSourceLocation.by_value
 			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
 			attach_function :get_cursor_display_name, :clang_getCursorDisplayName, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
 			
 			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
+
+			attach_function :is_declaration, :clang_isDeclaration, [:kind], :uint
+			attach_function :is_reference,   :clang_isReference,   [:kind], :uint
+			attach_function :is_expression,  :clang_isExpression,  [:kind], :uint
+			attach_function :is_statement,   :clang_isStatement,   [:kind], :uint
+			attach_function :is_attribute,   :clang_isAttribute,   [:kind], :uint
+			attach_function :is_invalid,     :clang_isInvalid,     [:kind], :uint
+			attach_function :is_translation_unit, :clang_isTranslationUnit, [:kind], :uint
+			attach_function :is_preprocessing, :clang_isPreprocessing, [:kind], :uint
+			attach_function :is_unexposed,   :clang_isUnexposed,   [:kind], :uint
 
       enum :child_visit_result, [:break, :continue, :recurse]
 

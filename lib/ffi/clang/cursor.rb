@@ -33,6 +33,46 @@ module FFI
 				@cursor = cxcursor
 			end
 
+			def null?
+				Lib.cursor_is_null(@cursor) != 0
+			end
+
+			def declaration?
+				Lib.is_declaration(kind) != 0
+			end
+
+			def reference?
+				Lib.is_reference(kind) != 0
+			end
+
+			def expression?
+				Lib.is_expression(kind) != 0
+			end
+
+			def statement?
+				Lib.is_statement(kind) != 0
+			end
+
+			def attribute?
+				Lib.is_attribute(kind) != 0
+			end
+
+			def invalid?
+				Lib.is_invalid(kind) != 0
+			end
+
+			def translation_unit?
+				Lib.is_translation_unit(kind) != 0
+			end
+
+			def preprocessing?
+				Lib.is_preprocessing(kind) != 0
+			end
+
+			def unexposed?
+				Lib.is_unexposed(kind) != 0
+			end
+
 			def location
 				SourceLocation.new(Lib.get_cursor_location(@cursor))
 			end

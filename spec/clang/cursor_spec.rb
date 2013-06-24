@@ -40,13 +40,11 @@ end
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 
-	it "can be a null cursor" do
-		Cursor.null_cursor.kind.should equal(:cursor_invalid_file)
-	end
-
 	it "can be obtained from a translation unit" do
 		cursor.should be_kind_of(Cursor)
 		cursor.kind.should equal(:cursor_translation_unit)
+		cursor.null?.should equal(false)
+		cursor.translation_unit?.should equal(true)
 	end
 
 	it "returns the source location of the cursor" do
@@ -79,8 +77,27 @@ describe Cursor do
 		counter.should_not equal(0)
 	end
 
+	describe "Null Cursor" do
+		it "can be a null cursor" do
+			Cursor.null_cursor.should be_kind_of(Cursor)
+			Cursor.null_cursor.kind.should equal(:cursor_invalid_file)
+		end
+
+		it "is null?" do
+			Cursor.null_cursor.null?.should equal(true)
+		end
+
+		it "is invalid?" do
+			Cursor.null_cursor.invalid?.should equal(true)
+		end
+	end
+
 	describe "Function Cursors" do
 		let (:func) { find_first(cursor, :cursor_function) }
+
+		it "is not invalid?" do
+			func.invalid?.should equal(false)
+		end
 
 		it "can find the first function declaration" do
 			func.should_not equal(nil)
