@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,32 +21,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
-
 module FFI
 	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer)
-				super pointer
+		class SourceRange
+			def initialize(range)
+				@range = range
 			end
 
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
+			def start
+				SourceLocation.new(Lib.get_range_start @range)
 			end
 
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
-				end
+			def end
+				SourceLocation.new(Lib.get_range_end @range)
 			end
-
-			def cursor
-				Cursor.new(Lib.get_translation_unit_cursor(self))
-			end
-
 		end
 	end
 end

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # 
@@ -20,14 +21,10 @@
 # THE SOFTWARE.
 
 require 'ffi/clang/lib/diagnostic'
+require 'ffi/clang/source_range'
 
 module FFI
-	module Clang
-		class SourceRange
-			def initialize(range_struct)
-			end
-		end
-		
+	module Clang		
 		class Diagnostic < AutoPointer
 			def initialize(translation_unit, pointer)
 				super pointer
@@ -50,6 +47,11 @@ module FFI
 
 			def spelling
 				Lib.get_string Lib.get_diagnostic_spelling(self)
+			end
+
+			def location
+				sl = Lib.get_diagnostic_location(self)
+				SourceLocation.new sl
 			end
 
 			def fixits
