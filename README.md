@@ -5,6 +5,7 @@ Ruby FFI bindings for libclang. WIP.
 http://llvm.org/devmtg/2010-11/Gregor-libclang.pdf
 
 [![Build Status](https://secure.travis-ci.org/ioquatix/ffi-clang.png)](http://travis-ci.org/ioquatix/ffi-clang)
+[![Code Climate](https://codeclimate.com/github/ioquatix/ffi-clang.png)](https://codeclimate.com/github/ioquatix/ffi-clang)
 
 ## Installation
 
