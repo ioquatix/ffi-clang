@@ -58,7 +58,6 @@ module FFI
 			def options_bitmask_from(opts)
 				Lib.bitmask_from Lib::TranslationUnitFlags, opts
 			end
-
 		end
 	end
 end

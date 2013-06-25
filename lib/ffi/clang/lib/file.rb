@@ -26,10 +26,10 @@ module FFI
 	module Clang
 		module Lib
 			typedef :pointer, :CXFile
-			
+
 			# Retrieve a file handle within the given translation unit.
 			attach_function :get_file, :clang_getFile, [:CXTranslationUnit, :string], :CXFile
-			
+
 			# Retrieve the complete file and path name of the given file.
 			attach_function :get_file_name, :clang_getFileName, [:CXFile], CXString.by_value
 		end

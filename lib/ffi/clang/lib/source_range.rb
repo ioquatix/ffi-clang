@@ -28,10 +28,10 @@ module FFI
 		module Lib
 			class CXSourceRange < FFI::Struct
 				layout(
-							 :ptr_data, [:pointer, 2],
-							 :begin_int_data, :uint,
-							 :end_int_data, :uint
-							 )
+					:ptr_data, [:pointer, 2],
+					:begin_int_data, :uint,
+					:end_int_data, :uint
+				)
 			end
 
 			attach_function :get_range_start, :clang_getRangeStart, [CXSourceRange.by_value], CXSourceLocation.by_value

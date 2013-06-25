@@ -34,7 +34,7 @@ module FFI
 			end
 
 			ffi_lib libs
-			
+
 			def self.bitmask_from(enum, opts)
 				bitmask = 0
 

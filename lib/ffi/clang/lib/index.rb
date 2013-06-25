@@ -25,7 +25,7 @@ module FFI
 	module Clang
 		module Lib
 			typedef :pointer, :CXIndex
-			
+
 			# Source code index:
 			attach_function :create_index, :clang_createIndex, [:int, :int], :CXIndex
 			attach_function :dispose_index, :clang_disposeIndex, [:CXIndex], :void

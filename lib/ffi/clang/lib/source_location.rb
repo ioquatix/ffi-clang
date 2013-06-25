@@ -24,9 +24,9 @@ module FFI
 		module Lib
 			class CXSourceLocation < FFI::Struct
 				layout(
-							 :ptr_data, [:pointer, 2],
-							 :int_data, :uint
-							 )
+					:ptr_data, [:pointer, 2],
+					:int_data, :uint
+				)
 			end
 
 			attach_function :get_expansion_location, :clang_getExpansionLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void

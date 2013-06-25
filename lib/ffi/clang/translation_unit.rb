@@ -44,7 +44,6 @@ module FFI
 			def cursor
 				Cursor.new(Lib.get_translation_unit_cursor(self))
 			end
-
 		end
 	end
 end

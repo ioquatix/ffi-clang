@@ -24,14 +24,14 @@ require 'ffi/clang/lib/diagnostic'
 require 'ffi/clang/source_range'
 
 module FFI
-	module Clang		
+	module Clang
 		class Diagnostic < AutoPointer
 			def initialize(translation_unit, pointer)
 				super pointer
-				
+
 				@translation_unit = translation_unit
 			end
-			
+
 			def self.release(pointer)
 				Lib.dispose_diagnostic(pointer)
 			end
@@ -60,7 +60,6 @@ module FFI
 				# – CXString clang_getDiagnosticFixIt(CXDiagnostic Diag,
 				#                                     unsigned FixIt,
 				#                                     CXSourceRange *ReplacementRange);
-
 			end
 
 			def ranges
