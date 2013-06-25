@@ -28,16 +28,16 @@ module FFI
 		module Lib
 
 			enum :kind, [:cursor_struct, 2,
-									 :cursor_function, 8,
-									 :cursor_invalid_file, 70,
-									 :cursor_translation_unit, 300]
+				:cursor_function, 8,
+				:cursor_invalid_file, 70,
+				:cursor_translation_unit, 300]
 
 			class CXCursor < FFI::Struct
 				layout(
-							 :kind, :kind,
-							 :xdata, :int,
-							 :data, [:pointer, 3]
-							 )
+					:kind, :kind,
+					:xdata, :int,
+					:data, [:pointer, 3]
+				)
 			end
 
 			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
@@ -63,7 +63,7 @@ module FFI
 			attach_function :is_preprocessing, :clang_isPreprocessing, [:kind], :uint
 			attach_function :is_unexposed,   :clang_isUnexposed,   [:kind], :uint
 
-      enum :child_visit_result, [:break, :continue, :recurse]
+			enum :child_visit_result, [:break, :continue, :recurse]
 
 			callback :visit_children_function, [CXCursor.by_value, CXCursor.by_value, :pointer], :child_visit_result
 			attach_function :visit_children, :clang_visitChildren, [CXCursor.by_value, :visit_children_function, :pointer], :uint

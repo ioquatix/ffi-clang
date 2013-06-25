@@ -90,6 +90,14 @@ describe Cursor do
 		it "is invalid?" do
 			Cursor.null_cursor.invalid?.should equal(true)
 		end
+
+		it "compares as equal to another null cursor instance" do
+			Cursor.null_cursor.should eq(Cursor.null_cursor)
+		end
+
+		it "should not equal a Translation Unit cursor" do
+			Cursor.null_cursor.should_not eq(cursor)
+		end
 	end
 
 	describe "Function Cursors" do

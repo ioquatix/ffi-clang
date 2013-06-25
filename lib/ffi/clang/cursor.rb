@@ -93,11 +93,17 @@ module FFI
 				@cursor[:kind]
 			end
 
-			def visit_children( &block )
+			def visit_children(&block)
 				adapter = Proc.new do | cxcursor, parent_cursor, unused |
 					block.call Cursor.new(cxcursor), Cursor.new(parent_cursor)
 				end
 				Lib.visit_children(@cursor, adapter, nil)
+			end
+
+			attr_reader :cursor
+
+			def ==(other)
+				Lib.are_equal(@cursor, other.cursor) != 0
 			end
 		end
 	end
