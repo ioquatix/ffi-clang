@@ -21,6 +21,7 @@
 
 require 'ffi/clang/lib/cursor'
 require 'ffi/clang/source_location'
+require 'ffi/clang/comment'
 
 module FFI
 	module Clang
@@ -35,6 +36,14 @@ module FFI
 
 			def null?
 				Lib.cursor_is_null(@cursor) != 0
+			end
+
+			def raw_comment_text
+				Lib.extract_string Lib.cursor_get_raw_comment_text(@cursor)
+			end
+
+			def parsed_comment
+				Comment.new Lib.cursor_get_parsed_comment(@cursor)
 			end
 
 			def declaration?
