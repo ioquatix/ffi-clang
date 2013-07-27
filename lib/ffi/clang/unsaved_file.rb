@@ -1,5 +1,5 @@
-# Copyright, 2010-2012 by Jari Bakken.
-# Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# -*- coding: utf-8 -*-
+# Copyright, 2013, by Carlos Martín Nieto <cmn@dwim.me.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,27 +19,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/string'
-require 'ffi/clang/lib/translation_unit'
-
 module FFI
 	module Clang
-		module Lib
-			class CXUnsavedFile < FFI::Struct
-				layout(
-					:filename, :pointer,
-					:contents, :pointer,
-					:length, :ulong
-				)
+		class UnsavedFile
+			def initialize(filename, contents)
+				@filename = filename
+				@contents = contents
 			end
 
-			typedef :pointer, :CXFile
-
-			# Retrieve a file handle within the given translation unit.
-			attach_function :get_file, :clang_getFile, [:CXTranslationUnit, :string], :CXFile
-
-			# Retrieve the complete file and path name of the given file.
-			attach_function :get_file_name, :clang_getFileName, [:CXFile], CXString.by_value
+			attr_accessor :filename, :contents
 		end
 	end
 end
