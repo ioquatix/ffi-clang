@@ -53,8 +53,11 @@ module FFI
 			end
 
 			def text
-				if self.kind == :comment_text
+				case self.kind
+				when :comment_text
 					Lib.extract_string Lib.text_comment_get_text(@comment)
+				when :comment_paragraph
+					self.children.map(&:text).join("\n")
 				else
 					nil
 				end

@@ -55,6 +55,9 @@ describe Comment do
 	it "has working helpers" do
 		children = comment.children
 		children.length.should equal(6)
+
+		para = comment.child(1)
+		para.text.should eq(" This is a longer explanation\n that spans multiple lines")
 	end
 
 end
