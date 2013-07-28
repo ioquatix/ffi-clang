@@ -22,29 +22,29 @@
 require 'ffi/clang/lib/index'
 
 module FFI
-  module Clang
-    module Lib
-      class CXComment < FFI::Struct
-        layout(
-               :ast_node, :pointer,
-               :translation_unit, :pointer
-               )
-      end
+	module Clang
+		module Lib
+			class CXComment < FFI::Struct
+				layout(
+				       :ast_node, :pointer,
+				       :translation_unit, :pointer
+				       )
+			end
 
-      enum :kind, [:comment_null, 0,
-                   :comment_text, 1,
-                   :comment_paragraph, 5,
-                   :comment_block_command,6 ,
-                   :comment_param_command, 7,
-                   :comment_full, 12]
+			enum :kind, [:comment_null, 0,
+				     :comment_text, 1,
+				     :comment_paragraph, 5,
+				     :comment_block_command,6 ,
+				     :comment_param_command, 7,
+				     :comment_full, 12]
 
-      attach_function :comment_get_kind, :clang_Comment_getKind, [CXComment.by_value], :kind
-      attach_function :comment_get_num_children, :clang_Comment_getNumChildren, [CXComment.by_value], :uint
-      attach_function :comment_get_child, :clang_Comment_getChild, [CXComment.by_value, :uint], CXComment.by_value
-      attach_function :text_comment_get_text, :clang_TextComment_getText, [CXComment.by_value], CXString.by_value
-      attach_function :block_command_comment_get_paragraph, :clang_BlockCommandComment_getParagraph, [CXComment.by_value], CXComment.by_value
-      attach_function :full_comment_get_as_html, :clang_FullComment_getAsHTML, [CXComment.by_value], CXString.by_value
-      attach_function :full_comment_get_as_xml, :clang_FullComment_getAsXML, [CXComment.by_value], CXString.by_value
-    end
-  end
+			attach_function :comment_get_kind, :clang_Comment_getKind, [CXComment.by_value], :kind
+			attach_function :comment_get_num_children, :clang_Comment_getNumChildren, [CXComment.by_value], :uint
+			attach_function :comment_get_child, :clang_Comment_getChild, [CXComment.by_value, :uint], CXComment.by_value
+			attach_function :text_comment_get_text, :clang_TextComment_getText, [CXComment.by_value], CXString.by_value
+			attach_function :block_command_comment_get_paragraph, :clang_BlockCommandComment_getParagraph, [CXComment.by_value], CXComment.by_value
+			attach_function :full_comment_get_as_html, :clang_FullComment_getAsHTML, [CXComment.by_value], CXString.by_value
+			attach_function :full_comment_get_as_xml, :clang_FullComment_getAsXML, [CXComment.by_value], CXString.by_value
+		end
+	end
 end
