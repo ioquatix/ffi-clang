@@ -28,7 +28,11 @@ module FFI
 	module Clang
 		module Lib
 			enum :kind, [:cursor_struct, 2,
+				:cursor_enum_decl, 5,
+				:cursor_enum_constant_decl, 7,
 				:cursor_function, 8,
+				:cursor_parm_decl, 10,
+				:cursor_typedef_decl, 20,
 				:cursor_invalid_file, 70,
 				:cursor_translation_unit, 300]
 
