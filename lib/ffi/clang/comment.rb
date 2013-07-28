@@ -78,6 +78,23 @@ module FFI
 					nil
 				end
 			end
+
+			def param_name
+				if self.kind == :comment_param_command
+					Lib.extract_string Lib.param_command_comment_get_param_name(@comment)
+				else
+					nil
+				end
+			end
+
+			def command_name
+				if self.kind == :comment_block_command
+					Lib.extract_string Lib.block_command_comment_get_command_name(@comment)
+				else
+					nil
+				end
+			end
+
 		end
 	end
 end
