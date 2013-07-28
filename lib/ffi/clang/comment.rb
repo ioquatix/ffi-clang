@@ -46,6 +46,12 @@ module FFI
 				Comment.new Lib.comment_get_child(@comment, n)
 			end
 
+			def children
+				(0..self.num_children-1).map do |i|
+					child(i)
+				end
+			end
+
 			def text
 				if self.kind == :comment_text
 					Lib.extract_string Lib.text_comment_get_text(@comment)

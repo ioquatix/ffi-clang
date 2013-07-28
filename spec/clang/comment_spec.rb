@@ -52,4 +52,9 @@ describe Comment do
 				 " that spans multiple lines"])
 	end
 
+	it "has working helpers" do
+		children = comment.children
+		children.length.should equal(6)
+	end
+
 end
