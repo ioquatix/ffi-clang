@@ -8,4 +8,12 @@ describe TranslationUnit do
 		diags.should be_kind_of(Array)
 		diags.should_not be_empty
 	end
+
+	it "returns a list of diagnostics from an unsaved file" do
+		file = UnsavedFile.new("a.c", File.read(fixture_path("a.c")))
+		tu = Index.new.parse_translation_unit("a.c", nil,[file])
+		diags = tu.diagnostics
+		diags.should be_kind_of(Array)
+		diags.should_not be_empty
+	end
 end
