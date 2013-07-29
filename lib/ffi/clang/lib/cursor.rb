@@ -22,12 +22,17 @@
 
 require 'ffi/clang/lib/translation_unit'
 require 'ffi/clang/lib/diagnostic'
+require 'ffi/clang/lib/comment'
 
 module FFI
 	module Clang
 		module Lib
 			enum :kind, [:cursor_struct, 2,
+				:cursor_enum_decl, 5,
+				:cursor_enum_constant_decl, 7,
 				:cursor_function, 8,
+				:cursor_parm_decl, 10,
+				:cursor_typedef_decl, 20,
 				:cursor_invalid_file, 70,
 				:cursor_translation_unit, 300]
 
@@ -44,6 +49,9 @@ module FFI
 			attach_function :get_null_cursor, :clang_getNullCursor, [], CXCursor.by_value
 
 			attach_function :cursor_is_null, :clang_Cursor_isNull, [CXCursor.by_value], :int
+
+			attach_function :cursor_get_raw_comment_text, :clang_Cursor_getRawCommentText, [CXCursor.by_value], CXString.by_value
+			attach_function :cursor_get_parsed_comment, :clang_Cursor_getParsedComment, [CXCursor.by_value], CXComment.by_value
 
 			attach_function :get_cursor_location, :clang_getCursorLocation, [CXCursor.by_value], CXSourceLocation.by_value
 			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
