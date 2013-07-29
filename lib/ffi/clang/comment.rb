@@ -25,9 +25,32 @@ require 'ffi/clang/source_location'
 
 module FFI
 	module Clang
+
 		class Comment
-			def initialize( cxcomment )
-				@comment = cxcomment
+			include Enumerable
+
+			def self.build_from(comment)
+				kind = Lib.comment_get_kind(comment)
+				case kind
+				when :comment_full
+					FullComment.new comment
+				when :comment_paragraph
+					ParagraphComment.new comment
+				when :comment_text
+					TextComment.new comment
+				when :comment_block_command
+					BlockCommandComment.new comment
+				when :comment_param_command
+					ParamCommandComment.new comment
+				when :comment_null
+					Comment.new comment
+				else
+					raise NotImplementedError, kind
+				end
+			end
+
+			def initialize(comment)
+				@comment = comment
 			end
 
 			def kind
@@ -35,7 +58,7 @@ module FFI
 			end
 
 			def paragraph
-				Comment.new Lib.block_command_comment_get_paragraph(@comment)
+				Comment.build_from Lib.block_command_comment_get_paragraph(@comment)
 			end
 
 			def num_children
@@ -43,58 +66,50 @@ module FFI
 			end
 
 			def child(n = 0)
-				Comment.new Lib.comment_get_child(@comment, n)
+				Comment.build_from Lib.comment_get_child(@comment, n)
 			end
 
-			def children
-				(0..self.num_children-1).map do |i|
-					child(i)
-				end
-			end
-
-			def text
-				case self.kind
-				when :comment_text
-					Lib.extract_string Lib.text_comment_get_text(@comment)
-				when :comment_paragraph
-					self.children.map(&:text).join("\n")
-				else
-					nil
-				end
-			end
-
-			def xml
-				if self.kind == :comment_full
-					Lib.extract_string Lib.full_comment_get_as_xml(@comment)
-				else
-					nil
-				end
-			end
-
-			def html
-				if self.kind == :comment_full
-					Lib.extract_string Lib.full_comment_get_as_html(@comment)
-				else
-					nil
-				end
-			end
-
-			def param_name
-				if self.kind == :comment_param_command
-					Lib.extract_string Lib.param_command_comment_get_param_name(@comment)
-				else
-					nil
-				end
-			end
-
-			def command_name
-				if self.kind == :comment_block_command
-					Lib.extract_string Lib.block_command_comment_get_command_name(@comment)
-				else
-					nil
+			def each(&block)
+				(0..num_children-1).map do |i|
+					block.call(child(i))
 				end
 			end
 
 		end
+
+		class ParagraphComment < Comment
+			def text
+				self.map(&:text).join("\n")
+			end
+		end
+
+		class TextComment < Comment
+			def text
+				Lib.extract_string Lib.text_comment_get_text(@comment)
+			end
+		end
+
+		class BlockCommandComment < Comment
+			def name
+				Lib.extract_string Lib.block_command_comment_get_command_name(@comment)
+			end
+		end
+
+		class ParamCommandComment < Comment
+			def name
+				Lib.extract_string Lib.param_command_comment_get_param_name(@comment)
+			end
+		end
+
+		class FullComment < Comment
+			def to_html
+				Lib.extract_string Lib.full_comment_get_as_html(@comment)
+			end
+
+			def to_xml
+				Lib.extract_string Lib.full_comment_get_as_xml(@comment)
+			end
+		end
+
 	end
 end

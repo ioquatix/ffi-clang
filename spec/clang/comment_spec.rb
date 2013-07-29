@@ -23,18 +23,21 @@ require 'spec_helper'
 
 describe Comment do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("docs.h")).cursor }
-	let (:comment) { find_first(cursor, :cursor_function).parsed_comment }
+	let (:comment) { find_first(cursor, :cursor_function).comment }
 
 	it "can be obtained from a cursor" do
 		comment.should be_kind_of(Comment)
+		comment.should be_kind_of(FullComment)
 		comment.kind.should equal(:comment_full)
 	end
 
 	it "can parse the brief description" do
 		para = comment.child
 		para.kind.should equal(:comment_paragraph)
+		para.should be_kind_of(ParagraphComment)
 		text = para.child
 		text.kind.should equal(:comment_text)
+		text.should be_kind_of(TextComment)
 		text.text.strip.should eq("Short explanation")
 	end
 
@@ -53,8 +56,7 @@ describe Comment do
 	end
 
 	it "has working helpers" do
-		children = comment.children
-		children.length.should equal(6)
+		comment.num_children.should equal(6)
 
 		para = comment.child(1)
 		para.text.should eq(" This is a longer explanation\n that spans multiple lines")

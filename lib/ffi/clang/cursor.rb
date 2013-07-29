@@ -42,8 +42,8 @@ module FFI
 				Lib.extract_string Lib.cursor_get_raw_comment_text(@cursor)
 			end
 
-			def parsed_comment
-				Comment.new Lib.cursor_get_parsed_comment(@cursor)
+			def comment
+				Comment.build_from Lib.cursor_get_parsed_comment(@cursor)
 			end
 
 			def declaration?
