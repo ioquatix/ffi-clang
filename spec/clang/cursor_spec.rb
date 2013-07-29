@@ -22,21 +22,6 @@
 
 require 'spec_helper'
 
-def find_first(cursor, kind)
-	first = nil
-
-	cursor.visit_children do |cursor, parent|
-		if (cursor.kind == kind)
-			first = cursor
-			:break
-		else
-			:recurse
-		end
-	end
-
-	first
-end
-
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 
