@@ -47,7 +47,10 @@ module FFI
 			attach_function :full_comment_get_as_xml, :clang_FullComment_getAsXML, [CXComment.by_value], CXString.by_value
 
 			attach_function :param_command_comment_get_param_name, :clang_ParamCommandComment_getParamName, [CXComment.by_value], CXString.by_value
+			attach_function :param_command_comment_is_param_index_valid, :clang_ParamCommandComment_isParamIndexValid, [CXComment.by_value], :uint
+			attach_function :param_command_comment_get_param_index, :clang_ParamCommandComment_getParamIndex, [CXComment.by_value], :uint
 			attach_function :block_command_comment_get_command_name, :clang_BlockCommandComment_getCommandName, [CXComment.by_value], CXString.by_value
+			attach_function :block_command_comment_get_num_args, :clang_BlockCommandComment_getNumArgs, [CXComment.by_value], :uint
 		end
 	end
 end

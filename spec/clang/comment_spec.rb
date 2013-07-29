@@ -62,4 +62,23 @@ describe Comment do
 		para.text.should eq(" This is a longer explanation\n that spans multiple lines")
 	end
 
+	it "understands params" do
+		param = comment.child(3)
+		param.should be_kind_of(ParamCommandComment)
+
+		param.valid_index?.should == true
+		param.index.should equal(0)
+		param.name.should eq("input")
+		arg = " some input\n "
+		param.child.text.should eq(arg)
+		param.comment.should eq(arg)
+	end
+
+	it "understands blocks" do
+		block = comment.child(5)
+		block.should be_kind_of(BlockCommandComment)
+		block.name.should eq("return")
+		block.comment.should eq(" a random value\n ")
+	end
+
 end

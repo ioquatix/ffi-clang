@@ -57,10 +57,6 @@ module FFI
 				Lib.comment_get_kind(@comment)
 			end
 
-			def paragraph
-				Comment.build_from Lib.block_command_comment_get_paragraph(@comment)
-			end
-
 			def num_children
 				Lib.comment_get_num_children(@comment)
 			end
@@ -93,11 +89,35 @@ module FFI
 			def name
 				Lib.extract_string Lib.block_command_comment_get_command_name(@comment)
 			end
+
+			def paragraph
+				Comment.build_from Lib.block_command_comment_get_paragraph(@comment)
+			end
+
+			def comment
+				self.paragraph.text
+			end
+
+			def num_args
+				Lib.block_command_comment_get_num_args(@comment)
+			end
 		end
 
 		class ParamCommandComment < Comment
 			def name
 				Lib.extract_string Lib.param_command_comment_get_param_name(@comment)
+			end
+
+			def comment
+				self.child.text
+			end
+
+			def valid_index?
+				Lib.param_command_comment_is_param_index_valid(@comment) != 0
+			end
+
+			def index
+				Lib.param_command_comment_get_param_index(@comment)
 			end
 		end
 
