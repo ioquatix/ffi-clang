@@ -22,6 +22,7 @@
 require 'ffi/clang/lib/cursor'
 require 'ffi/clang/source_location'
 require 'ffi/clang/comment'
+require 'ffi/clang/type'
 
 module FFI
 	module Clang
@@ -100,6 +101,14 @@ module FFI
 
 			def kind
 				@cursor[:kind]
+			end
+
+			def type
+				Type.new Lib.get_cursor_type(@cursor)
+			end
+
+			def result_type
+				Type.new Lib.get_cursor_result_type(@cursor)
 			end
 
 			def visit_children(&block)
