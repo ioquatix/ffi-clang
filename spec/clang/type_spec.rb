@@ -1,5 +1,5 @@
-# Copyright, 2010-2012 by Jari Bakken.
-# Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# -*- coding: utf-8 -*-
+# Copyright, 2013, by Carlos Martín Nieto <cmn@dwim.me>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,37 +19,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module FFI
-	module Clang
-		module Lib
-			extend FFI::Library
+require 'spec_helper'
 
-			libs = ["clang"]
+describe Comment do
+	let(:cursor) { Index.new.parse_translation_unit(fixture_path("a.c")).cursor }
+	let(:type) { find_first(cursor, :cursor_function).type }
 
-			if Clang.platform == :linux
-				libs += [
-					"/usr/lib/llvm-3.3/lib/libclang.so",
-					"/usr/lib64/llvm-3.3/lib/libclang.so"
-				]
-			end
+	it "can tell us about the main function" do
+		type.variadic?.should equal(false)
 
-			ffi_lib libs
-
-			def self.bitmask_from(enum, opts)
-				bitmask = 0
-
-				opts.each do |key, val|
-					next unless val
-
-					if int = enum[key]
-						bitmask |= int
-					else
-						raise Error, "unknown option: #{key.inspect}, expected one of #{enum.symbols}"
-					end
-				end
-
-				bitmask
-			end
-		end
+		type.num_arg_types.should equal(2)
+		type.arg_type(0).spelling.should eq("int")
+		type.arg_type(1).spelling.should eq("const char *")
+		type.result_type.spelling.should eq("int")
 	end
 end

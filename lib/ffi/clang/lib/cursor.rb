@@ -23,6 +23,7 @@
 require 'ffi/clang/lib/translation_unit'
 require 'ffi/clang/lib/diagnostic'
 require 'ffi/clang/lib/comment'
+require 'ffi/clang/lib/type'
 
 module FFI
 	module Clang
@@ -74,6 +75,10 @@ module FFI
 
 			callback :visit_children_function, [CXCursor.by_value, CXCursor.by_value, :pointer], :child_visit_result
 			attach_function :visit_children, :clang_visitChildren, [CXCursor.by_value, :visit_children_function, :pointer], :uint
+
+			attach_function :get_cursor_type, :clang_getCursorType, [CXCursor.by_value], CXType.by_value
+			attach_function :get_cursor_result_type, :clang_getCursorResultType, [CXCursor.by_value], CXType.by_value
+
 		end
 	end
 end
