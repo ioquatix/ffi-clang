@@ -1,7 +1,6 @@
 module FFI
 	module Clang
 		class Type
-
 			def initialize(type)
 				@type = type
 			end
@@ -18,7 +17,7 @@ module FFI
 				Lib.is_function_type_variadic(@type) != 0
 			end
 
-			def POD?
+			def pod?
 				Lib.is_pod_type(@type) != 0
 			end
 
@@ -33,7 +32,6 @@ module FFI
 			def result_type
 				Type.new Lib.get_result_type(@type)
 			end
-
 		end
 	end
 end
