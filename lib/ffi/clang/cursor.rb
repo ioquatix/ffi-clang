@@ -91,7 +91,7 @@ module FFI
 				SourceRange.new(Lib.get_cursor_extent(@cursor))
 			end
 
-			def displayName
+			def display_name
 				Lib.extract_string Lib.get_cursor_display_name(@cursor)
 			end
 
