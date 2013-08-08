@@ -2,17 +2,17 @@ module FFI
 	module Clang
 		module Lib
 			enum :kind, [
-									 :type_invalid, 0,
-									 :type_unexposed, 1,
-									 :type_void, 2,
-									 :type_pointer, 101,
-									 :type_function_proto, 111
-									]
+				:type_invalid, 0,
+				:type_unexposed, 1,
+				:type_void, 2,
+				:type_pointer, 101,
+				:type_function_proto, 111
+			]
 
 			class CXType < FFI::Struct
 				layout(
-							 :kind, :kind,
-							 :data, [:pointer, 2]
+					:kind, :kind,
+					:data, [:pointer, 2]
 				)
 			end
 

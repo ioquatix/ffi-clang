@@ -35,7 +35,8 @@ module FFI
 				:cursor_parm_decl, 10,
 				:cursor_typedef_decl, 20,
 				:cursor_invalid_file, 70,
-				:cursor_translation_unit, 300]
+				:cursor_translation_unit, 300
+			]
 
 			class CXCursor < FFI::Struct
 				layout(
