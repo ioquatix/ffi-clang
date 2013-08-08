@@ -49,7 +49,7 @@ describe Cursor do
 	end
 
 	it "returns the path of the translation unit for the translation unit cursor" do
-		cursor.displayName.should eq(fixture_path("list.c"))
+		cursor.display_name.should eq(fixture_path("list.c"))
 		cursor.spelling.should eq(fixture_path("list.c"))
 	end
 
@@ -105,7 +105,7 @@ describe Cursor do
 
 		it "returns the name of the function" do
 			func.spelling.should eq("sum")
-			func.displayName.should eq("sum(union List *)")
+			func.display_name.should eq("sum(union List *)")
 		end
 	end
 
@@ -124,7 +124,7 @@ describe Cursor do
 
 		it "returns the name of the struct" do
 			struct.spelling.should eq("List")
-			struct.displayName.should eq("List")
+			struct.display_name.should eq("List")
 		end
 
 	end
