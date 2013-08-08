@@ -21,7 +21,7 @@
 
 require 'spec_helper'
 
-describe Comment do
+describe Type do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("a.c")).cursor }
 	let(:type) { find_first(cursor, :cursor_function).type }
 
