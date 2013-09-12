@@ -28,13 +28,38 @@ require 'ffi/clang/lib/type'
 module FFI
 	module Clang
 		module Lib
-			enum :kind, [:cursor_struct, 2,
+			enum :kind, [:cursor_unexposed_decl, 1,
+				:cursor_struct_decl, 2,
+				:cursor_class_decl, 4,
 				:cursor_enum_decl, 5,
 				:cursor_enum_constant_decl, 7,
 				:cursor_function, 8,
+				:cursor_var_decl, 9,
 				:cursor_parm_decl, 10,
 				:cursor_typedef_decl, 20,
+				:cursor_cxx_method, 21,
+				:cursor_namespace, 22,
+				:cursor_ctor, 24,
+				:cursor_dtor, 25,
+				:cursor_template_type_parameter, 27,
+				:cursor_template_template_parameter, 29,
+				:cursor_function_template, 30,
+				:cursor_class_template, 31,
+				:cursor_class_template_partial_specialization, 32,
+				:cursor_cxx_access_specifier, 39,
+				:cursor_typeref, 43,
+				:cursor_cxx_base_specifier, 44,
+				:cursor_template_ref, 45,
+				:cursor_member_ref, 47,
 				:cursor_invalid_file, 70,
+				:cursor_no_decl_found, 71,
+				:cursor_first_expr, 100,
+				:cursor_decl_ref_expr, 101,
+				:cursor_member_ref_expr, 102,
+				:cursor_integer_literal, 106,
+				:cursor_unary_operator, 112,
+				:cursor_compound_stmt, 202,
+				:cursor_return_stmt, 214,
 				:cursor_translation_unit, 300
 			]
 
@@ -45,6 +70,23 @@ module FFI
 					:data, [:pointer, 3]
 				)
 			end
+
+			enum :cxx_access_specifier, [:public, 1, :protected, 2, :private, 3, :none, 0]
+			attach_function :get_cxx_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :cxx_access_specifier
+
+			attach_function :get_enum_value, :clang_getEnumConstantDeclValue, [CXCursor.by_value], :long_long
+
+			attach_function :is_virtual_base, :clang_isVirtualBase, [CXCursor.by_value], :uint
+			attach_function :is_dynamic_call, :clang_Cursor_isDynamicCall, [CXCursor.by_value], :uint
+			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
+			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
+			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
+
+			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
+			attach_function :get_language, :clang_getCursorLanguage, [CXCursor.by_value], :language_kind
+
+			attach_function :get_specialized_cursor_template, :clang_getSpecializedCursorTemplate, [CXCursor.by_value], CXCursor.by_value
+			attach_function :get_template_cursor_kind, :clang_getTemplateCursorKind, [CXCursor.by_value], :kind
 
 			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
 
@@ -59,7 +101,7 @@ module FFI
 			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
 			attach_function :get_cursor_display_name, :clang_getCursorDisplayName, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
-			
+
 			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
 
 			attach_function :is_declaration, :clang_isDeclaration, [:kind], :uint
@@ -83,4 +125,3 @@ module FFI
 		end
 	end
 end
-

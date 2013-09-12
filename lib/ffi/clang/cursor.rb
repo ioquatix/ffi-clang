@@ -111,10 +111,51 @@ module FFI
 				Type.new Lib.get_cursor_result_type(@cursor)
 			end
 
+			def virtual_base?
+				Lib.is_virtual_base(@cursor) != 0
+			end
+
+			def dynamic_call?
+				Lib.is_dynamic_call(@cursor) != 0
+			end
+
+			def static?
+				Lib.cxx_method_is_static(@cursor) != 0
+			end
+
+			def virtual?
+				Lib.cxx_method_is_virtual(@cursor) != 0
+			end
+
+			def pure_virtual?
+				Lib.cxx_method_is_pure_virtual(@cursor) != 0
+			end
+
+			def enum_value
+				Lib.get_enum_value @cursor
+			end
+
+			def specialized_template
+				Cursor.new Lib.get_specialized_cursor_template @cursor
+			end
+
+			def template_kind
+				Lib.get_template_cursor_kind @cursor
+			end
+
+			def access_specifier
+				Lib.get_cxx_access_specifier @cursor
+			end
+
+			def language
+				Lib.get_language @cursor
+			end
+
 			def visit_children(&block)
 				adapter = Proc.new do | cxcursor, parent_cursor, unused |
 					block.call Cursor.new(cxcursor), Cursor.new(parent_cursor)
 				end
+				
 				Lib.visit_children(@cursor, adapter, nil)
 			end
 
