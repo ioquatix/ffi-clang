@@ -27,9 +27,11 @@ module FFI
 			libs = ["clang"]
 
 			if Clang.platform == :linux
+				llvm_library_dir = `llvm-config --libdir`.chomp
+				
 				libs += [
-					"/usr/lib/llvm-3.3/lib/libclang.so",
-					"/usr/lib64/llvm-3.3/lib/libclang.so"
+					llvm_library_dir + '/libclang.dylib',
+					llvm_library_dir + '/libclang.so',
 				]
 			end
 
