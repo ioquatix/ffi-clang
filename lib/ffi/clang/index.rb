@@ -46,13 +46,13 @@ module FFI
 			private
 
 			def args_pointer_from(command_line_args)
-				args_pointer = MemoryPointer.new(:pointer)
+				args_pointer = MemoryPointer.new(:pointer, command_line_args.length)
 
 				strings = command_line_args.map do |arg|
 					MemoryPointer.from_string(arg.to_s)
 				end
 
-				args_pointer.put_array_of_pointer(strings) unless strings.empty?
+				args_pointer.put_array_of_pointer(0, strings) unless strings.empty?
 				args_pointer
 			end
 
