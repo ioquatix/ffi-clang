@@ -139,6 +139,14 @@ module FFI
 				Cursor.new Lib.get_specialized_cursor_template @cursor
 			end
 
+			def canonical
+				Cursor.new Lib.get_canonical_cursor @cursor
+			end
+
+			def definition
+				Cursor.new Lib.get_cursor_definition @cursor
+			end
+
 			def template_kind
 				Lib.get_template_cursor_kind @cursor
 			end

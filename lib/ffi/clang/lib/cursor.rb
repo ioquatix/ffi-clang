@@ -71,7 +71,8 @@ module FFI
 				)
 			end
 
-			enum :cxx_access_specifier, [:public, 1, :protected, 2, :private, 3, :none, 0]
+
+			enum :cxx_access_specifier, [:invalid, :public, :protected, :private]
 			attach_function :get_cxx_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :cxx_access_specifier
 
 			attach_function :get_enum_value, :clang_getEnumConstantDeclValue, [CXCursor.by_value], :long_long
@@ -85,6 +86,8 @@ module FFI
 			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
 			attach_function :get_language, :clang_getCursorLanguage, [CXCursor.by_value], :language_kind
 
+			attach_function :get_canonical_cursor, :clang_getCanonicalCursor, [CXCursor.by_value], CXCursor.by_value
+			attach_function :get_cursor_definition, :clang_getCursorDefinition, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_specialized_cursor_template, :clang_getSpecializedCursorTemplate, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_template_cursor_kind, :clang_getTemplateCursorKind, [CXCursor.by_value], :kind
 
