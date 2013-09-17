@@ -29,6 +29,10 @@ module FFI
 				@type[:kind]
 			end
 
+			def kind_spelling
+				Lib.extract_string Lib.get_type_kind_spelling @type[:kind]
+			end
+
 			def spelling
 				Lib.extract_string Lib.get_type_spelling(@type)
 			end
