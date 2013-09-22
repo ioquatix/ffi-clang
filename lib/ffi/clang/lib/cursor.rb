@@ -1,17 +1,17 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,21 +28,72 @@ require 'ffi/clang/lib/type'
 module FFI
 	module Clang
 		module Lib
-			enum :kind, [:cursor_struct, 2,
+			enum :kind, [
+        :cursor_struct, 2,
+        :cursor_union, 3,
+        :cursor_class_decl, 4,
 				:cursor_enum_decl, 5,
+        :cursor_field_decl, 6,
 				:cursor_enum_constant_decl, 7,
 				:cursor_function, 8,
+        :cursor_variable, 9,
 				:cursor_parm_decl, 10,
+        :cursor_obj_c_interface_decl, 11,
+        :cursor_obj_c_category_decl, 12,
+        :cursor_obj_c_protocol_decl, 13,
+        :cursor_obj_c_property_decl, 14,
+        :cursor_obj_c_instance_var_decl, 15,
+        :cursor_obj_c_instance_method_decl, 16,
+        :cursor_obj_c_class_method_decl, 17,
+        :cursor_obj_c_implementation_decl, 18,
+        :cursor_obj_c_category_impl_decl, 19,
 				:cursor_typedef_decl, 20,
+        :cursor_cxx_method, 21,
+        :cursor_namespace, 22,
+        :cursor_linkage_spec, 23,
+        :cursor_constructor, 24,
+        :cursor_destructor, 25,
+        :cursor_conversion_function, 26,
+        :cursor_template_type_parameter, 27,
+        :cursor_non_type_template_parameter, 28,
+        :cursor_template_template_parameter, 29,
+        :cursor_function_template, 30,
+        :cursor_class_template, 31,
+        :cursor_class_template_partial_specialization, 32,
+        :cursor_namespace_alias, 33,
+        :cursor_using_directive, 34,
+        :cursor_using_declaration, 35,
+        :cursor_type_alias_decl, 36,
+        :cursor_obj_c_synthesize_decl, 37,
+        :cursor_obj_c_dynamic_decl, 38,
+        :cursor_cxx_access_specifier, 39,
+        :cursor_obj_c_super_class_ref, 40,
+        :cursor_obj_c_protocol_ref, 41,
+        :cursor_obj_c_class_ref, 42,
+        :cursor_type_ref, 43,
+        :cursor_cxx_base_specifier, 44,
+        :cursor_template_ref, 45,
+        :cursor_namespace_ref, 46,
+        :cursor_member_ref, 47,
+        :cursor_label_ref, 48,
+        :cursor_overloaded_decl_ref, 49,
+        :cursor_variable_ref, 50,
 				:cursor_invalid_file, 70,
 				:cursor_translation_unit, 300
 			]
 
+      enum :access_specifier, [
+        :invalid,   0,
+        :public,    1,
+        :protected, 2,
+        :private,   3
+      ]
+
 			class CXCursor < FFI::Struct
 				layout(
-					:kind, :kind,
+					:kind,  :kind,
 					:xdata, :int,
-					:data, [:pointer, 3]
+					:data,  [:pointer, 3]
 				)
 			end
 
@@ -59,7 +110,7 @@ module FFI
 			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
 			attach_function :get_cursor_display_name, :clang_getCursorDisplayName, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
-			
+
 			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
 
 			attach_function :is_declaration, :clang_isDeclaration, [:kind], :uint
@@ -71,6 +122,11 @@ module FFI
 			attach_function :is_translation_unit, :clang_isTranslationUnit, [:kind], :uint
 			attach_function :is_preprocessing, :clang_isPreprocessing, [:kind], :uint
 			attach_function :is_unexposed, :clang_isUnexposed, [:kind], :uint
+
+      # C++
+      attach_function :is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
+      attach_function :is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
+      attach_function :get_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :access_specifier
 
 			enum :child_visit_result, [:break, :continue, :recurse]
 
