@@ -1,16 +1,16 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -66,6 +66,26 @@ module FFI
 			def attribute?
 				Lib.is_attribute(kind) != 0
 			end
+
+      def public?
+        Lib.get_access_specifier(@cursor) == :public
+      end
+
+      def private?
+        Lib.get_access_specifier(@cursor) == :private
+      end
+
+      def protected?
+        Lib.get_access_specifier(@cursor) == :protected
+      end
+
+      def virtual?
+        Lib.is_virtual(@cursor) != 0
+      end
+
+      def static?
+        Lib.is_static(@cursor) != 0
+      end
 
 			def invalid?
 				Lib.is_invalid(kind) != 0
