@@ -63,22 +63,23 @@ describe Comment do
 	end
 
 	it "understands params" do
-		param = comment.child(3)
-		param.should be_kind_of(ParamCommandComment)
+		[['input', " some input\n "], ['flags', " some flags\n "]].each_with_index do |v, child_idx|
+			param = comment.child(3 + child_idx)
+			param.should be_kind_of(ParamCommandComment)
 
-		param.valid_index?.should == true
-		param.index.should equal(0)
-		param.name.should eq("input")
-		arg = " some input\n "
-		param.child.text.should eq(arg)
-		param.comment.should eq(arg)
+			param.valid_index?.should == true
+			param.index.should equal(child_idx)
+			param.name.should eq(v[0])
+			param.child.text.should eq v[1]
+			param.comment.should eq v[1]
+		end
 	end
 
 	it "understands blocks" do
 		block = comment.child(5)
 		block.should be_kind_of(BlockCommandComment)
 		block.name.should eq("return")
-		block.comment.should eq(" a random value\n ")
+		block.comment.should eq(" a random value")
 	end
 
 end

@@ -23,6 +23,7 @@ require 'spec_helper'
 
 describe Type do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("a.c")).cursor }
+	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:type) { find_first(cursor, :cursor_function).type }
 
 	it "can tell us about the main function" do
@@ -33,4 +34,51 @@ describe Type do
 		type.arg_type(1).spelling.should eq("const char *")
 		type.result_type.spelling.should eq("int")
 	end
+
+  describe '#kind_spelling' do
+    let(:kind_spelling_type) { find_matching(cursor_cxx) { |child, parent|
+      child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'}.type }
+
+    it 'returns type kind name with string' do
+      kind_spelling_type.kind_spelling.should eq 'Typedef'
+    end
+  end
+
+  describe '#canonical' do
+    let(:canonical_type_spelling) { find_matching(cursor_cxx) { |child, parent|
+        child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
+      }.type.canonical.spelling }
+
+    it 'extracts typedef' do
+      canonical_type_spelling.should eq 'const int *'
+    end
+  end
+
+  describe '#pointee' do
+    let(:pointee_type_spelling) { find_matching(cursor_cxx) { |child, parent|
+        child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
+      }.type.canonical.pointee.spelling }
+
+    it 'gets pointee type of pointer, C++ reference' do
+      pointee_type_spelling.should eq 'const int'
+    end
+  end
+
+  describe '#const_qualified?' do
+    let(:pointer_type) { find_matching(cursor_cxx) { |child, parent|
+        child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
+      }.type.canonical }
+
+    let(:pointee_type) { find_matching(cursor_cxx) { |child, parent|
+        child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
+      }.type.canonical.pointee }
+
+    it 'checks type is const qualified' do
+      pointee_type.const_qualified?.should equal true
+    end
+
+    it 'cannot check whether pointee type is const qualified' do
+      pointer_type.const_qualified?.should equal false
+    end
+  end
 end
