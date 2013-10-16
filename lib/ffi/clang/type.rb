@@ -49,6 +49,10 @@ module FFI
 				Lib.get_num_arg_types(@type)
 			end
 
+			def pointee
+				Type.new Lib.get_pointee_type @type
+			end
+
 			def canonical
 				Type.new Lib.get_canonical_type(@type)
 			end

@@ -25,8 +25,11 @@ module FFI
 				:type_invalid, 0,
 				:type_unexposed, 1,
 				:type_void, 2,
+				:type_dependent, 26,
 				:type_pointer, 101,
 				:type_lvalue_ref, 103,
+				:type_record, 105,
+				:type_enum, 106,
 				:type_function_proto, 111
 			]
 
@@ -37,6 +40,7 @@ module FFI
 				)
 			end
 
+			attach_function :get_pointee_type, :clang_getPointeeType, [CXType.by_value], CXType.by_value
 			attach_function :get_type_kind_spelling, :clang_getTypeKindSpelling, [:kind], CXString.by_value
 			attach_function :get_type_spelling, :clang_getTypeSpelling, [CXType.by_value], CXString.by_value
 			attach_function :is_function_type_variadic, :clang_isFunctionTypeVariadic, [CXType.by_value], :uint
