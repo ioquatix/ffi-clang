@@ -1,8 +1,6 @@
 # FFI::Clang
 
-Ruby FFI bindings for libclang. WIP.
-
-http://llvm.org/devmtg/2010-11/Gregor-libclang.pdf
+A light weight wrapper for Ruby exposing libclang.
 
 [![Build Status](https://secure.travis-ci.org/ioquatix/ffi-clang.png)](http://travis-ci.org/ioquatix/ffi-clang)
 [![Code Climate](https://codeclimate.com/github/ioquatix/ffi-clang.png)](https://codeclimate.com/github/ioquatix/ffi-clang)
@@ -11,19 +9,34 @@ http://llvm.org/devmtg/2010-11/Gregor-libclang.pdf
 
 Add this line to your application's Gemfile:
 
-    gem 'ffi-clang'
+	gem 'ffi-clang'
 
 And then execute:
 
-    $ bundle
+	$ bundle
 
 Or install it yourself as:
 
-    $ gem install ffi-clang
+	$ gem install ffi-clang
 
 ## Usage
 
-TODO: Write usage instructions here
+Traverse the AST in the given file:
+
+	index = Index.new
+	translation_unit = index.parse_translation_unit("list.c")
+	cursor = translation_unit.cursor
+	cursor.visit_children do |cursor, parent|
+		puts "#{cursor.kind} #{cursor.spelling.inspect}"
+		
+		next :recurse 
+	end
+
+### Library Version
+
+Due to issues figuring out which library to use, we require you to manually specify it. For example, to run the tests, with MacPorts llvm/clang 3.4, use the following:
+
+	LLVM_CONFIG=llvm-config-mp-3.4 rake
 
 ## Contributing
 
@@ -35,8 +48,8 @@ TODO: Write usage instructions here
 
 ## License
 
-Copyright, 2010-2012 by Jari Bakken.
-Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+Copyright, 2010-2012, by Jari Bakken.  
+Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>  
 Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
