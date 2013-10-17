@@ -6,3 +6,4 @@ install:
     - sudo apt-get -qq update
     - sudo apt-get -qq install libclang-3.3-dev
     - bundle install
+    - export LD_LIBRARY_PATH=/usr/lib/llvm-3.3/lib/
