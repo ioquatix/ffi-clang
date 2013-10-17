@@ -67,6 +67,18 @@ module FFI
 				Lib.is_attribute(kind) != 0
 			end
 
+			def public?
+				Lib.cxx_get_access_specifier(@cursor) == :public
+			end
+
+			def private?
+				Lib.cxx_get_access_specifier(@cursor) == :private
+			end
+
+			def protected?
+				Lib.cxx_get_access_specifier(@cursor) == :protected
+			end
+
 			def invalid?
 				Lib.is_invalid(kind) != 0
 			end

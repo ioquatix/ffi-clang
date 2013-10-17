@@ -28,29 +28,57 @@ require 'ffi/clang/lib/type'
 module FFI
 	module Clang
 		module Lib
-			enum :kind, [:cursor_unexposed_decl, 1,
-				:cursor_struct_decl, 2,
+			enum :kind, [
+				:cursor_unexposed_decl, 1,
+				:cursor_struct, 2,
+				:cursor_union, 3,
 				:cursor_class_decl, 4,
 				:cursor_enum_decl, 5,
+				:cursor_field_decl, 6,
 				:cursor_enum_constant_decl, 7,
 				:cursor_function, 8,
-				:cursor_var_decl, 9,
+				:cursor_variable, 9,
 				:cursor_parm_decl, 10,
+				:cursor_obj_c_interface_decl, 11,
+				:cursor_obj_c_category_decl, 12,
+				:cursor_obj_c_protocol_decl, 13,
+				:cursor_obj_c_property_decl, 14,
+				:cursor_obj_c_instance_var_decl, 15,
+				:cursor_obj_c_instance_method_decl, 16,
+				:cursor_obj_c_class_method_decl, 17,
+				:cursor_obj_c_implementation_decl, 18,
+				:cursor_obj_c_category_impl_decl, 19,
 				:cursor_typedef_decl, 20,
 				:cursor_cxx_method, 21,
 				:cursor_namespace, 22,
-				:cursor_ctor, 24,
-				:cursor_dtor, 25,
+				:cursor_linkage_spec, 23,
+				:cursor_constructor, 24,
+				:cursor_destructor, 25,
+				:cursor_conversion_function, 26,
 				:cursor_template_type_parameter, 27,
+				:cursor_non_type_template_parameter, 28,
 				:cursor_template_template_parameter, 29,
 				:cursor_function_template, 30,
 				:cursor_class_template, 31,
 				:cursor_class_template_partial_specialization, 32,
+				:cursor_namespace_alias, 33,
+				:cursor_using_directive, 34,
+				:cursor_using_declaration, 35,
+				:cursor_type_alias_decl, 36,
+				:cursor_obj_c_synthesize_decl, 37,
+				:cursor_obj_c_dynamic_decl, 38,
 				:cursor_cxx_access_specifier, 39,
-				:cursor_typeref, 43,
+				:cursor_obj_c_super_class_ref, 40,
+				:cursor_obj_c_protocol_ref, 41,
+				:cursor_obj_c_class_ref, 42,
+				:cursor_type_ref, 43,
 				:cursor_cxx_base_specifier, 44,
 				:cursor_template_ref, 45,
+				:cursor_namespace_ref, 46,
 				:cursor_member_ref, 47,
+				:cursor_label_ref, 48,
+				:cursor_overloaded_decl_ref, 49,
+				:cursor_variable_ref, 50,
 				:cursor_invalid_file, 70,
 				:cursor_no_decl_found, 71,
 				:cursor_first_expr, 100,
@@ -61,6 +89,13 @@ module FFI
 				:cursor_compound_stmt, 202,
 				:cursor_return_stmt, 214,
 				:cursor_translation_unit, 300
+			]
+
+			enum :access_specifier, [
+				:invalid, 0,
+				:public, 1,
+				:protected, 2,
+				:private, 3
 			]
 
 			class CXCursor < FFI::Struct
@@ -81,6 +116,7 @@ module FFI
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
+			attach_function :cxx_get_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :access_specifier
 			
 			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
 			attach_function :get_language, :clang_getCursorLanguage, [CXCursor.by_value], :language_kind
