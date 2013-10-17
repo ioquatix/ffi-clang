@@ -35,8 +35,8 @@ module FFI
 
 				Lib::get_expansion_location(@location, cxfile, line, column, offset)
 
-				@file   = Lib.extract_string Lib.get_file_name(cxfile.read_pointer)
-				@line   = line.get_uint(0)
+				@file = Lib.extract_string Lib.get_file_name(cxfile.read_pointer)
+				@line = line.get_uint(0)
 				@column = column.get_uint(0)
 				@offset = offset.get_uint(0)
 			end

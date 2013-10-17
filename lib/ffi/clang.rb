@@ -31,7 +31,7 @@ module FFI::Clang
 
 		case os
 		when /darwin/
-			:osx
+			:darwin
 		when /linux/
 			:linux
 		when /mswin|msys|mingw|cygwin|bccwin|wince|emc/

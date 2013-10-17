@@ -23,20 +23,20 @@ module ClangSpecHelper
 		first
 	end
 
-  def find_matching(cursor, &term)
-    ret = nil
+	def find_matching(cursor, &term)
+		ret = nil
 
-    cursor.visit_children do |child, parent|
-      if term.call child, parent
-        ret = child
-        next :break
-      end
+		cursor.visit_children do |child, parent|
+			if term.call child, parent
+				ret = child
+				next :break
+			end
 
-      :recurse
-    end
+			:recurse
+		end
 
-    ret
-  end
+		ret
+	end
 end
 
 RSpec.configure do |c|

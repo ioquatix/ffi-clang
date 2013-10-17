@@ -71,7 +71,6 @@ module FFI
 				)
 			end
 
-
 			enum :cxx_access_specifier, [:invalid, :public, :protected, :private]
 			attach_function :get_cxx_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :cxx_access_specifier
 
@@ -82,7 +81,7 @@ module FFI
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
-
+			
 			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
 			attach_function :get_language, :clang_getCursorLanguage, [CXCursor.by_value], :language_kind
 

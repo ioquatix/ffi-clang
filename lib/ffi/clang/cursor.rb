@@ -160,7 +160,7 @@ module FFI
 			end
 
 			def visit_children(&block)
-				adapter = Proc.new do | cxcursor, parent_cursor, unused |
+				adapter = Proc.new do |cxcursor, parent_cursor, unused|
 					block.call Cursor.new(cxcursor), Cursor.new(parent_cursor)
 				end
 				
