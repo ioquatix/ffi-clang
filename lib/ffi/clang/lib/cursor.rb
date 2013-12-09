@@ -187,6 +187,13 @@ module FFI
 				:private, 3
 			]
 
+			enum :availability, [
+				:available, 0,
+				:deprecated, 1,
+				:not_available, 2,
+				:not_accesible, 3
+			]
+
 			class CXCursor < FFI::Struct
 				layout(
 					:kind, :kind,
