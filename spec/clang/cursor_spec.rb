@@ -25,6 +25,7 @@ require 'spec_helper'
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
+	let(:cursor_canon) { Index.new.parse_translation_unit(fixture_path("canonical.c")).cursor }
 
 	it "can be obtained from a translation unit" do
 		cursor.should be_kind_of(Cursor)
@@ -111,11 +112,11 @@ describe Cursor do
 	end
 
 	describe "Struct Cursors" do
-		let (:struct) { find_first(cursor, :cursor_struct_decl) }
+		let (:struct) { find_first(cursor, :cursor_struct) }
 
 		it "can find the first struct" do
 			struct.should_not equal(nil)
-			struct.kind.should equal(:cursor_struct_decl)
+			struct.kind.should equal(:cursor_struct)
 		end
 
 		it "has an extent representing the bounds of the struct" do
@@ -185,11 +186,31 @@ describe Cursor do
 	end
 
 	describe '#canonical' do
-		# TODO
+		let (:structs) { find_all(cursor_canon, :cursor_struct) }
+
+		it "mathes 3 cursors" do
+			structs.size.should eq(3)
+		end
+
+		it "refers the first cursor as canonical one" do
+			structs[0].canonical.should eq(structs[0])
+			structs[1].canonical.should eq(structs[0])
+			structs[2].canonical.should eq(structs[0])
+		end
 	end
 
 	describe '#definition' do
-		# TODO
+		let (:structs) { find_all(cursor_canon, :cursor_struct) }
+
+		it "mathes 3 cursors" do
+			structs.size.should eq(3)
+		end
+
+		it "refers the third cursor as definition one" do
+			structs[0].definition.should eq(structs[2])
+			structs[1].definition.should eq(structs[2])
+			structs[2].definition.should eq(structs[2])
+		end
 	end
 
 	describe '#template_kind' do
@@ -206,8 +227,8 @@ describe Cursor do
 	end
 
 	describe '#language' do
-		let(:c_language_cursor) { find_matching(cursor) { |c, p| c.kind == :cursor_struct_decl } }
-		let(:cxx_language_cursor) { find_matching(cursor_cxx) { |c, p| c.kind == :cursor_struct_decl } }
+		let(:c_language_cursor) { find_matching(cursor) { |c, p| c.kind == :cursor_struct } }
+		let(:cxx_language_cursor) { find_matching(cursor_cxx) { |c, p| c.kind == :cursor_struct } }
 
 		it 'returns :c if the cursor language is C' do
 			c_language_cursor.language.should equal :c
@@ -216,5 +237,135 @@ describe Cursor do
 		it 'returns :c_plus_plus if the cursor language is C++' do
 			cxx_language_cursor.language.should equal :c_plus_plus
 		end
+	end
+
+	describe '#translation_unit' do
+		let (:struct) { find_first(cursor, :cursor_struct) }
+
+		it "can find the first struct" do
+			struct.should_not equal(nil)
+		end
+
+		it "returns the translation unit that a cursor originated from" do
+			struct.translation_unit.should be_kind_of(TranslationUnit)
+		end
+	end
+
+	describe '#linkage' do
+		let (:ref) { find_first(cursor, :cursor_type_ref) }
+		let (:func) { find_first(cursor, :cursor_function) }
+
+		it "returns :external if the cursor is non-static function" do
+			func.linkage.should equal :external
+		end
+
+		it "returns :invalid if the cursor does not have linkage" do
+			ref.linkage.should equal :invalid
+		end
+	end
+
+	describe '#semantic_parent' do
+		let(:parent) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_cxx_method and child.spelling == 'func_d' and parent.spelling != 'D' } }
+
+		it 'returns base class as semantic parent' do
+			parent.semantic_parent.spelling.should eq('D')
+		end
+	end
+
+	describe '#lexical_parent' do
+		let(:parent) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_cxx_method and child.spelling == 'func_d' and parent.spelling != 'D' } }
+
+		it 'returns translation unit as lexical parent' do
+			parent.lexical_parent.kind.should eq(:cursor_translation_unit)
+		end
+	end
+
+	describe '#included_file' do
+		#TODO
+	end
+
+	describe '#definition?' do
+		let (:struct) { find_all(cursor_canon, :cursor_struct).at(2) }
+
+		it "checks cursor is a definition" do
+			struct.definition?.should be_true
+		end
+	end
+
+	describe '#usr' do
+		let (:func) { find_first(cursor, :cursor_function) }
+
+		it "returns something in string" do
+			func.usr.should be_kind_of(String)
+		end
+	end
+
+	describe '#variadic?' do
+		let(:func) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'f_variadic' } }
+
+		it "checks cursor is a variadic function" do
+			func.variadic?.should be_true
+		end
+	end
+
+	describe '#referenced' do
+		let(:struct) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_struct and child.spelling == 'A' } }
+		let(:ref) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_type_ref and child.spelling == 'struct A' } }
+
+		it "returns a cursor that this cursor references" do
+			ref.referenced.should eq(struct)
+		end
+
+	end
+
+	describe '#hash' do
+		let (:func) { find_first(cursor, :cursor_function) }
+
+		it "computes hash for the cursor" do
+			func.hash.should be_kind_of(Fixnum)
+		end
+	end
+
+	describe '#availability' do
+		let (:func) { find_first(cursor, :cursor_function) }
+
+		it "returns :available for the cursor availability" do
+			func.availability.should equal(:available)
+		end
+	end
+
+	describe '#type' do
+		let (:field) { find_first(cursor, :cursor_field_decl) }
+
+		it "returns type for the cursor" do
+			field.type.should be_kind_of(Type)
+			field.type.kind.should equal(:type_int)
+		end
+	end
+
+	describe '#underlying_type' do
+		let (:typedef) { find_first(cursor_cxx, :cursor_typedef_decl) }
+
+		it "returns type that the cursor type is underlying" do
+			typedef.underlying_type.should be_kind_of(Type)
+			typedef.underlying_type.kind.should equal(:type_pointer)
+		end
+	end
+
+	describe '#enum_decl_integer_type' do
+		#TODO
+	end
+
+	describe '#platform_availability' do
+		#TODO
+	end
+
+	describe '#get_overridden_cursors' do
+		#TODO
 	end
 end
