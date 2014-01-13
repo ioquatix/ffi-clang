@@ -38,7 +38,7 @@ module FFI
 
 				translation_unit_pointer = Lib.parse_translation_unit(self, source_file, args_pointer_from(command_line_args), command_line_args.size, unsaved_files, unsaved.length, options_bitmask_from(opts))
 
-				raise Error, "error parsing #{source_file.inspect}" unless translation_unit_pointer
+				raise Error, "error parsing #{source_file.inspect}" if translation_unit_pointer.null?
 
 				TranslationUnit.new translation_unit_pointer
 			end

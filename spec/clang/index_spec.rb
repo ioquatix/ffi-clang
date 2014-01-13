@@ -7,4 +7,8 @@ describe Index do
 		tu = index.parse_translation_unit fixture_path("a.c")
 		tu.should be_kind_of(TranslationUnit)
 	end
+
+	it "raises error when file is not found" do
+		expect { index.parse_translation_unit fixture_path("xxxxxxxxx.c") }.to raise_error
+	end
 end
