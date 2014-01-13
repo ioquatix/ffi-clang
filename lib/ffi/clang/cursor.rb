@@ -111,6 +111,10 @@ module FFI
 				Lib.extract_string Lib.get_cursor_spelling(@cursor)
 			end
 
+			def usr
+				Lib.extract_string Lib.get_cursor_usr(@cursor)
+			end
+
 			def kind
 				@cursor[:kind]
 			end
@@ -123,12 +127,28 @@ module FFI
 				Type.new Lib.get_cursor_result_type(@cursor)
 			end
 
+			def underlying_type
+				Type.new Lib.get_typedef_decl_underlying_type(@cursor)
+			end
+
+			def enum_decl_integer_type
+				Type.new Lib.get_decl_integer_type(@cursor)
+			end
+
 			def virtual_base?
 				Lib.is_virtual_base(@cursor) != 0
 			end
 
 			def dynamic_call?
 				Lib.is_dynamic_call(@cursor) != 0
+			end
+
+			def variadic?
+				Lib.is_variadic(@cursor) != 0
+			end
+
+			def definition?
+				Lib.is_definition(@cursor) != 0
 			end
 
 			def static?
@@ -159,6 +179,18 @@ module FFI
 				Cursor.new Lib.get_cursor_definition @cursor
 			end
 
+			def referenced
+				Cursor.new Lib.get_cursor_referenced(@cursor)
+			end
+
+			def semantic_parent
+				Cursor.new Lib.get_cursor_semantic_parent(@cursor)
+			end
+
+			def lexical_parent
+				Cursor.new Lib.get_cursor_lexical_parent(@cursor)
+			end
+
 			def template_kind
 				Lib.get_template_cursor_kind @cursor
 			end
@@ -171,12 +203,45 @@ module FFI
 				Lib.get_language @cursor
 			end
 
+			def translation_unit
+				tu = TranslationUnit.new Lib.cursor_get_translation_unit(@cursor)
+				# The allocated memory for TranslationUnit is managed
+				# by a pointer created by parse_translation_unit.
+				# autorelease is disabled to avoid double-free on GC.
+				tu.autorelease = false
+				tu
+			end
+
 			def visit_children(&block)
 				adapter = Proc.new do |cxcursor, parent_cursor, unused|
 					block.call Cursor.new(cxcursor), Cursor.new(parent_cursor)
 				end
 				
 				Lib.visit_children(@cursor, adapter, nil)
+			end
+
+			def linkage
+				Lib.get_cursor_linkage(@cursor)
+			end
+
+			def availability
+				Lib.get_cursor_availability(@cursor)
+			end
+
+			def included_file
+				raise NotImplementedError
+			end
+
+			def platform_availability
+				raise NotImplementedError
+			end
+
+			def get_overridden_cursors
+				raise NotImplementedError
+			end
+
+			def hash
+				Lib.get_cursor_hash(@cursor)
 			end
 
 			attr_reader :cursor

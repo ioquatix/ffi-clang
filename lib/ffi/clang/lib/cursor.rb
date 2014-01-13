@@ -194,6 +194,14 @@ module FFI
 				:not_accesible, 3
 			]
 
+			enum :linkage_kind, [
+				:invalid, 0,
+				:no_linkage, 1,
+				:internal, 2,
+				:unique_external, 3,
+				:external, 4,
+			]
+
 			class CXCursor < FFI::Struct
 				layout(
 					:kind, :kind,
@@ -209,6 +217,8 @@ module FFI
 
 			attach_function :is_virtual_base, :clang_isVirtualBase, [CXCursor.by_value], :uint
 			attach_function :is_dynamic_call, :clang_Cursor_isDynamicCall, [CXCursor.by_value], :uint
+			attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
+			attach_function :is_definition, :clang_isCursorDefinition, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
@@ -223,6 +233,7 @@ module FFI
 			attach_function :get_template_cursor_kind, :clang_getTemplateCursorKind, [CXCursor.by_value], :kind
 
 			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
+			attach_function :cursor_get_translation_unit, :clang_Cursor_getTranslationUnit, [CXCursor.by_value], :CXTranslationUnit
 
 			attach_function :get_null_cursor, :clang_getNullCursor, [], CXCursor.by_value
 
@@ -231,10 +242,12 @@ module FFI
 			attach_function :cursor_get_raw_comment_text, :clang_Cursor_getRawCommentText, [CXCursor.by_value], CXString.by_value
 			attach_function :cursor_get_parsed_comment, :clang_Cursor_getParsedComment, [CXCursor.by_value], CXComment.by_value
 
+			attach_function :get_cursor, :clang_getCursor, [:CXTranslationUnit, CXSourceLocation.by_value], CXCursor.by_value
 			attach_function :get_cursor_location, :clang_getCursorLocation, [CXCursor.by_value], CXSourceLocation.by_value
 			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
 			attach_function :get_cursor_display_name, :clang_getCursorDisplayName, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
+			attach_function :get_cursor_usr, :clang_getCursorUSR, [CXCursor.by_value], CXString.by_value
 
 			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
 
@@ -255,7 +268,18 @@ module FFI
 
 			attach_function :get_cursor_type, :clang_getCursorType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_cursor_result_type, :clang_getCursorResultType, [CXCursor.by_value], CXType.by_value
+			attach_function :get_typedef_decl_underlying_type, :clang_getTypedefDeclUnderlyingType, [CXCursor.by_value], CXType.by_value
+			attach_function :get_enum_decl_integer_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
+			attach_function :get_type_declaration, :clang_getTypeDeclaration, [CXType.by_value], FFI::Clang::Lib::CXCursor.by_value
 
+			attach_function :get_cursor_referenced, :clang_getCursorReferenced, [CXCursor.by_value], CXCursor.by_value
+			attach_function :get_cursor_semantic_parent, :clang_getCursorSemanticParent, [CXCursor.by_value], CXCursor.by_value
+			attach_function :get_cursor_lexical_parent, :clang_getCursorLexicalParent, [CXCursor.by_value], CXCursor.by_value
+
+			attach_function :get_cursor_availability, :clang_getCursorAvailability, [CXCursor.by_value], :availability
+			attach_function :get_cursor_linkage, :clang_getCursorLinkage, [CXCursor.by_value], :linkage_kind
+			# attach_function :get_included_file, :clang_getIncludedFile, [CXCursor.by_value], :CXFile
+			attach_function :get_cursor_hash, :clang_hashCursor, [CXCursor.by_value], :uint
 		end
 	end
 end
