@@ -33,6 +33,7 @@ module FFI
 
 			enum :kind, [:comment_null, 0,
 				     :comment_text, 1,
+				     :comment_inline_command, 2,
 				     :comment_paragraph, 5,
 				     :comment_block_command,6 ,
 				     :comment_param_command, 7,
@@ -51,6 +52,8 @@ module FFI
 			attach_function :param_command_comment_get_param_index, :clang_ParamCommandComment_getParamIndex, [CXComment.by_value], :uint
 			attach_function :block_command_comment_get_command_name, :clang_BlockCommandComment_getCommandName, [CXComment.by_value], CXString.by_value
 			attach_function :block_command_comment_get_num_args, :clang_BlockCommandComment_getNumArgs, [CXComment.by_value], :uint
+			attach_function :inline_command_comment_get_command_name, :clang_InlineCommandComment_getCommandName, [CXComment.by_value], CXString.by_value
+			attach_function :inline_command_comment_get_num_args, :clang_InlineCommandComment_getNumArgs, [CXComment.by_value], :uint
 		end
 	end
 end

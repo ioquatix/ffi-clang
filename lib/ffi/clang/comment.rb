@@ -40,6 +40,8 @@ module FFI
 					TextComment.new comment
 				when :comment_block_command
 					BlockCommandComment.new comment
+				when :comment_inline_command
+					InlineCommandComment.new comment
 				when :comment_param_command
 					ParamCommandComment.new comment
 				when :comment_null
@@ -82,6 +84,16 @@ module FFI
 		class TextComment < Comment
 			def text
 				Lib.extract_string Lib.text_comment_get_text(@comment)
+			end
+		end
+
+		class InlineCommandComment < Comment
+			def name
+				Lib.extract_string Lib.inline_command_comment_get_command_name(@comment)
+			end
+
+			def num_args
+				Lib.inline_command_comment_get_num_args(@comment)
 			end
 		end
 
