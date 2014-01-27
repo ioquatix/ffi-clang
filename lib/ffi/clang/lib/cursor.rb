@@ -85,7 +85,7 @@ module FFI
 				:cursor_no_decl_found, 71,
 				:cursor_not_implemented, 72,
 				:cursor_invalid_code, 73,
-				:cursor_first_expr, 100,
+				:cursor_unexposed_expr, 100,
 				:cursor_decl_ref_expr, 101,
 				:cursor_member_ref_expr, 102,
 				:cursor_call_expr, 103,

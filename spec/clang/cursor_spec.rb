@@ -233,7 +233,7 @@ describe Cursor do
 
 	describe '#unexposed?' do
 		let(:unexposed_cursor) { find_matching(cursor_cxx) { |child, parent|
-				child.kind == :cursor_first_expr and child.spelling == 'func_overloaded' } }
+				child.kind == :cursor_unexposed_expr and child.spelling == 'func_overloaded' } }
 
 		it 'checks the cursor is unexposed' do
 			expect(unexposed_cursor.unexposed?).to be_true
