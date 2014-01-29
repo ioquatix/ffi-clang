@@ -286,6 +286,7 @@ module FFI
 
 			attach_function :cursor_is_null, :clang_Cursor_isNull, [CXCursor.by_value], :int
 
+			attach_function :cursor_get_comment_range, :clang_Cursor_getCommentRange, [CXCursor.by_value], CXSourceRange.by_value
 			attach_function :cursor_get_raw_comment_text, :clang_Cursor_getRawCommentText, [CXCursor.by_value], CXString.by_value
 			attach_function :cursor_get_parsed_comment, :clang_Cursor_getParsedComment, [CXCursor.by_value], CXComment.by_value
 
