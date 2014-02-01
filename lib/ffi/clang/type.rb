@@ -21,8 +21,9 @@
 module FFI
 	module Clang
 		class Type
-			def initialize(type)
+			def initialize(type, translation_unit)
 				@type = type
+				@translation_unit = translation_unit
 			end
 
 			def kind
@@ -50,11 +51,11 @@ module FFI
 			end
 
 			def pointee
-				Type.new Lib.get_pointee_type @type
+				Type.new Lib.get_pointee_type(@type), @translation_unit
 			end
 
 			def canonical
-				Type.new Lib.get_canonical_type(@type)
+				Type.new Lib.get_canonical_type(@type), @translation_unit
 			end
 
 			def const_qualified?
@@ -62,11 +63,11 @@ module FFI
 			end
 
 			def arg_type(i)
-				Type.new Lib.get_arg_type(@type, i)
+				Type.new Lib.get_arg_type(@type, i), @translation_unit
 			end
 
 			def result_type
-				Type.new Lib.get_result_type(@type)
+				Type.new Lib.get_result_type(@type), @translation_unit
 			end
 		end
 	end
