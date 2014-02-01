@@ -25,8 +25,9 @@ require 'ffi/clang/cursor'
 module FFI
 	module Clang
 		class TranslationUnit < AutoPointer
-			def initialize(pointer)
+			def initialize(pointer, index)
 				super pointer
+				@index = index
 			end
 
 			def self.release(pointer)

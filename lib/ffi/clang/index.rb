@@ -40,7 +40,7 @@ module FFI
 
 				raise Error, "error parsing #{source_file.inspect}" if translation_unit_pointer.null?
 
-				TranslationUnit.new translation_unit_pointer
+				TranslationUnit.new translation_unit_pointer, self
 			end
 
 			private
