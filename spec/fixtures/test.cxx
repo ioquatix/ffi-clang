@@ -16,7 +16,11 @@ struct C : public virtual A {
 
 struct D : public B, public C {
  private:
-  void func_d() {}
+  void func_d();
 };
+
+void D::func_d() {};
+
+void f_variadic(int a, ...);
 
 typedef int const* const_int_ptr;
