@@ -26,7 +26,7 @@ describe Type do
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:type) { find_first(cursor, :cursor_function).type }
 
-	it "can tell us about the main function" do
+	it "can tell us about the main function", from_3_3: true do
 		type.variadic?.should equal(false)
 
 		type.num_arg_types.should equal(2)
@@ -45,22 +45,36 @@ describe Type do
   end
 
   describe '#canonical' do
-    let(:canonical_type_spelling) { find_matching(cursor_cxx) { |child, parent|
+    let(:canonical_type) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
-      }.type.canonical.spelling }
+      }.type.canonical }
 
-    it 'extracts typedef' do
-      canonical_type_spelling.should eq 'const int *'
+    it 'extracts typedef', upto_3_2: true do
+      expect(canonical_type).to be_kind_of(Type)
+      expect(canonical_type.kind).to be(:type_pointer)
+    end
+
+    it 'extracts typedef', from_3_3: true do
+      expect(canonical_type).to be_kind_of(Type)
+      expect(canonical_type.kind).to be(:type_pointer)
+      expect(canonical_type.spelling).to eq('const int *')
     end
   end
 
   describe '#pointee' do
-    let(:pointee_type_spelling) { find_matching(cursor_cxx) { |child, parent|
+    let(:pointee_type) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
-      }.type.canonical.pointee.spelling }
+      }.type.canonical.pointee }
 
-    it 'gets pointee type of pointer, C++ reference' do
-      pointee_type_spelling.should eq 'const int'
+    it 'gets pointee type of pointer, C++ reference', upto_3_2: true do
+      expect(pointee_type).to be_kind_of(Type)
+      expect(pointee_type.kind).to be(:type_int)
+    end
+
+    it 'gets pointee type of pointer, C++ reference', from_3_3: true do
+      expect(pointee_type).to be_kind_of(Type)
+      expect(pointee_type.kind).to be(:type_int)
+      expect(pointee_type.spelling).to eq('const int')
     end
   end
 

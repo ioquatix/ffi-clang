@@ -217,11 +217,15 @@ module FFI
 
 			attach_function :is_virtual_base, :clang_isVirtualBase, [CXCursor.by_value], :uint
 			attach_function :is_dynamic_call, :clang_Cursor_isDynamicCall, [CXCursor.by_value], :uint
-			attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
+			if FFI::Clang::Utils.satisfy_version?('3.3')
+				attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
+			end
 			attach_function :is_definition, :clang_isCursorDefinition, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
-			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
+			if FFI::Clang::Utils.satisfy_version?('3.4')
+				attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
+			end
 			attach_function :cxx_get_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :access_specifier
 			
 			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
