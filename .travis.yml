@@ -1,9 +1,18 @@
 language: ruby
 rvm:
   - "2.0"
+  - "2.1"
+env:
+  - LLVM_VERSION=3.2
+  - LLVM_VERSION=3.3
+  - LLVM_VERSION=3.4
+  - LLVM_VERSION=3.5
 install:
     - sudo add-apt-repository --yes ppa:h-rayflood/llvm
+    - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+    - sudo add-apt-repository --yes 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise main'
+    - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
     - sudo apt-get -qq update
-    - sudo apt-get -qq install libclang-3.3-dev
+    - sudo apt-get -qq install libclang-${LLVM_VERSION}-dev
+    - export LD_LIBRARY_PATH=/usr/lib/llvm-${LLVM_VERSION}/lib/
     - bundle install
-    - export LD_LIBRARY_PATH=/usr/lib/llvm-3.3/lib/
