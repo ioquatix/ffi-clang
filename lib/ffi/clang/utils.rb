@@ -1,5 +1,4 @@
-# Copyright, 2010-2012 by Jari Bakken.
-# Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2014 by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,36 +18,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi'
-require "rbconfig"
+require 'ffi/clang/lib/utils'
+require 'ffi/clang/lib/string'
 
-module FFI::Clang
-	class Error < StandardError
-	end
+module FFI
+	module Clang
+		class Utils
+			def self.clang_version_string
+				Lib.extract_string Lib.get_clang_version
+			end
 
-	def self.platform
-		os = RbConfig::CONFIG["host_os"]
+			def self.clang_version
+				version = clang_version_string
+				version.match(/clang version (\d+\.\d+)/).values_at(1).first
+			end
 
-		case os
-		when /darwin/
-			:darwin
-		when /linux/
-			:linux
-		when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-			:windows
-		else
-			os
+			def self.clang_version_symbol
+				version = "clang_" + clang_version.tr('.', '_')
+				version.intern
+			end
+
+			def self.clang_major_version
+				version = clang_version_string
+				version.match(/clang version (\d+)\./).values_at(1).first.to_i
+			end
+
+			def self.clang_minor_version
+				version = clang_version_string
+				version.match(/clang version \d+\.(\d+)/).values_at(1).first.to_i
+			end
+
+			def self.satisfy_version?(min_version, max_version = nil)
+				Gem::Version.create(self.clang_version) >= Gem::Version.create(min_version) and
+					(max_version.nil? or
+					Gem::Version.create(self.clang_version) <= Gem::Version.create(max_version))
+			end
 		end
 	end
 end
-
-require 'ffi/clang/utils'
-require 'ffi/clang/lib'
-require 'ffi/clang/index'
-require 'ffi/clang/translation_unit'
-require 'ffi/clang/diagnostic'
-require 'ffi/clang/cursor'
-require 'ffi/clang/source_location'
-require 'ffi/clang/source_range'
-require 'ffi/clang/unsaved_file'
-

@@ -39,15 +39,26 @@ describe Cursor do
 		location.should be_kind_of(SourceLocation)
 	end
 
-	it "has an extent which is a SourceRange" do
-		extent = cursor.extent
-		extent.should be_kind_of(SourceRange)
+	describe '#extent' do
+		let(:extent) { cursor.extent }
+		it "has an extent which is a SourceRange" do
+			expect(extent).to be_kind_of(SourceRange)
+		end
 
-		extent.start.file.should eq(fixture_path("list.c"))
-		extent.start.line.should equal(1)
+		it 'has filename and posion at start point' do
+			expect(extent.start.file).to eq(fixture_path("list.c"))
+			expect(extent.start.line).to equal(1)
+		end
 
-		extent.end.file.should eq(fixture_path("list.c"))
-		extent.end.line.should equal(11)
+		it 'has filename and posion at end point', from_3_4: true do
+			expect(extent.end.file).to eq(fixture_path("list.c"))
+			expect(extent.end.line).to equal(11)
+		end
+
+		it 'has filename and posion at end point', upto_3_3: true do
+			expect(extent.end.file).to eq(fixture_path("list.c"))
+			expect(extent.end.line).to equal(10)
+		end
 	end
 
 	it "returns the path of the translation unit for the translation unit cursor" do
@@ -149,7 +160,7 @@ describe Cursor do
 		end
 	end
 
-	describe '#pure_virtual?' do
+	describe '#pure_virtual?', from_3_4: true do
 		let(:pure_virtual_cursor) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_cxx_method and
 				child.spelling == 'func_a' and parent.spelling == 'A' } }
@@ -221,8 +232,12 @@ describe Cursor do
 		let(:access_specifier_cursor) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_cxx_method and child.spelling == 'func_d' } }
 
-		it 'returns access specifier symbol' do
+		it 'returns access specifier symbol', from_3_3: true do
 			access_specifier_cursor.access_specifier.should equal :private
+		end
+
+		it 'returns access specifier symbol(invalid, why?)', upto_3_2: true do
+			access_specifier_cursor.access_specifier.should equal :invalid
 		end
 	end
 
@@ -302,7 +317,7 @@ describe Cursor do
 		end
 	end
 
-	describe '#variadic?' do
+	describe '#variadic?', from_3_3: true do
 		let(:func) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'f_variadic' } }
 

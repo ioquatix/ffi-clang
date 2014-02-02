@@ -75,11 +75,23 @@ describe Comment do
 		end
 	end
 
-	it "understands blocks" do
-		block = comment.child(5)
-		block.should be_kind_of(BlockCommandComment)
-		block.name.should eq("return")
-		block.comment.should eq(" a random value")
-	end
+	describe "understands blocks" do
+		let (:block) { comment.child(5) }
 
+		it 'is BlockCommandComment' do
+			expect(block).to be_kind_of(BlockCommandComment)
+		end
+
+		it 'has name' do
+			expect(block.name).to eq("return")
+		end
+
+		it 'has comment', from_3_4: true do
+			expect(block.comment).to eq(" a random value")
+		end
+
+		it 'has comment', upto_3_3: true do
+			expect(block.comment).to eq(" a random value\n ")
+		end
+	end
 end
