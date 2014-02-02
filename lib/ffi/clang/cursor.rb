@@ -27,12 +27,16 @@ require 'ffi/clang/type'
 module FFI
 	module Clang
 		class Cursor
+			attr_reader :cursor
+			attr_reader :translation_unit
+
 			def self.null_cursor
-				Cursor.new Lib.get_null_cursor
+				Cursor.new Lib.get_null_cursor, nil
 			end
 
-			def initialize( cxcursor )
+			def initialize(cxcursor, translation_unit)
 				@cursor = cxcursor
+				@translation_unit = translation_unit
 			end
 
 			def null?
@@ -120,19 +124,19 @@ module FFI
 			end
 
 			def type
-				Type.new Lib.get_cursor_type(@cursor)
+				Type.new Lib.get_cursor_type(@cursor), @translation_unit
 			end
 
 			def result_type
-				Type.new Lib.get_cursor_result_type(@cursor)
+				Type.new Lib.get_cursor_result_type(@cursor), @translation_unit
 			end
 
 			def underlying_type
-				Type.new Lib.get_typedef_decl_underlying_type(@cursor)
+				Type.new Lib.get_typedef_decl_underlying_type(@cursor), @translation_unit
 			end
 
 			def enum_decl_integer_type
-				Type.new Lib.get_decl_integer_type(@cursor)
+				Type.new Lib.get_decl_integer_type(@cursor), @translation_unit
 			end
 
 			def virtual_base?
@@ -168,27 +172,27 @@ module FFI
 			end
 
 			def specialized_template
-				Cursor.new Lib.get_specialized_cursor_template @cursor
+				Cursor.new Lib.get_specialized_cursor_template(@cursor), @translation_unit
 			end
 
 			def canonical
-				Cursor.new Lib.get_canonical_cursor @cursor
+				Cursor.new Lib.get_canonical_cursor(@cursor), @translation_unit
 			end
 
 			def definition
-				Cursor.new Lib.get_cursor_definition @cursor
+				Cursor.new Lib.get_cursor_definition(@cursor), @translation_unit
 			end
 
 			def referenced
-				Cursor.new Lib.get_cursor_referenced(@cursor)
+				Cursor.new Lib.get_cursor_referenced(@cursor), @translation_unit
 			end
 
 			def semantic_parent
-				Cursor.new Lib.get_cursor_semantic_parent(@cursor)
+				Cursor.new Lib.get_cursor_semantic_parent(@cursor), @translation_unit
 			end
 
 			def lexical_parent
-				Cursor.new Lib.get_cursor_lexical_parent(@cursor)
+				Cursor.new Lib.get_cursor_lexical_parent(@cursor), @translation_unit
 			end
 
 			def template_kind
@@ -203,18 +207,9 @@ module FFI
 				Lib.get_language @cursor
 			end
 
-			def translation_unit
-				tu = TranslationUnit.new Lib.cursor_get_translation_unit(@cursor)
-				# The allocated memory for TranslationUnit is managed
-				# by a pointer created by parse_translation_unit.
-				# autorelease is disabled to avoid double-free on GC.
-				tu.autorelease = false
-				tu
-			end
-
 			def visit_children(&block)
 				adapter = Proc.new do |cxcursor, parent_cursor, unused|
-					block.call Cursor.new(cxcursor), Cursor.new(parent_cursor)
+					block.call Cursor.new(cxcursor, @translation_unit), Cursor.new(parent_cursor, @translation_unit)
 				end
 				
 				Lib.visit_children(@cursor, adapter, nil)
@@ -243,8 +238,6 @@ module FFI
 			def hash
 				Lib.get_cursor_hash(@cursor)
 			end
-
-			attr_reader :cursor
 
 			def ==(other)
 				Lib.are_equal(@cursor, other.cursor) != 0
