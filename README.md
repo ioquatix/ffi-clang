@@ -1,9 +1,11 @@
 # FFI::Clang
 
-A light weight wrapper for Ruby exposing libclang.
+A light weight wrapper for Ruby exposing [libclang][1].
 
 [![Build Status](https://secure.travis-ci.org/ioquatix/ffi-clang.png)](http://travis-ci.org/ioquatix/ffi-clang)
 [![Code Climate](https://codeclimate.com/github/ioquatix/ffi-clang.png)](https://codeclimate.com/github/ioquatix/ffi-clang)
+
+[1]: http://llvm.org/devmtg/2010-11/Gregor-libclang.pdf
 
 ## Installation
 
