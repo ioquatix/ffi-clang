@@ -1,5 +1,6 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +22,7 @@
 
 require 'ffi/clang/lib/translation_unit'
 require 'ffi/clang/cursor'
+require 'ffi/clang/file'
 
 module FFI
 	module Clang
@@ -42,8 +44,24 @@ module FFI
 				end
 			end
 
-			def cursor
-				Cursor.new(Lib.get_translation_unit_cursor(self), self)
+			def cursor(location = nil)
+				if location.nil?
+					Cursor.new Lib.get_translation_unit_cursor(self), self
+				else
+					Cursor.new Lib.get_cursor(self, location.location), self
+				end
+			end
+
+			def location(file, line, column)
+				ExpansionLocation.new Lib.get_location(self, file, line, column)
+			end
+
+			def location_offset(file, offset)
+				ExpansionLocation.new Lib.get_location_offset(self, file, offset)
+			end
+
+			def file(file_name)
+				File.new(Lib.get_file(self, file_name), self)
 			end
 		end
 	end

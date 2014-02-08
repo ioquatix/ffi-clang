@@ -29,11 +29,11 @@ module FFI
 			end
 
 			def start
-				SourceLocation.new(Lib.get_range_start @range)
+				ExpansionLocation.new(Lib.get_range_start @range)
 			end
 
 			def end
-				SourceLocation.new(Lib.get_range_end @range)
+				ExpansionLocation.new(Lib.get_range_end @range)
 			end
 		end
 	end
