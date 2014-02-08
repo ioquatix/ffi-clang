@@ -1,6 +1,7 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +27,7 @@ describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:cursor_canon) { Index.new.parse_translation_unit(fixture_path("canonical.c")).cursor }
+	let(:cursor_pp) { Index.new.parse_translation_unit(fixture_path("docs.c"),[],[],{detailed_preprocessing_record: true}).cursor }
 
 	it "can be obtained from a translation unit" do
 		cursor.should be_kind_of(Cursor)
@@ -142,6 +144,102 @@ describe Cursor do
 
 	end
 
+	describe '#declaration?' do
+		let (:struct) { find_first(cursor, :cursor_struct) }
+
+		it "checks the cursor is declaration" do
+			expect(struct.declaration?).to be_true
+		end
+	end
+
+	describe '#reference?' do
+		let (:ref) { find_first(cursor, :cursor_type_ref) }
+
+		it "checks the cursor is reference" do
+			expect(ref.reference?).to be_true
+		end
+	end
+
+	describe '#expression?' do
+		let (:literal) { find_first(cursor, :cursor_integer_literal) }
+
+		it "checks the cursor is expression" do
+			expect(literal.expression?).to be_true
+		end
+	end
+
+	describe '#statement?' do
+		let (:return_stmt) { find_first(cursor, :cursor_return_stmt) }
+
+		it "checks the cursor is statement" do
+			expect(return_stmt.statement?).to be_true
+		end
+	end
+
+	describe '#attribute?' do
+		let (:attr) { find_first(cursor_cxx, :cursor_unexposed_attr) }
+
+		it "checks the cursor is attribute" do
+			expect(attr.attribute?).to be_true
+		end
+	end
+
+	describe '#public?' do
+		let(:public_cursor) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'public_member_int' } }
+
+		it 'checks access control level is public', from_3_3: true do
+			expect(public_cursor.public?).to be_true
+		end
+
+		it 'returns false on clang 3.2', upto_3_2: true do
+			expect(public_cursor.public?).to be_false
+		end
+	end
+
+	describe '#private?' do
+		let(:private_cursor) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'private_member_int' } }
+
+		it 'checks access control level is private', from_3_3: true do
+			expect(private_cursor.private?).to be_true
+		end
+
+		it 'returns false on clang 3.2', upto_3_2: true do
+			expect(private_cursor.private?).to be_false
+		end
+	end
+
+	describe '#protected?' do
+		let(:protected_cursor) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'protected_member_int' } }
+
+		it 'checks access control level is protected', from_3_3: true do
+			expect(protected_cursor.protected?).to be_true
+		end
+
+		it 'returns false on clang 3.2', upto_3_2: true do
+			expect(protected_cursor.protected?).to be_false
+		end
+	end
+
+	describe '#preprocessing?' do
+		let (:pp) { find_first(cursor_pp, :cursor_macro_definition) }
+
+		it 'checks the cursor is preprocessing' do
+			expect(pp.preprocessing?).to be_true
+		end
+	end
+
+	describe '#unexposed?' do
+		let(:unexposed_cursor) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_first_expr and child.spelling == 'func_overloaded' } }
+
+		it 'checks the cursor is unexposed' do
+			expect(unexposed_cursor.unexposed?).to be_true
+		end
+	end
+
 	describe '#virtual_base?' do
 		let(:virtual_base_cursor) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_cxx_base_specifier and parent.spelling == 'B' } }
@@ -188,12 +286,33 @@ describe Cursor do
 		end
 	end
 
-	describe '#dynamic_call?' do
-		# TODO
+	describe '#enum_unsigned_value' do
+		let(:enum_value_cursor) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_enum_constant_decl and child.spelling == 'EnumC' } }
+
+		it 'returns enum unsigned value' do
+			expect(enum_value_cursor.enum_unsigned_value).to eq(100)
+		end
 	end
 
-	describe '#specialized_template' do
-		# TODO
+	describe '#dynamic_call?' do
+		let(:dynamic_call) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_call_expr and child.spelling == 'func_a' and 
+				child.semantic_parent.spelling == 'f_dynamic_call' } }
+
+		it 'checks if the method call is dynamic' do
+			expect(dynamic_call.dynamic_call?).to be_true
+		end
+	end
+
+	describe '#specialized_template', from_3_3: true do # looks not working on 3.2
+		let(:cursor_function) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'func_overloaded' } }
+
+		it "returns a cursor that may represent a specialization or instantiation of a template" do
+			expect(cursor_function.specialized_template).to be_kind_of(Cursor)
+			expect(cursor_function.specialized_template.kind).to be(:cursor_function_template)
+		end
 	end
 
 	describe '#canonical' do
@@ -224,8 +343,14 @@ describe Cursor do
 		end
 	end
 
-	describe '#template_kind' do
-		# TODO
+	describe '#template_kind', from_3_3: true do # looks not working on 3.2
+		let(:template) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function_template and child.spelling == 'func_overloaded' } }
+
+		it "returns the cursor kind of the specializations would be generated" do
+			expect(template.template_kind).to be_kind_of(Symbol)
+			expect(template.template_kind).to be(:cursor_function)
+		end
 	end
 
 	describe '#access_specifier' do
@@ -263,6 +388,7 @@ describe Cursor do
 
 		it "returns the translation unit that a cursor originated from" do
 			struct.translation_unit.should be_kind_of(TranslationUnit)
+			struct.translation_unit.spelling.should eq(fixture_path("list.c"))
 		end
 	end
 
@@ -372,15 +498,204 @@ describe Cursor do
 		end
 	end
 
+	describe '#bitfield?', from_3_3: true do
+		let(:bitfield) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'bit_field_a' } }
+		let(:non_bitfield) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'non_bit_field_c' } }
+
+		it "returns true if the cursor is bitfield" do
+			expect(bitfield.bitfield?).to be_true
+		end
+
+		it "returns false if the cursor is not bitfield" do
+			expect(non_bitfield.bitfield?).to be_false
+		end
+	end
+
+	describe '#bitwidth', from_3_3: true do
+		let(:bitfield) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'bit_field_a' } }
+		let(:non_bitfield) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == 'non_bit_field_c' } }
+
+		it "returns the bit width of the bit field if the cursor is bitfield" do
+			expect(bitfield.bitwidth).to be_kind_of(Integer)
+			expect(bitfield.bitwidth).to eq(2)
+		end
+
+		it "returns -1 if the cursor is not bitfield" do
+			expect(non_bitfield.bitwidth).to eq(-1)
+		end
+	end
+
 	describe '#enum_decl_integer_type' do
-		#TODO
+		let(:enum) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_enum_decl and child.spelling == 'normal_enum' } }
+
+		it "returns the integer type of the enum declaration" do
+			expect(enum.enum_decl_integer_type).to be_kind_of(Type)
+			expect(enum.enum_decl_integer_type.kind).to be(:type_uint)
+		end
 	end
 
 	describe '#platform_availability' do
+		let(:func) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'availability_func'} }
+		let(:availability) { func.platform_availability }
+
+		it "returns the availability of the entity as Hash" do
+			expect(availability).to be_kind_of(Hash)
+			expect(availability[:always_deprecated]).to be_kind_of(Integer)
+			expect(availability[:always_unavailable]).to be_kind_of(Integer)
+			expect(availability[:deprecated_message]).to be_kind_of(String)
+			expect(availability[:unavailable_message]).to be_kind_of(String)
+			expect(availability[:availability]).to be_kind_of(Array)
+		end
+	end
+
+	describe '#overriddens' do
+		let(:override_cursor) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_cxx_method and
+				child.spelling == 'func_a' and parent.spelling == 'D' } }
+
+		it "returns the set of methods which are overridden by this cursor method" do
+			expect(override_cursor.overriddens).to be_kind_of(Array)
+			expect(override_cursor.overriddens.size).to eq(2)
+			expect(override_cursor.overriddens.map{|cur| cur.semantic_parent.spelling}).to eq(["B", "C"])
+		end
+	end
+
+	describe '#overloaded_decl' do
+		let(:overloaded) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_overloaded_decl_ref and child.spelling == 'func_overloaded' } }
+
+		it "returns a cursor for one of the overloaded declarations" do
+			expect(overloaded.overloaded_decl(0)).to be_kind_of(Cursor)
+			expect(overloaded.overloaded_decl(0).kind).to be(:cursor_function_template)
+			expect(overloaded.overloaded_decl(0).spelling).to eq('func_overloaded')
+		end
+	end
+
+	describe '#num_overloaded_decls' do
+		let(:overloaded) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_overloaded_decl_ref and child.spelling == 'func_overloaded' } }
+
+		it "returns the number of overloaded declarations" do
+			expect(overloaded.num_overloaded_decls).to be_kind_of(Integer)
+			expect(overloaded.num_overloaded_decls).to be(2)
+		end
+	end
+
+	describe '#objc_type_encoding' do
 		#TODO
 	end
 
-	describe '#get_overridden_cursors' do
-		#TODO
+	describe '#argument' do
+		let(:func) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'f_non_variadic' } }
+
+		it "returns the argument cursor of the function" do
+			expect(func.argument(0)).to be_kind_of(Cursor)
+			expect(func.argument(0).spelling).to eq('a')
+		end
+	end
+
+	describe '#num_arguments' do
+	    let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
+		let(:func) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'f_non_variadic' } }
+
+		it "returns the number of non-variadic arguments" do
+			expect(func.num_arguments).to be_kind_of(Integer)
+			expect(func.num_arguments).to be(3)
+		end
+	end
+
+	describe '#result_type' do
+		let(:func) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'f_non_variadic' } }
+
+		it "result the result type of the function" do
+			expect(func.result_type).to be_kind_of(Type)
+			expect(func.result_type.kind).to be(:type_void)
+		end
+	end
+
+	describe '#raw_comment_text' do
+		let(:func) { find_matching(cursor_pp) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'a_function' } }
+
+		it "checks the cursor is declaration" do
+			expect(func.raw_comment_text).to be_kind_of(String)
+			expect(func.raw_comment_text).not_to be_empty
+		end
+	end
+
+	describe '#comment' do
+		let(:func) { find_matching(cursor_pp) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'a_function' } }
+
+		it "checks the cursor is declaration" do
+			expect(func.comment).to be_kind_of(Comment)
+		end
+	end
+
+	describe '#included_file' do
+		let (:inclusion) { find_first(cursor_pp, :cursor_inclusion_directive) }
+
+		it 'returns the file that is included by the given inclusion directive cursor' do
+			expect(inclusion.included_file).to be_kind_of(FFI::Clang::File)
+			expect(File.basename(inclusion.included_file.name)).to eq("docs.h")
+		end
+	end
+
+	describe Cursor::PlatformAvailability do
+		let(:func) { find_matching(cursor_cxx) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'availability_func'} }
+		let(:availability) { func.platform_availability[:availability].first }
+
+		it "can be obtained by Cursor#platform_availability" do
+			expect(availability).to be_kind_of(Cursor::PlatformAvailability)
+		end
+
+		describe "#platform" do
+			it "returns availability information for the platform" do
+				expect(availability.platform).to be_kind_of(String)
+			end
+		end
+
+		describe "#introduced" do
+			it "returns the version number in which this entity was introduced" do
+				expect(availability.introduced).to be_kind_of(Lib::CXVersion)
+				expect(availability.introduced.to_s).to eq("10.4.1")
+			end
+		end
+
+		describe "#deprecated" do
+			it "returns the version number in which this entity was deprecated" do
+				expect(availability.deprecated).to be_kind_of(Lib::CXVersion)
+				expect(availability.deprecated.to_s).to eq("10.6")
+			end
+		end
+
+		describe "#obsoleted" do
+			it "returns the version number in which this entity was obsoleted" do
+				expect(availability.obsoleted).to be_kind_of(Lib::CXVersion)
+				expect(availability.obsoleted.to_s).to eq("10.7")
+			end
+		end
+
+		describe "#unavailable" do
+			it "returns whether the entity is unavailable on this platform" do
+				expect(availability.unavailable).to be_false
+			end
+		end
+
+		describe "#message" do
+			it "returns an optional message to provide to a user of this API" do
+				expect(availability.message).to be_kind_of(String)
+			end
+		end
 	end
 end

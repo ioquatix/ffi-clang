@@ -28,6 +28,22 @@ module FFI
 			end
 
 			attr_accessor :filename, :contents
+
+
+			def self.unsaved_pointer_from(unsaved)
+				return nil if unsaved.length == 0
+
+				vec = MemoryPointer.new(Lib::CXUnsavedFile, unsaved.length)
+
+				unsaved.each_with_index do |file, i|
+					uf = Lib::CXUnsavedFile.new(vec + i * Lib::CXUnsavedFile.size)
+					uf[:filename] = MemoryPointer.from_string(file.filename)
+					uf[:contents] = MemoryPointer.from_string(file.contents)
+					uf[:length] = file.contents.length
+				end
+
+				vec
+			end
 		end
 	end
 end

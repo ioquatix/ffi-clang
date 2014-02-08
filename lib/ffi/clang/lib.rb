@@ -49,6 +49,23 @@ module FFI
 
 				bitmask
 			end
+
+			def self.opts_from(enum, bitmask)
+				bit = 1
+				opts = {}
+				while bitmask != 0
+					if bitmask & 1
+						if sym = enum[bit]
+							opts[sym] = true
+						else
+							raise Error, "unknown values: #{bit}, expected one of #{enum.symbols}"
+						end
+					end
+					bitmask >>= 1
+					bit <<= 1
+				end
+				opts
+			end
 		end
 	end
 end

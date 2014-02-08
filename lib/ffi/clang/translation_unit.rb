@@ -36,6 +36,35 @@ module FFI
 				Lib.dispose_translation_unit(pointer)
 			end
 
+			def self.default_editing_translation_unit_options
+				bitmask = Lib.default_editing_translation_unit_options
+				Lib.opts_from Lib::TranslationUnitFlags, bitmask
+			end
+
+			def default_save_options
+				bitmask = Lib.default_save_options(self)
+				Lib.opts_from Lib::SaveTranslationUnitFlags, bitmask
+			end
+
+			def save(filename, opts = {})
+				ret = Lib.save_translation_unit(self, filename, 0)
+				sym = Lib::SaveError[ret]
+				raise Error, "unknown return values: #{ret} #{sym.inspect}" unless sym
+				raise Error, "save error: #{sym.inspect}, filename: #{filename}" if sym != :none
+			end
+
+			def default_reparse_options
+				bitmask = Lib.default_save_options(self)
+				Lib.opts_from Lib::ReparseFlags, bitmask
+			end
+
+			def reparse(unsaved = [], opts = {})
+				unsaved_files = UnsavedFile.unsaved_pointer_from(unsaved)
+				if Lib.reparse_translation_unit(self, unsaved.size, unsaved_files, 0) != 0
+					raise Error, "reparse error"
+				end
+			end
+
 			def diagnostics
 				n = Lib.get_num_diagnostics(self)
 			
@@ -62,6 +91,43 @@ module FFI
 
 			def file(file_name)
 				File.new(Lib.get_file(self, file_name), self)
+			end
+
+			def spelling
+				Lib.get_translation_unit_spelling(self)
+			end
+
+			def resource_usage
+				FFI::Clang::TranslationUnit::ResourceUsage.new Lib.resource_usage(self)
+			end
+
+			class ResourceUsage < AutoPointer
+				def initialize(resource_usage)
+					# CXResourceUsage is returned by value and should be freed explicitly.
+					# Get FFI::pointer of the data so that the data is handled by AutoPointer.
+					pointer = FFI::Pointer.new(resource_usage.to_ptr)
+					super(pointer)
+					@resource_usage = resource_usage
+				end
+
+				def self.release(pointer)
+					# clang_disposeCXTUResourceUsage requires value type, so create it by pointer
+					Lib.dispose_resource_usage(Lib::CXTUResourceUsage.new(pointer))
+				end
+
+				def self.name(kind)
+					Lib.resource_usage_name(kind)
+				end
+
+				def entries
+					ary = []
+					ptr = @resource_usage[:entries]
+					@resource_usage[:numEntries].times {
+						ary << Lib::CXTUResourceUsageEntry.new(ptr)
+						ptr += Lib::CXTUResourceUsageEntry.size
+					}
+					ary
+				end
 			end
 		end
 	end

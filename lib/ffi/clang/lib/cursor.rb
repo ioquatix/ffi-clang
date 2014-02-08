@@ -1,6 +1,7 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +25,7 @@ require 'ffi/clang/lib/translation_unit'
 require 'ffi/clang/lib/diagnostic'
 require 'ffi/clang/lib/comment'
 require 'ffi/clang/lib/type'
+require 'ffi/clang/utils'
 
 module FFI
 	module Clang
@@ -210,10 +212,50 @@ module FFI
 				)
 			end
 
+			class CXVersion < FFI::Struct
+				layout(
+					:major, :int,
+					:minor, :int,
+					:subminor, :int,
+				)
+
+				def major
+					self[:major]
+				end
+
+				def minor
+					self[:minor]
+				end
+
+				def subminor
+					self[:subminor]
+				end
+
+				def version_string
+					[major, minor, subminor].reject{|v| v < 0}.map(&:to_s).join(".")
+				end
+
+				def to_s
+					version_string
+				end
+			end
+
+			class CXPlatformAvailability < FFI::Struct
+				layout(
+					:platform, CXString,
+					:introduced, CXVersion,
+					:deprecated, CXVersion,
+					:obsoleted, CXVersion,
+					:unavailable, :int,
+					:message, CXString,
+				)
+			end
+
 			enum :cxx_access_specifier, [:invalid, :public, :protected, :private]
 			attach_function :get_cxx_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :cxx_access_specifier
 
 			attach_function :get_enum_value, :clang_getEnumConstantDeclValue, [CXCursor.by_value], :long_long
+			attach_function :get_enum_unsigned_value, :clang_getEnumConstantDeclUnsignedValue, [CXCursor.by_value], :ulong_long
 
 			attach_function :is_virtual_base, :clang_isVirtualBase, [CXCursor.by_value], :uint
 			attach_function :is_dynamic_call, :clang_Cursor_isDynamicCall, [CXCursor.by_value], :uint
@@ -223,6 +265,7 @@ module FFI
 			attach_function :is_definition, :clang_isCursorDefinition, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
+
 			if FFI::Clang::Utils.satisfy_version?('3.4')
 				attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
 			end
@@ -282,8 +325,27 @@ module FFI
 
 			attach_function :get_cursor_availability, :clang_getCursorAvailability, [CXCursor.by_value], :availability
 			attach_function :get_cursor_linkage, :clang_getCursorLinkage, [CXCursor.by_value], :linkage_kind
-			# attach_function :get_included_file, :clang_getIncludedFile, [CXCursor.by_value], :CXFile
+			attach_function :get_included_file, :clang_getIncludedFile, [CXCursor.by_value], :CXFile
 			attach_function :get_cursor_hash, :clang_hashCursor, [CXCursor.by_value], :uint
+
+			if FFI::Clang::Utils.satisfy_version?('3.3')
+				attach_function :is_bit_field,:clang_Cursor_isBitField, [CXCursor.by_value], :uint
+				attach_function :get_field_decl_bit_width, :clang_getFieldDeclBitWidth, [CXCursor.by_value], :int
+			end
+
+			attach_function :get_overloaded_decl, :clang_getOverloadedDecl, [CXCursor.by_value, :uint], CXCursor.by_value
+			attach_function :get_num_overloaded_decls, :clang_getNumOverloadedDecls, [CXCursor.by_value], :uint
+
+			attach_function :cursor_get_argument, :clang_Cursor_getArgument, [CXCursor.by_value, :uint], CXCursor.by_value
+			attach_function :cursor_get_num_arguments, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
+
+			attach_function :get_decl_objc_type_encoding, :clang_getDeclObjCTypeEncoding, [CXCursor.by_value], CXString.by_value
+
+			attach_function :get_cursor_platform_availability, :clang_getCursorPlatformAvailability, [CXCursor.by_value, :pointer, :pointer, :pointer, :pointer, :pointer, :int], :int
+			attach_function :dispose_platform_availability, :clang_disposeCXPlatformAvailability, [:pointer], :void
+
+			attach_function :get_overridden_cursors, :clang_getOverriddenCursors, [CXCursor.by_value, :pointer, :pointer], :void
+			attach_function :dispose_overridden_cursors, :clang_disposeOverriddenCursors, [:pointer], :void
 		end
 	end
 end

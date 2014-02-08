@@ -3,6 +3,8 @@ require 'ffi/clang'
 
 include FFI::Clang
 
+TMP_DIR = File.expand_path("../tmp/", __FILE__)
+
 module ClangSpecHelper
 	def fixture_path(path)
 		File.join File.expand_path("../fixtures", __FILE__), path
