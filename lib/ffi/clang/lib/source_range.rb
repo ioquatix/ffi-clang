@@ -2,6 +2,7 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +35,12 @@ module FFI
 				)
 			end
 
+			attach_function :get_null_range, :clang_getNullRange, [], CXSourceLocation.by_value
+			attach_function :get_range, :clang_getRange, [CXSourceLocation.by_value, CXSourceLocation.by_value], CXSourceRange.by_value
 			attach_function :get_range_start, :clang_getRangeStart, [CXSourceRange.by_value], CXSourceLocation.by_value
 			attach_function :get_range_end, :clang_getRangeEnd, [CXSourceRange.by_value], CXSourceLocation.by_value
+			attach_function :range_is_null, :clang_Range_isNull, [CXSourceRange.by_value], :int
+			attach_function :equal_range, :clang_equalRanges, [CXSourceRange.by_value, CXSourceRange.by_value], :uint
 		end
 	end
 end
