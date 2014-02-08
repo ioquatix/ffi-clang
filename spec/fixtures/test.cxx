@@ -1,5 +1,6 @@
 struct A {
   virtual int func_a() = 0;
+  int int_member_a;
 };
 
 struct B : public virtual A {
@@ -16,11 +17,46 @@ struct C : public virtual A {
 
 struct D : public B, public C {
  private:
+  int func_a() { return B::func_a(); }
   void func_d();
+
+  int private_member_int;
+ public:
+  int public_member_int;
+ protected:
+  int protected_member_int;
 };
 
 void D::func_d() {};
+f_dynamic_call(A *a) { a->func_a(); };
 
 void f_variadic(int a, ...);
+void f_non_variadic(int a, char b, long c);
 
 typedef int const* const_int_ptr;
+int int_array[8];
+
+struct RefQualifier {
+    void func_lvalue_ref() &;
+    void func_rvalue_ref() &&;
+    void func_none();
+};
+
+int A::*member_pointer = &A::int_member_a;
+
+struct BitField {
+  int bit_field_a : 2;
+  int bit_field_b : 6;
+  int non_bit_field_c;
+};
+
+enum normal_enum {
+  normal_enum_a
+};
+
+template <typename T> T func_overloaded(T a) { return a;};
+template <typename T> T func_overloaded() { return 100;};
+template <typename T> T use_func_overloaded() { return func_overloaded<T>(); };
+int use_overloaded_int_a = func_overloaded<int>();
+
+void availability_func(void) __attribute__((availability(macosx,introduced=10.4.1,deprecated=10.6,obsoleted=10.7)));
