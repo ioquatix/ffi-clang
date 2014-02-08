@@ -1,5 +1,6 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +27,80 @@ module FFI
 		module Lib
 			typedef :pointer, :CXTranslationUnit
 
-			TranslationUnitFlags = enum [:none, :detailed_preprocessing_record, :incomplete, :precompiled_preamble, :cache_completion_results]
+			TranslationUnitFlags = enum [
+				:none, 0x0,
+				:detailed_preprocessing_record, 0x01,
+				:incomplete, 0x02,
+				:precompiled_preamble, 0x04,
+				:cache_completion_results, 0x08,
+				:for_serialization, 0x10,
+				:cxx_chained_pch, 0x20,
+				:skip_function_bodies, 0x40,
+				:include_brief_comments_in_code_completion, 0x80,
+			]
+
+			SaveTranslationUnitFlags = enum [
+				:save_translation_unit_none, 0x0,
+			]
+
+			SaveError = enum [
+				:none, 0,
+				:unknown, 1,
+				:translation_errors, 2,
+				:invalid_tu, 3
+			]
+
+			ReparseFlags = enum [
+				:none, 0x0,
+			]
+
+			enum :resource_usage_kind, [
+				:ast, 1,
+				:identifiers, 2,
+				:selectors, 3,
+				:global_completion_results, 4,
+				:source_manager_content_cache, 5,
+				:ast_side_tables, 6,
+				:source_manager_membuffer_malloc, 7,
+				:source_manager_membuffer_mmap, 8,
+				:external_ast_source_membuffer_malloc, 9,
+				:external_ast_source_membuffer_mmap, 10,
+				:preprocessor, 11,
+				:preprocessing_record, 12,
+				:sourcemanager_data_structures, 13,
+				:preprocessor_header_search, 14,
+			]
+
+			class CXTUResourceUsage < FFI::Struct
+				layout(
+					:data, :pointer,
+					:numEntries, :uint,
+					:entries, :pointer
+				)
+			end
+
+			class CXTUResourceUsageEntry < FFI::Struct
+				layout(
+					:kind, :resource_usage_kind,
+					:amount, :ulong,
+				)
+			end
 
 			# Source code translation units:
 			attach_function :parse_translation_unit, :clang_parseTranslationUnit, [:CXIndex, :string, :pointer, :int, :pointer, :uint, :uint], :CXTranslationUnit
 			attach_function :create_translation_unit, :clang_createTranslationUnit, [:CXIndex, :string], :CXTranslationUnit
 			attach_function :dispose_translation_unit, :clang_disposeTranslationUnit, [:CXTranslationUnit], :void
+			attach_function :get_translation_unit_spelling, :clang_getTranslationUnitSpelling, [:CXTranslationUnit], :string
+
+			attach_function :default_editing_translation_unit_options, :clang_defaultEditingTranslationUnitOptions, [], :uint
+			attach_function :default_save_options, :clang_defaultSaveOptions, [:CXTranslationUnit], :uint
+			attach_function :save_translation_unit, :clang_saveTranslationUnit, [:CXTranslationUnit, :string, :uint], :int
+			attach_function :default_reparse_options, :clang_defaultReparseOptions, [:CXTranslationUnit], :uint
+			attach_function :reparse_translation_unit, :clang_reparseTranslationUnit, [:CXTranslationUnit, :uint, :pointer, :uint], :int
+
+			attach_function :resource_usage, :clang_getCXTUResourceUsage, [:CXTranslationUnit], CXTUResourceUsage.by_value
+			attach_function :dispose_resource_usage, :clang_disposeCXTUResourceUsage, [CXTUResourceUsage.by_value], :void
+			attach_function :resource_usage_name, :clang_getTUResourceUsageName, [:resource_usage_kind], :string
 		end
 	end
 end
