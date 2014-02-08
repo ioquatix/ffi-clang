@@ -100,7 +100,7 @@ module FFI
 			end
 
 			def location
-				SourceLocation.new(Lib.get_cursor_location(@cursor))
+				ExpansionLocation.new(Lib.get_cursor_location(@cursor))
 			end
 
 			def extent

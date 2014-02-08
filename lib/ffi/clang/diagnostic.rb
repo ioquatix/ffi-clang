@@ -51,7 +51,7 @@ module FFI
 
 			def location
 				sl = Lib.get_diagnostic_location(self)
-				SourceLocation.new sl
+				ExpansionLocation.new sl
 			end
 
 			def fixits

@@ -1,5 +1,6 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +22,7 @@
 
 require 'ffi/clang/lib/string'
 require 'ffi/clang/lib/translation_unit'
+require 'ffi/clang/utils'
 
 module FFI
 	module Clang
@@ -33,13 +35,23 @@ module FFI
 				)
 			end
 
+			class CXFileUniqueID < FFI::Struct
+				layout(
+					:device, :ulong_long,
+					:inode, :ulong_long,
+					:modification, :ulong_long
+				)
+			end
+
 			typedef :pointer, :CXFile
 
-			# Retrieve a file handle within the given translation unit.
 			attach_function :get_file, :clang_getFile, [:CXTranslationUnit, :string], :CXFile
-
-			# Retrieve the complete file and path name of the given file.
 			attach_function :get_file_name, :clang_getFileName, [:CXFile], CXString.by_value
+			attach_function :get_file_time, :clang_getFileTime, [:CXFile], :time_t
+			attach_function :is_file_multiple_include_guarded, :clang_isFileMultipleIncludeGuarded, [:CXTranslationUnit, :CXFile], :int
+			if FFI::Clang::Utils.satisfy_version?('3.3')
+				attach_function :get_file_unique_id, :clang_getFileUniqueID, [:CXFile, :pointer], :int
+			end
 		end
 	end
 end

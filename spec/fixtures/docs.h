@@ -1,3 +1,6 @@
+#ifndef DOCS_H
+#define DOCS_H
+
 /**
  * Short explanation
  *
@@ -9,3 +12,5 @@
  * @return a random value
  */
 int a_function(char *input, int flags);
+
+#endif

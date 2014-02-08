@@ -1,5 +1,3 @@
-# Copyright, 2010-2012 by Jari Bakken.
-# Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,48 +18,51 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/cursor'
-require 'ffi/clang/file'
+require 'ffi/clang/lib/file'
+require 'ffi/clang/utils'
 
 module FFI
 	module Clang
-		class TranslationUnit < AutoPointer
-			def initialize(pointer, index)
+		class File < Pointer
+			attr_reader :translation_unit
+
+			def initialize(pointer, tu)
 				super pointer
-				@index = index
-			end
+				@translation_unit = tu
 
-			def self.release(pointer)
-				Lib.dispose_translation_unit(pointer)
-			end
-
-			def diagnostics
-				n = Lib.get_num_diagnostics(self)
-			
-				n.times.map do |i|
-					Diagnostic.new(self, Lib.get_diagnostic(self, i))
+				if FFI::Clang::Utils.satisfy_version?('3.3')
+					pointer = MemoryPointer.new(Lib::CXFileUniqueID)
+					Lib.get_file_unique_id(self, pointer)
+					@unique_id = Lib::CXFileUniqueID.new(pointer)
 				end
 			end
 
-			def cursor(location = nil)
-				if location.nil?
-					Cursor.new Lib.get_translation_unit_cursor(self), self
-				else
-					Cursor.new Lib.get_cursor(self, location.location), self
-				end
+			def to_s
+				name
 			end
 
-			def location(file, line, column)
-				ExpansionLocation.new Lib.get_location(self, file, line, column)
+			def name
+				Lib.extract_string Lib.get_file_name(self)
 			end
 
-			def location_offset(file, offset)
-				ExpansionLocation.new Lib.get_location_offset(self, file, offset)
+			def time
+				Time.at(Lib.get_file_time(self))
 			end
 
-			def file(file_name)
-				File.new(Lib.get_file(self, file_name), self)
+			def include_guarded?
+				Lib.is_file_multiple_include_guarded(@translation_unit, self) != 0
+			end
+
+			def device
+				@unique_id[:device]
+			end
+
+			def inode
+				@unique_id[:inode]
+			end
+
+			def modification
+				Time.at(@unique_id[:modification])
 			end
 		end
 	end
