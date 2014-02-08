@@ -1,5 +1,3 @@
-# Copyright, 2010-2012 by Jari Bakken.
-# Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,37 +18,51 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/string'
-require 'ffi/clang/lib/translation_unit'
+require 'ffi/clang/lib/file'
 require 'ffi/clang/utils'
 
 module FFI
 	module Clang
-		module Lib
-			class CXUnsavedFile < FFI::Struct
-				layout(
-					:filename, :pointer,
-					:contents, :pointer,
-					:length, :ulong
-				)
+		class File < Pointer
+			attr_reader :translation_unit
+
+			def initialize(pointer, tu)
+				super pointer
+				@translation_unit = tu
+
+				if FFI::Clang::Utils.satisfy_version?('3.3')
+					pointer = MemoryPointer.new(Lib::CXFileUniqueID)
+					Lib.get_file_unique_id(self, pointer)
+					@unique_id = Lib::CXFileUniqueID.new(pointer)
+				end
 			end
 
-			class CXFileUniqueID < FFI::Struct
-				layout(
-					:device, :ulong_long,
-					:inode, :ulong_long,
-					:modification, :ulong_long
-				)
+			def to_s
+				name
 			end
 
-			typedef :pointer, :CXFile
+			def name
+				Lib.extract_string Lib.get_file_name(self)
+			end
 
-			attach_function :get_file, :clang_getFile, [:CXTranslationUnit, :string], :CXFile
-			attach_function :get_file_name, :clang_getFileName, [:CXFile], CXString.by_value
-			attach_function :get_file_time, :clang_getFileTime, [:CXFile], :time_t
-			attach_function :is_file_multiple_include_guarded, :clang_isFileMultipleIncludeGuarded, [:CXTranslationUnit, :CXFile], :int
-			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :get_file_unique_id, :clang_getFileUniqueID, [:CXFile, :pointer], :int
+			def time
+				Time.at(Lib.get_file_time(self))
+			end
+
+			def include_guarded?
+				Lib.is_file_multiple_include_guarded(@translation_unit, self) != 0
+			end
+
+			def device
+				@unique_id[:device]
+			end
+
+			def inode
+				@unique_id[:inode]
+			end
+
+			def modification
+				Time.at(@unique_id[:modification])
 			end
 		end
 	end
