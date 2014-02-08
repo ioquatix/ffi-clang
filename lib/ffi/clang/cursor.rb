@@ -1,5 +1,6 @@
 # Copyright, 2010-2012 by Jari Bakken.
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2014, by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -136,7 +137,7 @@ module FFI
 			end
 
 			def enum_decl_integer_type
-				Type.new Lib.get_decl_integer_type(@cursor), @translation_unit
+				Type.new Lib.get_enum_decl_integer_type(@cursor), @translation_unit
 			end
 
 			def virtual_base?
@@ -169,6 +170,10 @@ module FFI
 
 			def enum_value
 				Lib.get_enum_value @cursor
+			end
+
+			def enum_unsigned_value
+				Lib.get_enum_unsigned_value @cursor
 			end
 
 			def specialized_template
@@ -207,6 +212,10 @@ module FFI
 				Lib.get_language @cursor
 			end
 
+			def translation_unit
+				@translation_unit
+			end
+
 			def visit_children(&block)
 				adapter = Proc.new do |cxcursor, parent_cursor, unused|
 					block.call Cursor.new(cxcursor, @translation_unit), Cursor.new(parent_cursor, @translation_unit)
@@ -224,23 +233,132 @@ module FFI
 			end
 
 			def included_file
-				raise NotImplementedError
+				File.new Lib.get_included_file(@cursor), @translation_unit
 			end
 
-			def platform_availability
-				raise NotImplementedError
+			def platform_availability(max_availability_size = 4)
+				availability_ptr = FFI::MemoryPointer.new(Lib::CXPlatformAvailability, max_availability_size)
+				always_deprecated_ptr = FFI::MemoryPointer.new :int
+				always_unavailable_ptr = FFI::MemoryPointer.new :int
+				deprecated_message_ptr = FFI::MemoryPointer.new Lib::CXString
+				unavailable_message_ptr = FFI::MemoryPointer.new Lib::CXString
+
+				actual_availability_size = Lib.get_cursor_platform_availability(
+					@cursor,
+					always_deprecated_ptr, deprecated_message_ptr,
+					always_unavailable_ptr, unavailable_message_ptr,
+					availability_ptr, max_availability_size)
+
+				availability = []
+				cur_ptr = availability_ptr
+				[actual_availability_size, max_availability_size].min.times {
+					availability << PlatformAvailability.new(cur_ptr)
+					cur_ptr += Lib::CXPlatformAvailability.size
+				}
+
+				# return as Hash
+				{
+					always_deprecated: always_deprecated_ptr.get_int(0),
+					always_unavailable: always_unavailable_ptr.get_int(0),
+					deprecated_message: Lib.extract_string(Lib::CXString.new(deprecated_message_ptr)),
+					unavailable_message: Lib.extract_string(Lib::CXString.new(unavailable_message_ptr)),
+					availability: availability
+				}
 			end
 
-			def get_overridden_cursors
-				raise NotImplementedError
+			def overriddens
+				cursor_ptr = FFI::MemoryPointer.new :pointer
+				num_ptr = FFI::MemoryPointer.new :uint
+				Lib.get_overridden_cursors(@cursor, cursor_ptr, num_ptr)
+				num = num_ptr.get_uint(0)
+				cur_ptr = cursor_ptr.get_pointer(0)
+
+				overriddens = []
+				num.times {
+					overriddens << Cursor.new(cur_ptr, @translation_unit)
+					cur_ptr += Lib::CXCursor.size
+				}
+				Lib.dispose_overridden_cursors(cursor_ptr.get_pointer(0)) if num != 0
+				overriddens
 			end
 
 			def hash
 				Lib.get_cursor_hash(@cursor)
 			end
 
+			def bitfield?
+				Lib.is_bit_field(@cursor) != 0
+			end
+
+			def bitwidth
+				Lib.get_field_decl_bit_width(@cursor)
+			end
+
+			def overloaded_decl(i)
+				Cursor.new Lib.get_overloaded_decl(@cursor, i), @translation_unit
+			end
+
+			def num_overloaded_decls
+				Lib.get_num_overloaded_decls(@cursor)
+			end
+
+			def objc_type_encoding
+				Lib.extract_string Lib.get_decl_objc_type_encoding(@cursor)
+			end
+
+			def argument(i)
+				Cursor.new Lib.cursor_get_argument(@cursor, i), @translation_unit
+			end
+
+			def num_arguments
+				Lib.cursor_get_num_arguments(@cursor)
+			end
+
+			attr_reader :cursor
+
 			def ==(other)
 				Lib.are_equal(@cursor, other.cursor) != 0
+			end
+
+			class PlatformAvailability < AutoPointer
+				def initialize(memory_pointer)
+					pointer = FFI::Pointer.new(memory_pointer)
+					super(pointer)
+
+					# I'm not sure this is safe.
+					# Keep a reference to CXPlatformAvailability itself allocated by MemoryPointer.
+					@memory_pointer = memory_pointer
+					@platform_availability = Lib::CXPlatformAvailability.new(memory_pointer)
+				end
+
+				def self.release(pointer)
+					# Memory allocated by get_cursor_platform_availability is managed by AutoPointer.
+					Lib.dispose_platform_availability(Lib::CXPlatformAvailability.new(pointer))
+				end
+
+				def platform
+					Lib.get_string @platform_availability[:platform]
+				end
+
+				def introduced
+					@platform_availability[:introduced]
+				end
+
+				def deprecated
+					@platform_availability[:deprecated]
+				end
+
+				def obsoleted
+					@platform_availability[:obsoleted]
+				end
+
+				def unavailable
+					@platform_availability[:unavailable] != 0
+				end
+
+				def message
+					Lib.get_string @platform_availability[:message]
+				end
 			end
 		end
 	end
