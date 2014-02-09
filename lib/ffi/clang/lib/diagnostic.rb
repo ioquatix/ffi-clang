@@ -57,11 +57,7 @@ module FFI
 			attach_function :get_diagnostic_num_ranges, :clang_getDiagnosticNumRanges, [:CXDiagnostic], :uint
 			attach_function :get_diagnostic_range, :clang_getDiagnosticRange, [:CXDiagnostic, :uint], CXSourceRange.by_value
 
-			# Range to source code location conversion:
-			attach_function :get_range_start, :clang_getRangeStart, [CXSourceRange.by_value], CXSourceLocation.by_value
-			attach_function :get_range_end, :clang_getRangeEnd, [CXSourceRange.by_value], CXSourceLocation.by_value
 
-			attach_function :equal_locations, :clang_equalLocations, [CXSourceLocation.by_value, CXSourceLocation.by_value], :uint
 		end
 	end
 end
