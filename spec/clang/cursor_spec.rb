@@ -54,12 +54,12 @@ describe Cursor do
 
 		it 'has filename and posion at end point', from_3_4: true do
 			expect(extent.end.file).to eq(fixture_path("list.c"))
-			expect(extent.end.line).to equal(11)
+			expect(extent.end.line).to equal(12)
 		end
 
 		it 'has filename and posion at end point', upto_3_3: true do
 			expect(extent.end.file).to eq(fixture_path("list.c"))
-			expect(extent.end.line).to equal(10)
+			expect(extent.end.line).to equal(11)
 		end
 	end
 
