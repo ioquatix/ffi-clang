@@ -131,6 +131,14 @@ module FFI
 			def index
 				Lib.param_command_comment_get_param_index(@comment)
 			end
+
+			def direction_explicit?
+				Lib.param_command_comment_is_direction_explicit(@comment) != 0
+			end
+
+			def direction
+				Lib.param_command_comment_get_direction(@comment)
+			end
 		end
 
 		class FullComment < Comment

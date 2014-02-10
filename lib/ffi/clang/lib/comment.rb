@@ -39,6 +39,10 @@ module FFI
 				     :comment_param_command, 7,
 				     :comment_full, 12]
 
+			enum :pass_direction, [:pass_direction_in, 0,
+				     :pass_direction_out, 1,
+				     :pass_direction_inout, 2]
+
 			attach_function :comment_get_kind, :clang_Comment_getKind, [CXComment.by_value], :kind
 			attach_function :comment_get_num_children, :clang_Comment_getNumChildren, [CXComment.by_value], :uint
 			attach_function :comment_get_child, :clang_Comment_getChild, [CXComment.by_value, :uint], CXComment.by_value
@@ -47,6 +51,8 @@ module FFI
 			attach_function :full_comment_get_as_html, :clang_FullComment_getAsHTML, [CXComment.by_value], CXString.by_value
 			attach_function :full_comment_get_as_xml, :clang_FullComment_getAsXML, [CXComment.by_value], CXString.by_value
 
+			attach_function :param_command_comment_is_direction_explicit, :clang_ParamCommandComment_isDirectionExplicit, [CXComment.by_value], :uint
+			attach_function :param_command_comment_get_direction, :clang_ParamCommandComment_getDirection, [CXComment.by_value], :pass_direction
 			attach_function :param_command_comment_get_param_name, :clang_ParamCommandComment_getParamName, [CXComment.by_value], CXString.by_value
 			attach_function :param_command_comment_is_param_index_valid, :clang_ParamCommandComment_isParamIndexValid, [CXComment.by_value], :uint
 			attach_function :param_command_comment_get_param_index, :clang_ParamCommandComment_getParamIndex, [CXComment.by_value], :uint
