@@ -51,6 +51,10 @@ module FFI
 				end
 			end
 
+			def text
+				return ""
+			end
+
 			def initialize(comment)
 				@comment = comment
 			end
