@@ -13,4 +13,6 @@
  */
 int a_function(char *input, int flags);
 
+int no_comment_function(void);
+
 #endif

@@ -87,6 +87,14 @@ module FFI
 				num_children.times.map { |i| child(i) }
 			end
 
+			def whitespace?
+				Lib.comment_is_whitespace(@comment) != 0
+			end
+
+			def has_trailing_newline?
+				Lib.inline_content_comment_has_trailing_newline(@comment) != 0
+			end
+
 			def each(&block)
 				num_children.times.map do |i|
 					block.call(child(i))

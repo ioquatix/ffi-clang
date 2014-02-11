@@ -75,23 +75,35 @@ describe Comment do
 		end
 	end
 
-	describe "understands blocks" do
-		let (:block) { comment.child(5) }
-
-		it 'is BlockCommandComment' do
-			expect(block).to be_kind_of(BlockCommandComment)
+	describe "#whitespace?" do
+		it "checks the comment is whitespace" do
+			expect(comment.child.whitespace?).to be_false
 		end
+	end
 
-		it 'has name' do
-			expect(block.name).to eq("return")
+	describe "#has_trailing_newline?" do
+		it "checks the content has a traling newline" do
+			expect(comment.child.has_trailing_newline?).to be_false
 		end
+	end
 
-		it 'has comment', from_3_4: true do
-			expect(block.comment).to eq(" a random value")
+	context 'comment_null' do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'no_comment_function' } }
+		let(:comment) { comment_cursor.comment }
+
+		it "is null comment" do
+			expect(comment).to be_kind_of(Comment)
+			expect(comment.kind).to eq(:comment_null)
+			expect(comment.text).to eq('')
 		end
+	end
 
-		it 'has comment', upto_3_3: true do
-			expect(block.comment).to eq(" a random value\n ")
+	context 'unknown comment type' do
+		let(:comment) { 'foobar' }
+		it "raises NotImplementedError" do
+			expect(Lib).to receive(:comment_get_kind).with(comment).and_return(:xxx_yyy_zzzz)
+			expect{Comment.build_from(comment)}.to raise_error(NotImplementedError)
 		end
 	end
 end
