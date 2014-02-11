@@ -240,6 +240,24 @@ module FFI
 			end
 		end
 
+		class VerbatimBlockCommandComment < Comment
+			def text
+				children.map(&:text).join("\n")
+			end
+		end
+
+		class VerbatimBlockLineComment < Comment
+			def text
+				Lib.extract_string Lib.verbatim_block_line_comment_get_text(@comment)
+			end
+		end
+
+		class VerbatimLine < Comment
+			def text
+				Lib.extract_string Lib.verbatim_line_comment_get_text(@comment)
+			end
+		end
+
 		class FullComment < Comment
 			def to_html
 				Lib.extract_string Lib.full_comment_get_as_html(@comment)

@@ -243,6 +243,52 @@ describe Comment do
 		end
 	end
 
+	describe VerbatimBlockCommandComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'e_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:verb_block_cmd_comment) { comment.children.select{|c| c.kind == :comment_verbatim_block_command}.first }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(verb_block_cmd_comment).to be_kind_of(VerbatimBlockCommandComment)
+		end
+
+		describe "#text" do
+			it "returns readble text" do
+				expect(verb_block_cmd_comment.text).to eq("  foo bar\n  baz")
+			end
+		end
+	end
+
+	describe VerbatimBlockLineComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'e_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:verb_block_cmd_comment) { comment.children.select{|c| c.kind == :comment_verbatim_block_command}.first }
+		let(:verb_block_line_comments) { verb_block_cmd_comment.children }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(verb_block_cmd_comment).to be_kind_of(VerbatimBlockCommandComment)
+			expect(verb_block_line_comments.first).to be_kind_of(VerbatimBlockLineComment)
+			expect(verb_block_line_comments.size).to eq(2)
+		end
+
+		describe "#text" do
+			it "returns readble text" do
+				expect(verb_block_line_comments[0].text.strip).to eq("foo bar")
+				expect(verb_block_line_comments[1].text.strip).to eq("baz")
+			end
+		end
+	end
+
+	describe VerbatimLine do
+	# TODO: how to generate this comment?
+	end
+
 	describe ParamCommandComment do
 		let(:comment_cursor) { find_matching(cursor) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'a_function' } }

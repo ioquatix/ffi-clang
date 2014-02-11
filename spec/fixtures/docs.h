@@ -37,4 +37,12 @@ void c_function(T3<int> xxx);
  */
 void d_function(void);
 
+/**
+ * \verbatim
+ *  foo bar
+ *  baz
+ * \endverbatim
+ */
+void e_function(void);
+
 #endif
