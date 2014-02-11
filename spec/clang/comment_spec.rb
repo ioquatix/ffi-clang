@@ -194,6 +194,55 @@ describe Comment do
 		end
 	end
 
+	describe InlineCommandComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'd_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:inline_command_comments) { comment.child.children.select{|c| c.kind == :comment_inline_command} }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(comment.child).to be_kind_of(ParagraphComment)
+			expect(inline_command_comments.size).to eq(2)
+		end
+
+		describe "#name" do
+			it "returns the name of the inline command" do
+				expect(inline_command_comments[0].name).to eq("em")
+				expect(inline_command_comments[1].name).to eq("b")
+			end
+		end
+
+		describe "#render_kind" do
+			it "returns the most appropriate rendering mode" do
+				expect(inline_command_comments[0].render_kind).to eq(:emphasized)
+				expect(inline_command_comments[1].render_kind).to eq(:bold)
+			end
+		end
+
+		describe "#num_args" do
+			it "returns number of command arguments" do
+				expect(inline_command_comments[0].num_args).to eq(1)
+				expect(inline_command_comments[1].num_args).to eq(1)
+			end
+		end
+
+		describe "#args" do
+			it "returns arguments as Array" do
+				expect(inline_command_comments[0].args).to eq(["foo"])
+				expect(inline_command_comments[1].args).to eq(["bar"])
+			end
+		end
+
+		describe "#text" do
+			it "returns readble text" do
+				expect(inline_command_comments[0].text.strip).to eq("foo")
+				expect(inline_command_comments[1].text.strip).to eq("bar")
+			end
+		end
+	end
+
 	describe ParamCommandComment do
 		let(:comment_cursor) { find_matching(cursor) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'a_function' } }

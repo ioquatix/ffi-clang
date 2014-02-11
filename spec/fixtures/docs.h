@@ -32,4 +32,9 @@ void b_function(void);
 template<typename T1, template<typename T2> class T3>
 void c_function(T3<int> xxx);
 
+/**
+ * abc \em foo \b bar
+ */
+void d_function(void);
+
 #endif

@@ -153,8 +153,22 @@ module FFI
 				Lib.extract_string Lib.inline_command_comment_get_command_name(@comment)
 			end
 
+			def render_kind
+				Lib.inline_command_comment_get_render_kind(@comment)
+			end
+
 			def num_args
 				Lib.inline_command_comment_get_num_args(@comment)
+			end
+
+			def args
+				num_args.times.map { |i|
+					Lib.extract_string Lib.inline_command_comment_get_arg_text(@comment, i)
+				}
+			end
+
+			def text
+				args.join
 			end
 		end
 
