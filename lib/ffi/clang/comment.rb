@@ -32,20 +32,32 @@ module FFI
 			def self.build_from(comment)
 				kind = Lib.comment_get_kind(comment)
 				case kind
-				when :comment_full
-					FullComment.new comment
-				when :comment_paragraph
-					ParagraphComment.new comment
-				when :comment_text
-					TextComment.new comment
-				when :comment_block_command
-					BlockCommandComment.new comment
-				when :comment_inline_command
-					InlineCommandComment.new comment
-				when :comment_param_command
-					ParamCommandComment.new comment
 				when :comment_null
 					Comment.new comment
+				when :comment_text
+					TextComment.new comment
+				when :comment_inline_command
+					InlineCommandComment.new comment
+				when :comment_html_start_tag
+					HTMLStartTagComment.new comment
+				when :comment_html_end_tag
+					HTMLEndTagComment.new comment
+				when :comment_paragraph
+					ParagraphComment.new comment
+				when :comment_block_command
+					BlockCommandComment.new comment
+				when :comment_param_command
+					ParamCommandComment.new comment
+				when :comment_tparam_command
+					TParamCommandComment.new comment
+				when :comment_verbatim_block_command
+					VerbatimBlockCommandComment.new comment
+				when :comment_verbatim_block_line
+					VerbatimBlockLineComment.new comment
+				when :comment_verbatim_line
+					VerbatimLine.new comment
+				when :comment_full
+					FullComment.new comment
 				else
 					raise NotImplementedError, kind
 				end
