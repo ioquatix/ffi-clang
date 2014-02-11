@@ -194,6 +194,58 @@ describe Comment do
 		end
 	end
 
+	describe BlockCommandComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'f_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:block_cmd_comment) { comment.children.select{|c| c.kind == :comment_block_command}.first }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(block_cmd_comment).to be_kind_of(BlockCommandComment)
+			expect(block_cmd_comment.child).to be_kind_of(ParagraphComment)
+		end
+
+		describe "#name" do
+			it "returns the name of the block command" do
+				expect(block_cmd_comment.name).to eq("brief")
+			end
+		end
+
+		describe "#paragraph" do
+			it "returns the paragraph" do
+				expect(block_cmd_comment.paragraph).to be_kind_of(ParagraphComment)
+			end
+		end
+
+		describe "#num_args" do
+			it "returns the number of word-like arguments" do
+				expect(block_cmd_comment.num_args).to eq(0)
+			end
+		end
+
+		describe "#args" do
+			it "returns word-like arguments" do
+				expect(block_cmd_comment.args).to be_kind_of(Array)
+				expect(block_cmd_comment.args).to eq([])
+			end
+
+			#TODO: needs tests with comments which have arguments
+		end
+
+		describe "#text" do
+			it "returns readble text that includes children's comments" do
+				expect(block_cmd_comment.text).to be_kind_of(String)
+				expect(block_cmd_comment.text.strip).to eq('this is a function.')
+			end
+
+			it "is a alias method of #comment" do
+				expect(block_cmd_comment.comment).to eq(block_cmd_comment.text)
+			end
+		end
+	end
+
 	describe InlineCommandComment do
 		let(:comment_cursor) { find_matching(cursor) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'd_function' } }

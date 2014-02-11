@@ -45,4 +45,10 @@ void d_function(void);
  */
 void e_function(void);
 
+/**
+ * \brief this is a function.
+ */
+int f_function(void);
+
+
 #endif

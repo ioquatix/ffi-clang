@@ -181,12 +181,19 @@ module FFI
 				Comment.build_from Lib.block_command_comment_get_paragraph(@comment)
 			end
 
-			def comment
+			def text
 				self.paragraph.text
 			end
+			alias_method :comment, :text
 
 			def num_args
 				Lib.block_command_comment_get_num_args(@comment)
+			end
+
+			def args
+				num_args.times.map { |i|
+					Lib.extract_string Lib.block_command_comment_get_arg_text(@comment, i)
+				}
 			end
 		end
 
