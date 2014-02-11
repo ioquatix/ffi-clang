@@ -71,8 +71,12 @@ module FFI
 				Comment.build_from Lib.comment_get_child(@comment, n)
 			end
 
+			def children
+				num_children.times.map { |i| child(i) }
+			end
+
 			def each(&block)
-				(0..num_children-1).map do |i|
+				num_children.times.map do |i|
 					block.call(child(i))
 				end
 			end
