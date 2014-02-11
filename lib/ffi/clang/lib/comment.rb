@@ -33,10 +33,15 @@ module FFI
 
 			enum :kind, [:comment_null, 0,
 				     :comment_text, 1,
+				     :comment_inline_command, 2,
 				     :comment_paragraph, 5,
 				     :comment_block_command,6 ,
 				     :comment_param_command, 7,
 				     :comment_full, 12]
+
+			enum :pass_direction, [:pass_direction_in, 0,
+				     :pass_direction_out, 1,
+				     :pass_direction_inout, 2]
 
 			attach_function :comment_get_kind, :clang_Comment_getKind, [CXComment.by_value], :kind
 			attach_function :comment_get_num_children, :clang_Comment_getNumChildren, [CXComment.by_value], :uint
@@ -46,11 +51,15 @@ module FFI
 			attach_function :full_comment_get_as_html, :clang_FullComment_getAsHTML, [CXComment.by_value], CXString.by_value
 			attach_function :full_comment_get_as_xml, :clang_FullComment_getAsXML, [CXComment.by_value], CXString.by_value
 
+			attach_function :param_command_comment_is_direction_explicit, :clang_ParamCommandComment_isDirectionExplicit, [CXComment.by_value], :uint
+			attach_function :param_command_comment_get_direction, :clang_ParamCommandComment_getDirection, [CXComment.by_value], :pass_direction
 			attach_function :param_command_comment_get_param_name, :clang_ParamCommandComment_getParamName, [CXComment.by_value], CXString.by_value
 			attach_function :param_command_comment_is_param_index_valid, :clang_ParamCommandComment_isParamIndexValid, [CXComment.by_value], :uint
 			attach_function :param_command_comment_get_param_index, :clang_ParamCommandComment_getParamIndex, [CXComment.by_value], :uint
 			attach_function :block_command_comment_get_command_name, :clang_BlockCommandComment_getCommandName, [CXComment.by_value], CXString.by_value
 			attach_function :block_command_comment_get_num_args, :clang_BlockCommandComment_getNumArgs, [CXComment.by_value], :uint
+			attach_function :inline_command_comment_get_command_name, :clang_InlineCommandComment_getCommandName, [CXComment.by_value], CXString.by_value
+			attach_function :inline_command_comment_get_num_args, :clang_InlineCommandComment_getNumArgs, [CXComment.by_value], :uint
 		end
 	end
 end

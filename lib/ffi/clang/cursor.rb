@@ -52,6 +52,10 @@ module FFI
 				Comment.build_from Lib.cursor_get_parsed_comment(@cursor)
 			end
 
+			def comment_range
+				SourceRange.new(Lib.cursor_get_comment_range(@cursor))
+			end
+
 			def declaration?
 				Lib.is_declaration(kind) != 0
 			end

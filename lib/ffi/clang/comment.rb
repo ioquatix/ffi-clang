@@ -40,6 +40,8 @@ module FFI
 					TextComment.new comment
 				when :comment_block_command
 					BlockCommandComment.new comment
+				when :comment_inline_command
+					InlineCommandComment.new comment
 				when :comment_param_command
 					ParamCommandComment.new comment
 				when :comment_null
@@ -47,6 +49,10 @@ module FFI
 				else
 					raise NotImplementedError, kind
 				end
+			end
+
+			def text
+				return ""
 			end
 
 			def initialize(comment)
@@ -85,6 +91,16 @@ module FFI
 			end
 		end
 
+		class InlineCommandComment < Comment
+			def name
+				Lib.extract_string Lib.inline_command_comment_get_command_name(@comment)
+			end
+
+			def num_args
+				Lib.inline_command_comment_get_num_args(@comment)
+			end
+		end
+
 		class BlockCommandComment < Comment
 			def name
 				Lib.extract_string Lib.block_command_comment_get_command_name(@comment)
@@ -118,6 +134,14 @@ module FFI
 
 			def index
 				Lib.param_command_comment_get_param_index(@comment)
+			end
+
+			def direction_explicit?
+				Lib.param_command_comment_is_direction_explicit(@comment) != 0
+			end
+
+			def direction
+				Lib.param_command_comment_get_direction(@comment)
 			end
 		end
 
