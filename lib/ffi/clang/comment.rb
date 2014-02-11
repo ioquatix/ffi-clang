@@ -103,6 +103,39 @@ module FFI
 
 		end
 
+		class HTMLTagComment < Comment
+			def name
+				Lib.extract_string Lib.html_tag_comment_get_tag_name(@comment)
+			end
+			alias_method :tag, :name
+
+			def text
+				Lib.extract_string Lib.html_tag_comment_get_as_string(@comment)
+			end
+		end
+
+		class HTMLStartTagComment < HTMLTagComment
+			def self_closing?
+				Lib.html_start_tag_comment_is_self_closing(@comment) != 0
+			end
+
+			def num_attrs
+				Lib.html_start_tag_comment_get_num_attrs(@comment)
+			end
+
+			def attrs
+				num_attrs.times.map { |i|
+					{
+						name: Lib.extract_string(Lib.html_start_tag_comment_get_attr_name(@comment, i)),
+						value: Lib.extract_string(Lib.html_start_tag_comment_get_attr_value(@comment, i)),
+					}
+			  }
+			end
+		end
+
+		class HTMLEndTagComment < HTMLTagComment
+		end
+
 		class ParagraphComment < Comment
 			def text
 				self.map(&:text).join("\n")

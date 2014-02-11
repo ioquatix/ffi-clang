@@ -106,4 +106,91 @@ describe Comment do
 			expect{Comment.build_from(comment)}.to raise_error(NotImplementedError)
 		end
 	end
+
+	describe HTMLStartTagComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'b_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:paragraph) { comment_cursor.comment.child }
+		let(:html_start_tag_comments) { paragraph.children.select{|c| c.kind == :comment_html_start_tag} }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(paragraph).to be_kind_of(ParagraphComment)
+			expect(html_start_tag_comments.first).to be_kind_of(HTMLStartTagComment)
+			expect(html_start_tag_comments.size).to eq(2)
+		end
+
+		describe "#tag" do
+			it "returns HTML tag name" do
+				expect(html_start_tag_comments[0].tag).to eq('br')
+				expect(html_start_tag_comments[1].tag).to eq('a')
+			end
+
+			it "is alias method of #name" do
+				expect(html_start_tag_comments[0].name).to eq('br')
+				expect(html_start_tag_comments[1].name).to eq('a')
+			end
+		end
+
+		describe "#text" do
+			it "returns HTML tag as string" do
+				expect(html_start_tag_comments[0].text.strip).to eq('<br/>')
+				expect(html_start_tag_comments[1].text.strip).to eq('<a href="http://example.org/">')
+			end
+		end
+
+		describe "#self_closing?" do
+			it "checks the tag is self-closing" do
+				expect(html_start_tag_comments[0].self_closing?).to be_true
+				expect(html_start_tag_comments[1].self_closing?).to be_false
+			end
+		end
+
+		describe "#num_attrs" do
+			it "returns the number of attributes" do
+				expect(html_start_tag_comments[0].num_attrs).to eq(0)
+				expect(html_start_tag_comments[1].num_attrs).to eq(1)
+			end
+		end
+
+		describe "#attrs" do
+			it "returns attributes as Array of Hash" do
+				expect(html_start_tag_comments[0].attrs).to eq([])
+                expect(html_start_tag_comments[1].attrs).to eq([{name: 'href', value: 'http://example.org/'}])
+			end
+		end
+	end
+
+	describe HTMLEndTagComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'b_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:paragraph) { comment_cursor.comment.child }
+		let(:html_end_tag_comment) { paragraph.children.select{|c| c.kind == :comment_html_end_tag}.first }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(paragraph).to be_kind_of(ParagraphComment)
+			expect(html_end_tag_comment).to be_kind_of(HTMLEndTagComment)
+		end
+
+		describe "#tag" do
+			it "returns HTML tag name" do
+				expect(html_end_tag_comment.tag).to eq('a')
+			end
+
+			it "is alias method of #name" do
+				expect(html_end_tag_comment.name).to eq('a')
+			end
+		end
+
+		describe "#text" do
+			it "returns HTML tag as string" do
+				expect(html_end_tag_comment.text.strip).to eq('</a>')
+			end
+		end
+	end
 end

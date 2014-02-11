@@ -15,4 +15,11 @@ int a_function(char *input, int flags);
 
 int no_comment_function(void);
 
+/**
+ * <br />
+ * <a href="http://example.org/">
+ * </a>
+ */
+void b_function(void);
+
 #endif
