@@ -135,9 +135,14 @@ describe Comment do
 		end
 
 		describe "#text" do
-			it "returns HTML tag as string" do
+			it "returns HTML tag as string", from_3_4: true do
 				expect(html_start_tag_comments[0].text.strip).to eq('<br/>')
 				expect(html_start_tag_comments[1].text.strip).to eq('<a href="http://example.org/">')
+			end
+
+			it "returuns empty string", upto_3_3: true do
+				expect(html_start_tag_comments[0].text.strip).to eq('')
+				expect(html_start_tag_comments[1].text.strip).to eq('')
 			end
 		end
 
@@ -188,8 +193,12 @@ describe Comment do
 		end
 
 		describe "#text" do
-			it "returns HTML tag as string" do
+			it "returns HTML tag as string", from_3_4: true do
 				expect(html_end_tag_comment.text.strip).to eq('</a>')
+			end
+
+			it "returuns empty string", upto_3_3: true do
+				expect(html_end_tag_comment.text.strip).to eq('')
 			end
 		end
 	end
@@ -205,9 +214,14 @@ describe Comment do
 		end
 
 		describe "#to_html" do
-			it "converts a given full parsed comment to an HTML fragment" do
+			it "converts a given full parsed comment to an HTML fragment", from_3_4: true do
 				expect(comment.to_html).to be_kind_of(String)
 				expect(comment.to_html).to eq('<p class="para-brief"> this is a function.</p>')
+			end
+
+			it "converts a given full parsed comment to an HTML fragment", upto_3_3: true do
+				expect(comment.to_html).to be_kind_of(String)
+				expect(comment.to_html).to eq('<p class="para-brief"> this is a function. </p>')
 			end
 		end
 
