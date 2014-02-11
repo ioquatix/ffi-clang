@@ -22,7 +22,7 @@
 require 'spec_helper'
 
 describe Comment do
-	let(:cursor) { Index.new.parse_translation_unit(fixture_path("docs.h")).cursor }
+	let(:cursor) { Index.new.parse_translation_unit(fixture_path("docs.cc")).cursor }
 	let (:comment) { find_first(cursor, :cursor_function).comment }
 
 	it "can be obtained from a cursor" do
@@ -56,7 +56,7 @@ describe Comment do
 	end
 
 	it "has working helpers" do
-		comment.num_children.should equal(6)
+		comment.num_children.should equal(8)
 
 		para = comment.child(1)
 		para.text.should eq(" This is a longer explanation\n that spans multiple lines")
@@ -190,6 +190,95 @@ describe Comment do
 		describe "#text" do
 			it "returns HTML tag as string" do
 				expect(html_end_tag_comment.text.strip).to eq('</a>')
+			end
+		end
+	end
+
+	describe ParamCommandComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'a_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:param_cmd_comments) { comment.children.select{|c| c.kind == :comment_param_command} }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(param_cmd_comments.first).to be_kind_of(ParamCommandComment)
+			expect(param_cmd_comments.size).to eq(4)
+		end
+
+		describe "#text" do
+			it "returns readble text" do
+				expect(param_cmd_comments[0].text.strip).to eq("some input")
+				expect(param_cmd_comments[1].text.strip).to eq("some flags")
+			end
+		end
+
+		describe "#direction_explicit?" do
+			it "checks the direction is specified explicitly" do
+				expect(param_cmd_comments[0].direction_explicit?).to be_true
+				expect(param_cmd_comments[3].direction_explicit?).to be_false
+			end
+		end
+
+		describe "#direction" do
+			it "returns parameter passing direction" do
+				expect(param_cmd_comments[0].direction).to eq(:pass_direction_in)
+				expect(param_cmd_comments[1].direction).to eq(:pass_direction_out)
+				expect(param_cmd_comments[2].direction).to eq(:pass_direction_inout)
+				expect(param_cmd_comments[3].direction).to eq(:pass_direction_in)
+			end
+		end
+	end
+
+	describe TParamCommandComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function_template and child.spelling == 'c_function' } }
+		let(:comment) { comment_cursor.comment }
+		let(:tparam_cmd_comments) { comment.children.select{|c| c.kind == :comment_tparam_command} }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+			expect(tparam_cmd_comments.first).to be_kind_of(TParamCommandComment)
+			expect(tparam_cmd_comments.size).to eq(3)
+		end
+
+		describe "#text" do
+			it "returns readble text" do
+				expect(tparam_cmd_comments[0].text.strip).to eq("some type of foo")
+				expect(tparam_cmd_comments[1].text.strip).to eq("some type of bar")
+			end
+		end
+
+		describe "#name" do
+			it "returns template parameter name" do
+				expect(tparam_cmd_comments[0].name).to eq("T1")
+				expect(tparam_cmd_comments[1].name).to eq("T2")
+				expect(tparam_cmd_comments[2].name).to eq("T3")
+			end
+		end
+
+		describe "#valid_position?" do
+			it "checks this parameter has valid position" do
+				expect(tparam_cmd_comments[0].valid_position?).to be_true
+			end
+		end
+
+		describe "#depth" do
+			it "returns nesting depth of this parameter" do
+				expect(tparam_cmd_comments[0].depth).to eq(1)
+				expect(tparam_cmd_comments[1].depth).to eq(2)
+				expect(tparam_cmd_comments[2].depth).to eq(1)
+			end
+		end
+
+		describe "#index" do
+			it "returns index of the parameter at the given nesting depth" do
+				expect(tparam_cmd_comments[0].index(0)).to eq(0)
+				expect(tparam_cmd_comments[1].index(0)).to eq(1)
+				expect(tparam_cmd_comments[1].index(1)).to eq(0)
+				expect(tparam_cmd_comments[2].index(0)).to eq(1)
 			end
 		end
 	end

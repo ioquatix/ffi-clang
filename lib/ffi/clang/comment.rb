@@ -181,9 +181,10 @@ module FFI
 				Lib.extract_string Lib.param_command_comment_get_param_name(@comment)
 			end
 
-			def comment
-				self.child.text
+			def text
+				self.map(&:text).join("")
 			end
+			alias_method :comment, :text
 
 			def valid_index?
 				Lib.param_command_comment_is_param_index_valid(@comment) != 0
@@ -199,6 +200,29 @@ module FFI
 
 			def direction
 				Lib.param_command_comment_get_direction(@comment)
+			end
+		end
+
+		class TParamCommandComment < Comment
+			def text
+				self.child.text
+			end
+			alias_method :comment, :text
+
+			def name
+				Lib.extract_string Lib.tparam_command_comment_get_param_name(@comment)
+			end
+
+			def valid_position?
+				Lib.tparam_command_comment_is_param_position_valid(@comment) != 0
+			end
+
+			def depth
+				Lib.tparam_command_comment_get_depth(@comment)
+			end
+
+			def index(depth = 0)
+				Lib.tparam_command_comment_get_index(@comment, depth)
 			end
 		end
 
