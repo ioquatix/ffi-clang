@@ -274,6 +274,5 @@ module FFI
 				Lib.extract_string Lib.full_comment_get_as_xml(@comment)
 			end
 		end
-
 	end
 end

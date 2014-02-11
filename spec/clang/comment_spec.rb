@@ -194,6 +194,30 @@ describe Comment do
 		end
 	end
 
+	describe FullComment do
+		let(:comment_cursor) { find_matching(cursor) { |child, parent|
+				child.kind == :cursor_function and child.spelling == 'f_function' } }
+		let(:comment) { comment_cursor.comment }
+
+		it "can be obtained from cursor" do
+			expect(comment).to be_kind_of(FullComment)
+			expect(comment.kind).to equal(:comment_full)
+		end
+
+		describe "#to_html" do
+			it "converts a given full parsed comment to an HTML fragment" do
+				expect(comment.to_html).to be_kind_of(String)
+				expect(comment.to_html).to eq('<p class="para-brief"> this is a function.</p>')
+			end
+		end
+
+		describe "#to_xml" do
+			it "converts a given full parsed comment to an XML document" do
+				expect(comment.to_xml).to be_kind_of(String)
+			end
+		end
+	end
+
 	describe BlockCommandComment do
 		let(:comment_cursor) { find_matching(cursor) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'f_function' } }
