@@ -26,22 +26,39 @@ module FFI
 		module Lib
 			class CXComment < FFI::Struct
 				layout(
-				       :ast_node, :pointer,
-				       :translation_unit, :pointer
-				       )
+					:ast_node, :pointer,
+					:translation_unit, :pointer
+				)
 			end
 
-			enum :kind, [:comment_null, 0,
-				     :comment_text, 1,
-				     :comment_inline_command, 2,
-				     :comment_paragraph, 5,
-				     :comment_block_command,6 ,
-				     :comment_param_command, 7,
-				     :comment_full, 12]
+			enum :kind, [
+				:comment_null, 0,
+				:comment_text, 1,
+				:comment_inline_command, 2,
+				:comment_html_start_tag, 3,
+				:comment_html_end_tag, 4,
+				:comment_paragraph, 5,
+				:comment_block_command, 6,
+				:comment_param_command, 7,
+				:comment_tparam_command, 8,
+				:comment_verbatim_block_command, 9,
+				:comment_verbatim_block_line, 10,
+				:comment_verbatim_line, 11,
+				:comment_full, 12,
+			]
 
-			enum :pass_direction, [:pass_direction_in, 0,
-				     :pass_direction_out, 1,
-				     :pass_direction_inout, 2]
+			enum :render_kind, [
+				:normal,
+				:bold,
+				:monospaced,
+				:emphasized
+			]
+
+			enum :pass_direction, [
+				:pass_direction_in, 0,
+				:pass_direction_out, 1,
+				:pass_direction_inout, 2
+			]
 
 			attach_function :comment_get_kind, :clang_Comment_getKind, [CXComment.by_value], :kind
 			attach_function :comment_get_num_children, :clang_Comment_getNumChildren, [CXComment.by_value], :uint
