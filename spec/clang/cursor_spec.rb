@@ -144,6 +144,14 @@ describe Cursor do
 
 	end
 
+	describe '#kind_spelling' do
+		let (:struct) { find_first(cursor, :cursor_struct) }
+
+		it "returns the spelling of the given kind" do
+			expect(struct.kind_spelling).to eq('StructDecl')
+		end
+	end
+
 	describe '#declaration?' do
 		let (:struct) { find_first(cursor, :cursor_struct) }
 

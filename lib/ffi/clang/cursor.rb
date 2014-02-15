@@ -35,6 +35,11 @@ module FFI
 				Cursor.new Lib.get_null_cursor, nil
 			end
 
+			# this function is categorized as "Debugging facilities"
+			def self.kind_spelling(kind)
+				Lib.extract_string Lib.get_cursor_kind_spelling(kind)
+			end
+
 			def initialize(cxcursor, translation_unit)
 				@cursor = cxcursor
 				@translation_unit = translation_unit
@@ -126,6 +131,10 @@ module FFI
 
 			def kind
 				@cursor[:kind]
+			end
+
+			def kind_spelling
+				Cursor.kind_spelling @cursor[:kind]
 			end
 
 			def type
