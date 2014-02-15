@@ -23,6 +23,7 @@
 require 'ffi/clang/lib/translation_unit'
 require 'ffi/clang/cursor'
 require 'ffi/clang/file'
+require 'ffi/clang/token'
 
 module FFI
 	module Clang
@@ -99,6 +100,13 @@ module FFI
 
 			def resource_usage
 				FFI::Clang::TranslationUnit::ResourceUsage.new Lib.resource_usage(self)
+			end
+
+			def tokenize(range)
+				token_ptr = MemoryPointer.new :pointer
+				uint_ptr = MemoryPointer.new :uint
+				Lib.tokenize(self, range.range, token_ptr, uint_ptr)
+				Tokens.new(token_ptr.get_pointer(0), uint_ptr.get_uint(0), self)
 			end
 
 			class ResourceUsage < AutoPointer
