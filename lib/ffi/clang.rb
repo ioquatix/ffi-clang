@@ -51,4 +51,4 @@ require 'ffi/clang/cursor'
 require 'ffi/clang/source_location'
 require 'ffi/clang/source_range'
 require 'ffi/clang/unsaved_file'
-
+require 'ffi/clang/token'
