@@ -24,6 +24,7 @@ require 'ffi/clang/lib/cursor'
 require 'ffi/clang/source_location'
 require 'ffi/clang/comment'
 require 'ffi/clang/type'
+require 'ffi/clang/lib/code_completion'
 
 module FFI
 	module Clang
@@ -59,6 +60,10 @@ module FFI
 
 			def comment_range
 				SourceRange.new(Lib.cursor_get_comment_range(@cursor))
+			end
+
+			def completion
+				CodeCompletion::String.new Lib.get_cursor_completion_string(@cursor)
 			end
 
 			def declaration?
