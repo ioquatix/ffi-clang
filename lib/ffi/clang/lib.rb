@@ -26,7 +26,9 @@ module FFI
 
 			libs = ["clang"]
 
-			if ENV['LLVM_CONFIG']
+			if ENV['LIBCLANG']
+				libs << ENV['LIBCLANG']
+			elsif ENV['LLVM_CONFIG']
 				llvm_library_dir = `#{ENV['LLVM_CONFIG']} --libdir`.chomp
 
 				libs << llvm_library_dir + '/libclang.dylib'
