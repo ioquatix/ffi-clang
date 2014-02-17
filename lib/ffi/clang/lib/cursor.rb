@@ -331,8 +331,14 @@ module FFI
 			attach_function :get_cursor_hash, :clang_hashCursor, [CXCursor.by_value], :uint
 
 			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :is_bit_field,:clang_Cursor_isBitField, [CXCursor.by_value], :uint
-				attach_function :get_field_decl_bit_width, :clang_getFieldDeclBitWidth, [CXCursor.by_value], :int
+				begin
+					attach_function :is_bit_field,:clang_Cursor_isBitField, [CXCursor.by_value], :uint
+				rescue FFI::NotFoundError => e
+				end
+				begin
+					attach_function :get_field_decl_bit_width, :clang_getFieldDeclBitWidth, [CXCursor.by_value], :int
+				rescue FFI::NotFoundError => e
+				end
 			end
 
 			attach_function :get_overloaded_decl, :clang_getOverloadedDecl, [CXCursor.by_value, :uint], CXCursor.by_value
