@@ -30,7 +30,7 @@ module FFI
 
 			def self.clang_version
 				version = clang_version_string
-				version.match(/clang version (\d+\.\d+)/).values_at(1).first
+				version.match(/based on LLVM (\d+\.\d+)/).values_at(1).first
 			end
 
 			def self.clang_version_symbol
@@ -40,12 +40,12 @@ module FFI
 
 			def self.clang_major_version
 				version = clang_version_string
-				version.match(/clang version (\d+)\./).values_at(1).first.to_i
+				version.match(/based on LLVM (\d+)\./).values_at(1).first.to_i
 			end
 
 			def self.clang_minor_version
 				version = clang_version_string
-				version.match(/clang version \d+\.(\d+)/).values_at(1).first.to_i
+				version.match(/based on LLVM \d+\.(\d+)/).values_at(1).first.to_i
 			end
 
 			def self.satisfy_version?(min_version, max_version = nil)
