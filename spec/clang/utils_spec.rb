@@ -31,9 +31,8 @@ describe FFI::Clang::Utils do
 
 	describe '#self.self.clang_version' do
 		let (:version) { Utils::clang_version }
-		it "returns only a version of clang as string" do
-			expect(version).to be_kind_of(String)
-			expect(version).to match(/^\d+\.\d+$/)
+		it "returns only a version of clang as array [major, minor]" do
+			expect(version).to be_kind_of(Array)
 		end
 	end
 

@@ -1,4 +1,5 @@
 # Copyright, 2014 by Masahiro Sano.
+# Copyright, 2014 by Samuel Williams.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,35 +24,60 @@ require 'ffi/clang/lib/string'
 
 module FFI
 	module Clang
-		class Utils
+		module Utils
+			@@clang_version = nil
+			
 			def self.clang_version_string
 				Lib.extract_string Lib.get_clang_version
 			end
 
 			def self.clang_version
-				version = clang_version_string
-				version.match(/based on LLVM (\d+\.\d+)/).values_at(1).first
+				unless @@clang_version
+					# Version string vary wildy:
+					# Ubuntu: "Ubuntu clang version 3.0-6ubuntu3 (tags/RELEASE_30/final) (based on LLVM 3.0)"
+					# Mac OS X: "Apple LLVM version 5.0 (clang-500.2.79) (based on LLVM 3.3svn)"
+					# Linux: "clang version 3.3"
+				
+					if parts = clang_version_string.match(/(?:clang version|based on LLVM) (\d+)\.(\d+)(svn)?/)
+						major = parts[1].to_i
+						minor = parts[2].to_i
+						rc = parts[3]
+					
+						# Mac OS X currently reports support for 3.3svn, but this support is broken in some ways, so we revert it back to 3.2 which it supports completely.
+						if rc == 'svn'
+							minor -= 1
+						end
+					
+						@@clang_version = [major, minor]
+						
+						puts "Clang version detected: #{@@clang_version.inspect}"
+					else
+						abort "Invalid/unsupported clang version string."
+					end
+				end
+				
+				return @@clang_version
 			end
 
 			def self.clang_version_symbol
-				version = "clang_" + clang_version.tr('.', '_')
-				version.intern
+				"clang_#{clang_version.join('_')}".to_sym
 			end
 
 			def self.clang_major_version
-				version = clang_version_string
-				version.match(/based on LLVM (\d+)\./).values_at(1).first.to_i
+				clang_version[0]
 			end
 
 			def self.clang_minor_version
-				version = clang_version_string
-				version.match(/based on LLVM \d+\.(\d+)/).values_at(1).first.to_i
+				clang_version[1]
 			end
 
+			# Returns true if the current clang version is >= min version and optionally <= max_version
 			def self.satisfy_version?(min_version, max_version = nil)
-				Gem::Version.create(self.clang_version) >= Gem::Version.create(min_version) and
-					(max_version.nil? or
-					Gem::Version.create(self.clang_version) <= Gem::Version.create(max_version))
+				min_version = Gem::Version.create(min_version)
+				max_version = Gem::Version.create(max_version) if max_version
+				current_version = Gem::Version.create(self.clang_version.join('.'))
+				
+				return (current_version >= min_version) && (!max_version || current_version <= max_version)
 			end
 		end
 	end
