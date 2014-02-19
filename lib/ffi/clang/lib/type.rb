@@ -138,9 +138,18 @@ module FFI
 			attach_function :get_array_element_type ,:clang_getArrayElementType, [CXType.by_value], CXType.by_value
 
 			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :type_get_align_of, :clang_Type_getAlignOf, [CXType.by_value], :long_long
-				attach_function :type_get_size_of, :clang_Type_getSizeOf, [CXType.by_value], :long_long
-				attach_function :type_get_offset_of, :clang_Type_getOffsetOf, [CXType.by_value, :string], :long_long
+				begin
+					attach_function :type_get_align_of, :clang_Type_getAlignOf, [CXType.by_value], :long_long
+				rescue FFI::NotFoundError => e
+				end
+				begin
+					attach_function :type_get_size_of, :clang_Type_getSizeOf, [CXType.by_value], :long_long
+				rescue FFI::NotFoundError => e
+				end
+				begin
+					attach_function :type_get_offset_of, :clang_Type_getOffsetOf, [CXType.by_value, :string], :long_long
+				rescue FFI::NotFoundError => e
+				end
 			end
 
 			if FFI::Clang::Utils.satisfy_version?('3.4')
