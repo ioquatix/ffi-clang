@@ -100,15 +100,18 @@ module FFI
 				end
 
 				def num_mapped_sources
-					Lib.compile_command_get_num_mapped_sources(@pointer)
+					raise NotImplementedError
+					# Lib.compile_command_get_num_mapped_sources(@pointer)
 				end
 
 				def mapped_source_path(i)
-					Lib.extract_string Lib.compile_command_get_mapped_source_path(@pointer, i)
+					raise NotImplementedError
+					# Lib.extract_string Lib.compile_command_get_mapped_source_path(@pointer, i)
 				end
 
 				def mapped_source_content(i)
-					Lib.extract_string Lib.compile_command_get_mapped_source_content(@pointer, i)
+					raise NotImplementedError
+					# Lib.extract_string Lib.compile_command_get_mapped_source_content(@pointer, i)
 				end
 
 				def mapped_sources

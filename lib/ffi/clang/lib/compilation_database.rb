@@ -48,9 +48,10 @@ module FFI
 			attach_function :compile_command_get_num_args, :clang_CompileCommand_getNumArgs, [:CXCompileCommand], :uint
 			attach_function :compile_command_get_arg, :clang_CompileCommand_getArg, [:CXCompileCommand, :uint], CXString.by_value
 			if FFI::Clang::Utils.satisfy_version?('3.4')
-				attach_function :compile_command_get_num_mapped_sources, :clang_CompileCommand_getNumMappedSources, [:CXCompileCommand], :uint
-				attach_function :compile_command_get_mapped_source_path, :clang_CompileCommand_getMappedSourcePath, [:CXCompileCommand, :uint], CXString.by_value
-				attach_function :compile_command_get_mapped_source_content, :clang_CompileCommand_getMappedSourceContent, [:CXCompileCommand, :uint], CXString.by_value
+				# Thease functions are not exposed by libclang.so privided by packages.
+				# attach_function :compile_command_get_num_mapped_sources, :clang_CompileCommand_getNumMappedSources, [:CXCompileCommand], :uint
+				# attach_function :compile_command_get_mapped_source_path, :clang_CompileCommand_getMappedSourcePath, [:CXCompileCommand, :uint], CXString.by_value
+				# attach_function :compile_command_get_mapped_source_content, :clang_CompileCommand_getMappedSourceContent, [:CXCompileCommand, :uint], CXString.by_value
 			end
 		end
 	end
