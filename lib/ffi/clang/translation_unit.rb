@@ -109,6 +109,14 @@ module FFI
 				Tokens.new(token_ptr.get_pointer(0), uint_ptr.get_uint(0), self)
 			end
 
+			def code_complete(source_file, line, column, unsaved = [], opts = nil)
+				opts = CodeCompletion.default_code_completion_options if opts.nil?
+				unsaved_files = UnsavedFile.unsaved_pointer_from(unsaved)
+				option_bitmask = Lib.bitmask_from(Lib::CodeCompleteFlags, opts)
+				ptr = Lib.code_complete_at(self, source_file, line, column, unsaved_files, unsaved.length, option_bitmask)
+				CodeCompletion::Results.new ptr, self
+			end
+
 			class ResourceUsage < AutoPointer
 				def initialize(resource_usage)
 					# CXResourceUsage is returned by value and should be freed explicitly.

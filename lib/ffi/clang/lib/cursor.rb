@@ -30,7 +30,7 @@ require 'ffi/clang/utils'
 module FFI
 	module Clang
 		module Lib
-			enum :kind, [
+			enum :cursor_kind, [
 				:cursor_unexposed_decl, 1,
 				:cursor_struct, 2,
 				:cursor_union, 3,
@@ -206,7 +206,7 @@ module FFI
 
 			class CXCursor < FFI::Struct
 				layout(
-					:kind, :kind,
+					:kind, :cursor_kind,
 					:xdata, :int,
 					:data, [:pointer, 3]
 				)
@@ -277,7 +277,7 @@ module FFI
 			attach_function :get_canonical_cursor, :clang_getCanonicalCursor, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_cursor_definition, :clang_getCursorDefinition, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_specialized_cursor_template, :clang_getSpecializedCursorTemplate, [CXCursor.by_value], CXCursor.by_value
-			attach_function :get_template_cursor_kind, :clang_getTemplateCursorKind, [CXCursor.by_value], :kind
+			attach_function :get_template_cursor_kind, :clang_getTemplateCursorKind, [CXCursor.by_value], :cursor_kind
 
 			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
 			attach_function :cursor_get_translation_unit, :clang_Cursor_getTranslationUnit, [CXCursor.by_value], :CXTranslationUnit
@@ -296,19 +296,19 @@ module FFI
 			attach_function :get_cursor_display_name, :clang_getCursorDisplayName, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_usr, :clang_getCursorUSR, [CXCursor.by_value], CXString.by_value
-			attach_function :get_cursor_kind_spelling, :clang_getCursorKindSpelling, [:kind], CXString.by_value
+			attach_function :get_cursor_kind_spelling, :clang_getCursorKindSpelling, [:cursor_kind], CXString.by_value
 
 			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
 
-			attach_function :is_declaration, :clang_isDeclaration, [:kind], :uint
-			attach_function :is_reference, :clang_isReference, [:kind], :uint
-			attach_function :is_expression, :clang_isExpression, [:kind], :uint
-			attach_function :is_statement, :clang_isStatement, [:kind], :uint
-			attach_function :is_attribute, :clang_isAttribute, [:kind], :uint
-			attach_function :is_invalid, :clang_isInvalid, [:kind], :uint
-			attach_function :is_translation_unit, :clang_isTranslationUnit, [:kind], :uint
-			attach_function :is_preprocessing, :clang_isPreprocessing, [:kind], :uint
-			attach_function :is_unexposed, :clang_isUnexposed, [:kind], :uint
+			attach_function :is_declaration, :clang_isDeclaration, [:cursor_kind], :uint
+			attach_function :is_reference, :clang_isReference, [:cursor_kind], :uint
+			attach_function :is_expression, :clang_isExpression, [:cursor_kind], :uint
+			attach_function :is_statement, :clang_isStatement, [:cursor_kind], :uint
+			attach_function :is_attribute, :clang_isAttribute, [:cursor_kind], :uint
+			attach_function :is_invalid, :clang_isInvalid, [:cursor_kind], :uint
+			attach_function :is_translation_unit, :clang_isTranslationUnit, [:cursor_kind], :uint
+			attach_function :is_preprocessing, :clang_isPreprocessing, [:cursor_kind], :uint
+			attach_function :is_unexposed, :clang_isUnexposed, [:cursor_kind], :uint
 
 			enum :child_visit_result, [:break, :continue, :recurse]
 
