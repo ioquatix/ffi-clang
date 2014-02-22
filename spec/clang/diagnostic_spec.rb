@@ -30,7 +30,8 @@ describe Diagnostic do
 	end
 
 	it "calls dispose_diagnostic on GC" do
-		expect(Lib).to receive(:dispose_diagnostic).with(diagnostic).at_least(:once)
+		diagnostic.autorelease = false
+		expect(Lib).to receive(:dispose_diagnostic).with(diagnostic).once
 		expect{diagnostic.free}.not_to raise_error
 	end
 

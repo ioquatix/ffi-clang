@@ -46,7 +46,8 @@ describe TranslationUnit do
 	end
 
 	it "calls dispose_translation_unit on GC" do
-		expect(Lib).to receive(:dispose_translation_unit).with(tu)
+		tu.autorelease = false
+		expect(Lib).to receive(:dispose_translation_unit).with(tu).once
 		expect{tu.free}.not_to raise_error
 	end
 
@@ -207,6 +208,7 @@ describe TranslationUnit do
 
 		describe "#self.release" do
 			it "releases data by calling 'clang_disposeCXTUResourceUsage'" do
+				ru.autorelease = false
 				expect{ ru.free }.not_to raise_error
 			end
 		end
