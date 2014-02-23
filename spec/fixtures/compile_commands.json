@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/xxxxx/src/build-trunk/lib/Support",
+  "command": "/opt/llvm/3.4/bin/clang++   -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wmissing-field-initializers -pedantic -Wno-long-long -Wcovered-switch-default -Wnon-virtual-dtor -fno-rtti  -ffunction-sections -fdata-sections -O3  -I/home/xxxxx/src/build-trunk/lib/Support -I/home/xxxxx/src/llvm-trunk/lib/Support -I/home/xxxxx/src/build-trunk/include -I/home/xxxxx/src/llvm-trunk/include    -UNDEBUG -fno-exceptions -o CMakeFiles/LLVMSupport.dir/APFloat.cpp.o -c /home/xxxxx/src/llvm-trunk/lib/Support/APFloat.cpp",
+  "file": "/home/xxxxx/src/llvm-trunk/lib/Support/APFloat.cpp"
+},
+{
+  "directory": "/home/xxxxx/src/build-trunk/lib/Support",
+  "command": "/opt/llvm/3.4/bin/clang++   -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wmissing-field-initializers -pedantic -Wno-long-long -Wcovered-switch-default -Wnon-virtual-dtor -fno-rtti  -ffunction-sections -fdata-sections -O3  -I/home/xxxxx/src/build-trunk/lib/Support -I/home/xxxxx/src/llvm-trunk/lib/Support -I/home/xxxxx/src/build-trunk/include -I/home/xxxxx/src/llvm-trunk/include    -UNDEBUG -fno-exceptions -o CMakeFiles/LLVMSupport.dir/APInt.cpp.o -c /home/xxxxx/src/llvm-trunk/lib/Support/APInt.cpp",
+  "file": "/home/xxxxx/src/llvm-trunk/lib/Support/APInt.cpp"
+},
+{
+  "directory": "/home/xxxxx/src/build-trunk/lib/Support",
+  "command": "/opt/llvm/3.4/bin/clang++   -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wmissing-field-initializers -pedantic -Wno-long-long -Wcovered-switch-default -Wnon-virtual-dtor -fno-rtti  -ffunction-sections -fdata-sections -O3  -I/home/xxxxx/src/build-trunk/lib/Support -I/home/xxxxx/src/llvm-trunk/lib/Support -I/home/xxxxx/src/build-trunk/include -I/home/xxxxx/src/llvm-trunk/include    -UNDEBUG -fno-exceptions -o CMakeFiles/LLVMSupport.dir/APSInt.cpp.o -c /home/xxxxx/src/llvm-trunk/lib/Support/APSInt.cpp",
+  "file": "/home/xxxxx/src/llvm-trunk/lib/Support/APSInt.cpp"
+}
+]
