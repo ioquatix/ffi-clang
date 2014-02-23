@@ -32,7 +32,8 @@ describe Index do
 	let(:index) { Index.new }
 
 	it "calls dispose_index_debug_unit on GC" do
-		expect(Lib).to receive(:dispose_index).with(index).at_least(:once)
+		index.autorelease = false
+		expect(Lib).to receive(:dispose_index).with(index).once
 		expect{index.free}.not_to raise_error
 	end
 
