@@ -31,7 +31,11 @@ module FFI
 			elsif ENV['LLVM_CONFIG']
 				llvm_library_dir = `#{ENV['LLVM_CONFIG']} --libdir`.chomp
 
-				libs << llvm_library_dir + '/libclang.dylib'
+				if FFI::Clang.platform == :darwin
+					libs << llvm_library_dir + '/libclang.dylib'
+				else
+					libs << llvm_library_dir + '/libclang.so'
+				end
 			end
 
 			ffi_lib libs
