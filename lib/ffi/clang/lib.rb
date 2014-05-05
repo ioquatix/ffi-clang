@@ -24,7 +24,15 @@ module FFI
 		module Lib
 			extend FFI::Library
 
-			libs = ["clang"]
+			libs = []
+			begin
+				xcode_dir = `xcode-select -p`.chomp
+				libs << "#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib"
+			rescue Errno::ENOENT => e
+				# Ignore
+			end
+
+			libs << "clang"
 
 			if ENV['LIBCLANG']
 				libs << ENV['LIBCLANG']

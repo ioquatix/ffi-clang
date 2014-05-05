@@ -50,6 +50,7 @@ module FFI
 					
 						@@clang_version = [major, minor]
 						
+						puts "Using libclang: #{Lib::ffi_libraries[0].name}"
 						puts "Clang version detected: #{@@clang_version.inspect}"
 					else
 						abort "Invalid/unsupported clang version string."
