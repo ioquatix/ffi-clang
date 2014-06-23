@@ -92,6 +92,10 @@ module FFI
 					initialize_results
 				end
 
+				def inspect
+					@results.inspect
+				end
+
 				private
 
 				def initialize_results
@@ -116,6 +120,10 @@ module FFI
 
 				def string
 					CodeCompletion::String.new @result[:string]
+				end
+
+				def inspect
+					"<#{kind.inspect} = #{string.inspect}>"
 				end
 			end
 
@@ -174,6 +182,10 @@ module FFI
 
 				def comment
 					Lib.extract_string Lib.get_completion_brief_comment(@pointer)
+				end
+
+				def inspect
+					chunks.inspect
 				end
 			end
 		end
