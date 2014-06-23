@@ -16,6 +16,4 @@ install:
     - sudo apt-get -qq install libclang-${LLVM_VERSION}-dev clang-${LLVM_VERSION}
     - export LD_LIBRARY_PATH=/usr/lib/llvm-${LLVM_VERSION}/lib/
     - export PATH=/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH
-    - if [ "${LLVM_VERSION}" = "3.5" ]; then sudo ln -s /usr/bin/clang /usr/lib/llvm-${LLVM_VERSION}/bin/clang; fi
-    - if [ "${LLVM_VERSION}" = "3.5" ]; then sudo ln -s /usr/bin/clang++ /usr/lib/llvm-${LLVM_VERSION}/bin/clang++; fi
     - bundle install
