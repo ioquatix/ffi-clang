@@ -169,7 +169,7 @@ describe TranslationUnit do
 			File::open(path, "w+") { |io|
 			   io.write("int a;")
 			}
-			expect(find_first(@reparse_tu.cursor, :cursor_variable)).to be false
+			expect(find_first(@reparse_tu.cursor, :cursor_variable)).to be nil
 			expect{@reparse_tu.reparse}.not_to raise_error
 			expect(find_first(@reparse_tu.cursor, :cursor_variable).spelling).to eq("a")
 		end
