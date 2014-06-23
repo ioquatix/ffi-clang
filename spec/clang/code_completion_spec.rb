@@ -40,7 +40,10 @@ describe CodeCompletion do
 	describe CodeCompletion::Results do
 		it "can be obtained from a translation unit" do
 			expect(results).to be_kind_of(CodeCompletion::Results)
-			expect(results.size).to eq(42)
+			
+			# At least 40 results, depends on standard library implementation:
+			expect(results.size).to be >= 40
+			
 			expect(results.results).to be_kind_of(Array)
 			expect(results.results.first).to be_kind_of(CodeCompletion::Result)
 		end
@@ -97,8 +100,9 @@ describe CodeCompletion do
 
 		it "#sort!" do
 			results.sort!
+			
 			# may be sorted with typed_text kind, first result will start with 'a'
-			expect(results.results.first.string.chunks.select{|x| x[:kind] == :typed_text}.first[:text]).to eq('assign')
+			expect(results.results.first.string.chunks.select{|x| x[:kind] == :typed_text}.first[:text]).to be =~ /^a/
 		end
 	end
 
@@ -114,11 +118,10 @@ describe CodeCompletion do
 	end
 
 	describe CodeCompletion::String do
-		let(:str) { results.sort!; results.results.first.string }
-
+		let(:str) { results.sort!; results.find{|x| x.string.chunk_text(1) == 'assign'}.string }
 
 		it "#num_chunks" do
-			expect(str.num_chunks).to eq(7)
+			expect(str.num_chunks).to be >= 5
 		end
 
 		it "#chunk_kind" do
@@ -126,9 +129,8 @@ describe CodeCompletion do
 			expect(str.chunk_kind(1)).to eq(:typed_text)
 		end
 
-
 		it "#chunk_text" do
-			expect(str.chunk_text(0)).to eq('void')
+			expect(str.chunk_text(0)).to be =~ /void/
 			expect(str.chunk_text(1)).to eq('assign')
 		end
 
@@ -168,7 +170,7 @@ describe CodeCompletion do
 
 		it "#parent" do
 			expect(str.parent).to be_kind_of(String)
-			expect(str.parent).to eq('std::vector')
+			expect(str.parent).to be =~ /std.+vector/
 		end
 
 		it "#comment" do
