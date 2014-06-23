@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 require 'ffi/clang/lib/translation_unit'
+require 'ffi/clang/lib/inclusions'
 require 'ffi/clang/cursor'
 require 'ffi/clang/file'
 require 'ffi/clang/token'
@@ -115,6 +116,21 @@ module FFI
 				option_bitmask = Lib.bitmask_from(Lib::CodeCompleteFlags, opts)
 				ptr = Lib.code_complete_at(self, source_file, line, column, unsaved_files, unsaved.length, option_bitmask)
 				CodeCompletion::Results.new ptr, self
+			end
+
+			def inclusions(&block)
+				adapter = Proc.new do |included_file, inclusion_stack, include_len, unused|
+					file = Lib.extract_string Lib.get_file_name(included_file)
+					cur_ptr = inclusion_stack
+					inclusions = []
+					include_len.times {
+						inclusions << SourceLocation.new(Lib::CXSourceLocation.new(cur_ptr))
+						cur_ptr += Lib::CXSourceLocation.size
+					}
+					block.call file, inclusions
+				end
+				
+				Lib.get_inclusions(self, adapter, nil)
 			end
 
 			class ResourceUsage < AutoPointer
