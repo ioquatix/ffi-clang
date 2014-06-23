@@ -77,13 +77,13 @@ describe Comment do
 
 	describe "#whitespace?" do
 		it "checks the comment is whitespace" do
-			expect(comment.child.whitespace?).to be_false
+			expect(comment.child.whitespace?).to be false
 		end
 	end
 
 	describe "#has_trailing_newline?" do
 		it "checks the content has a traling newline" do
-			expect(comment.child.has_trailing_newline?).to be_false
+			expect(comment.child.has_trailing_newline?).to be false
 		end
 	end
 
@@ -148,8 +148,8 @@ describe Comment do
 
 		describe "#self_closing?" do
 			it "checks the tag is self-closing" do
-				expect(html_start_tag_comments[0].self_closing?).to be_true
-				expect(html_start_tag_comments[1].self_closing?).to be_false
+				expect(html_start_tag_comments[0].self_closing?).to be true
+				expect(html_start_tag_comments[1].self_closing?).to be false
 			end
 		end
 
@@ -401,8 +401,8 @@ describe Comment do
 
 		describe "#direction_explicit?" do
 			it "checks the direction is specified explicitly" do
-				expect(param_cmd_comments[0].direction_explicit?).to be_true
-				expect(param_cmd_comments[3].direction_explicit?).to be_false
+				expect(param_cmd_comments[0].direction_explicit?).to be true
+				expect(param_cmd_comments[3].direction_explicit?).to be false
 			end
 		end
 
@@ -446,7 +446,7 @@ describe Comment do
 
 		describe "#valid_position?" do
 			it "checks this parameter has valid position" do
-				expect(tparam_cmd_comments[0].valid_position?).to be_true
+				expect(tparam_cmd_comments[0].valid_position?).to be true
 			end
 		end
 

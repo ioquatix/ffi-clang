@@ -67,17 +67,17 @@ describe SourceLocation do
 
 	describe "#from_main_file?", from_3_4: true do
 		it "returns true if the cursor location is in main file" do
-			expect(loc1_cursor.location.from_main_file?).to be_true
+			expect(loc1_cursor.location.from_main_file?).to be true
 		end
 
 		it "returns false if the cursor location is not in main file" do
-			expect(docs_cursor.location.from_main_file?).to be_false
+			expect(docs_cursor.location.from_main_file?).to be false
 		end
 	end
 
 	describe "#in_system_header?", from_3_4: true do
 		it "returns false if the cursor location is not in system header" do
-			expect(loc1_cursor.location.in_system_header?).to be_false
+			expect(loc1_cursor.location.in_system_header?).to be false
 		end
 	end
 

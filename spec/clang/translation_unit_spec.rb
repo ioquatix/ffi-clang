@@ -134,14 +134,14 @@ describe TranslationUnit do
 		let (:may_not_exist_filepath) { "#{TMP_DIR}/not_writable_directory/save_translation_unit" }
 		it "saves translation unit as a file" do
 			expect{tu.save(filepath)}.not_to raise_error
-			expect(FileTest.exist?(filepath)).to be_true
+			expect(FileTest.exist?(filepath)).to be true
 		end
 
 		it "raises exception if save path is not writable" do
 			FileUtils.mkdir_p File.dirname(may_not_exist_filepath)
 			File.chmod(0444, File.dirname(may_not_exist_filepath))
 			expect{tu.save(may_not_exist_filepath)}.to raise_error
-			expect(FileTest.exist?(may_not_exist_filepath)).to be_false
+			expect(FileTest.exist?(may_not_exist_filepath)).to be false
 		end
 	end
 
@@ -169,7 +169,7 @@ describe TranslationUnit do
 			File::open(path, "w+") { |io|
 			   io.write("int a;")
 			}
-			expect(find_first(@reparse_tu.cursor, :cursor_variable)).to be_false
+			expect(find_first(@reparse_tu.cursor, :cursor_variable)).to be false
 			expect{@reparse_tu.reparse}.not_to raise_error
 			expect(find_first(@reparse_tu.cursor, :cursor_variable).spelling).to eq("a")
 		end

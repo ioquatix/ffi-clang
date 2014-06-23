@@ -26,14 +26,14 @@ describe SourceRange do
 
 	it "can be obtained from a cursor" do
 		expect(tu_range).to be_kind_of(SourceRange)
-		expect(tu_range.null?).to be_false
+		expect(tu_range.null?).to be false
 	end
 
 	it "has start and end source location" do
 		expect(tu_range.start).to be_kind_of(SourceLocation)
-		expect(tu_range.start.null?).to be_false
+		expect(tu_range.start.null?).to be false
 		expect(tu_range.end).to be_kind_of(SourceLocation)
-		expect(tu_range.end.null?).to be_false
+		expect(tu_range.end.null?).to be false
 	end
 
 	describe "Null Range" do
@@ -47,8 +47,8 @@ describe SourceRange do
 		end
 
 		it "has null locations" do
-		    expect(null_range.start.null?).to be_true
-		    expect(null_range.end.null?).to be_true
+		    expect(null_range.start.null?).to be true
+		    expect(null_range.end.null?).to be true
 		end
 
 		it "compares as equal to another null range instance" do
@@ -61,7 +61,7 @@ describe SourceRange do
 
         it "can be obtained from two source locations" do
 			expect(range).to be_kind_of(SourceRange)
-			expect(range.null?).to be_false
+			expect(range.null?).to be false
         end
 
         it "is same to original source range" do

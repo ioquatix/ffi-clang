@@ -58,13 +58,13 @@ describe Index do
 		end
 
 		it "can create translation unit from a ast file" do
-			expect(FileTest.exist?("#{TMP_DIR}/simple.ast")).to be_true
+			expect(FileTest.exist?("#{TMP_DIR}/simple.ast")).to be true
 			tu = index.create_translation_unit "#{TMP_DIR}/simple.ast"
 			expect(tu).to be_kind_of(TranslationUnit)
 		end
 
 		it "raises error when file is not found" do
-			expect(FileTest.exist?('not_found.ast')).to be_false
+			expect(FileTest.exist?('not_found.ast')).to be false
 			expect { index.create_translation_unit 'not_found.ast' }.to raise_error
 		end
 	end

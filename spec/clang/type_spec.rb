@@ -104,7 +104,7 @@ describe Type do
       }.type }
 
     it 'checks type is volatile qualified' do
-      expect(pointer_type.volatile_qualified?).to be_true
+      expect(pointer_type.volatile_qualified?).to be true
     end
   end
 
@@ -114,7 +114,7 @@ describe Type do
       }.type }
 
     it 'checks type is restrict qualified' do
-      expect(pointer_type.restrict_qualified?).to be_true
+      expect(pointer_type.restrict_qualified?).to be true
     end
   end
 
@@ -223,7 +223,7 @@ describe Type do
       }.type }
 
     it 'returns true if the type is a POD type' do
-      expect(struct.pod?).to be_true
+      expect(struct.pod?).to be true
     end
   end
 
@@ -283,7 +283,7 @@ describe Type do
       }.type }
 
     it 'checks if two types represent the same type' do
-      expect(type_decl == type_ref).to be_true
+      expect(type_decl == type_ref).to be true
     end
   end
 end

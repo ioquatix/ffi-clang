@@ -156,7 +156,7 @@ describe Cursor do
 		let (:struct) { find_first(cursor, :cursor_struct) }
 
 		it "checks the cursor is declaration" do
-			expect(struct.declaration?).to be_true
+			expect(struct.declaration?).to be true
 		end
 	end
 
@@ -164,7 +164,7 @@ describe Cursor do
 		let (:ref) { find_first(cursor, :cursor_type_ref) }
 
 		it "checks the cursor is reference" do
-			expect(ref.reference?).to be_true
+			expect(ref.reference?).to be true
 		end
 	end
 
@@ -172,7 +172,7 @@ describe Cursor do
 		let (:literal) { find_first(cursor, :cursor_integer_literal) }
 
 		it "checks the cursor is expression" do
-			expect(literal.expression?).to be_true
+			expect(literal.expression?).to be true
 		end
 	end
 
@@ -180,7 +180,7 @@ describe Cursor do
 		let (:return_stmt) { find_first(cursor, :cursor_return_stmt) }
 
 		it "checks the cursor is statement" do
-			expect(return_stmt.statement?).to be_true
+			expect(return_stmt.statement?).to be true
 		end
 	end
 
@@ -188,7 +188,7 @@ describe Cursor do
 		let (:attr) { find_first(cursor_cxx, :cursor_unexposed_attr) }
 
 		it "checks the cursor is attribute" do
-			expect(attr.attribute?).to be_true
+			expect(attr.attribute?).to be true
 		end
 	end
 
@@ -197,11 +197,11 @@ describe Cursor do
 				child.kind == :cursor_field_decl and child.spelling == 'public_member_int' } }
 
 		it 'checks access control level is public', from_3_3: true do
-			expect(public_cursor.public?).to be_true
+			expect(public_cursor.public?).to be true
 		end
 
 		it 'returns false on clang 3.2', upto_3_2: true do
-			expect(public_cursor.public?).to be_false
+			expect(public_cursor.public?).to be false
 		end
 	end
 
@@ -210,11 +210,11 @@ describe Cursor do
 				child.kind == :cursor_field_decl and child.spelling == 'private_member_int' } }
 
 		it 'checks access control level is private', from_3_3: true do
-			expect(private_cursor.private?).to be_true
+			expect(private_cursor.private?).to be true
 		end
 
 		it 'returns false on clang 3.2', upto_3_2: true do
-			expect(private_cursor.private?).to be_false
+			expect(private_cursor.private?).to be false
 		end
 	end
 
@@ -223,11 +223,11 @@ describe Cursor do
 				child.kind == :cursor_field_decl and child.spelling == 'protected_member_int' } }
 
 		it 'checks access control level is protected', from_3_3: true do
-			expect(protected_cursor.protected?).to be_true
+			expect(protected_cursor.protected?).to be true
 		end
 
 		it 'returns false on clang 3.2', upto_3_2: true do
-			expect(protected_cursor.protected?).to be_false
+			expect(protected_cursor.protected?).to be false
 		end
 	end
 
@@ -235,7 +235,7 @@ describe Cursor do
 		let (:pp) { find_first(cursor_pp, :cursor_macro_definition) }
 
 		it 'checks the cursor is preprocessing' do
-			expect(pp.preprocessing?).to be_true
+			expect(pp.preprocessing?).to be true
 		end
 	end
 
@@ -244,7 +244,7 @@ describe Cursor do
 				child.kind == :cursor_unexposed_expr and child.spelling == 'func_overloaded' } }
 
 		it 'checks the cursor is unexposed' do
-			expect(unexposed_cursor.unexposed?).to be_true
+			expect(unexposed_cursor.unexposed?).to be true
 		end
 	end
 
@@ -309,7 +309,7 @@ describe Cursor do
 				child.semantic_parent.spelling == 'f_dynamic_call' } }
 
 		it 'checks if the method call is dynamic' do
-			expect(dynamic_call.dynamic_call?).to be_true
+			expect(dynamic_call.dynamic_call?).to be true
 		end
 	end
 
@@ -439,7 +439,7 @@ describe Cursor do
 		let (:struct) { find_all(cursor_canon, :cursor_struct).at(2) }
 
 		it "checks cursor is a definition" do
-			struct.definition?.should be_true
+			struct.definition?.should be true
 		end
 	end
 
@@ -456,7 +456,7 @@ describe Cursor do
 				child.kind == :cursor_function and child.spelling == 'f_variadic' } }
 
 		it "checks cursor is a variadic function" do
-			func.variadic?.should be_true
+			func.variadic?.should be true
 		end
 	end
 
@@ -513,11 +513,11 @@ describe Cursor do
 				child.kind == :cursor_field_decl and child.spelling == 'non_bit_field_c' } }
 
 		it "returns true if the cursor is bitfield" do
-			expect(bitfield.bitfield?).to be_true
+			expect(bitfield.bitfield?).to be true
 		end
 
 		it "returns false if the cursor is not bitfield" do
-			expect(non_bitfield.bitfield?).to be_false
+			expect(non_bitfield.bitfield?).to be false
 		end
 	end
 
@@ -696,7 +696,7 @@ describe Cursor do
 
 		describe "#unavailable" do
 			it "returns whether the entity is unavailable on this platform" do
-				expect(availability.unavailable).to be_false
+				expect(availability.unavailable).to be false
 			end
 		end
 

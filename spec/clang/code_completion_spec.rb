@@ -88,7 +88,7 @@ describe CodeCompletion do
 		end
 
 		it "#incomplete?" do
-			expect(results.incomplete?).to be_false
+			expect(results.incomplete?).to be false
 		end
 
 		it "#objc_selector" do

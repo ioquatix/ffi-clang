@@ -56,11 +56,11 @@ describe File do
 
 	describe "#include_guarded?" do
 		it 'returns false if included file is notguarded' do
-			expect(file_list.include_guarded?).to be_false
+			expect(file_list.include_guarded?).to be false
 		end
 
 		it 'returns true if included file is guarded' do
-			expect(file_docs.include_guarded?).to be_true
+			expect(file_docs.include_guarded?).to be true
 		end
 	end
 
