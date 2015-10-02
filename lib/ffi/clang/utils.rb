@@ -35,10 +35,14 @@ module FFI
 				unless @@clang_version
 					# Version string vary wildy:
 					# Ubuntu: "Ubuntu clang version 3.0-6ubuntu3 (tags/RELEASE_30/final) (based on LLVM 3.0)"
-					# Mac OS X: "Apple LLVM version 5.0 (clang-500.2.79) (based on LLVM 3.3svn)"
+					# Mac OS X: "Apple LLVM version 7.0.0 (clang-700.0.72)"
 					# Linux: "clang version 3.3"
-				
-					if parts = clang_version_string.match(/(?:clang version|based on LLVM) (\d+)\.(\d+)(svn)?/)
+					if parts = clang_version_string.match(/^Apple LLVM version (\d+)\.(\d+).\d \(clang-.*\)$/)
+						@@clang_version = [3, 7] # Fake it.
+
+						puts "Using libclang: #{Lib::ffi_libraries[0].name}"
+						puts "Clang version detected: #{@@clang_version.inspect}"
+					elsif parts = clang_version_string.match(/(?:clang version|based on LLVM) (\d+)\.(\d+)(svn)?/)
 						major = parts[1].to_i
 						minor = parts[2].to_i
 						rc = parts[3]
