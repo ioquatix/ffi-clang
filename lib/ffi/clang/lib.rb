@@ -19,17 +19,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require 'mkmf'
+
 module FFI
 	module Clang
 		module Lib
 			extend FFI::Library
 
+      llvm_config = ENV['LLVM_CONFIG'] || MakeMakefile.find_executable0("llvm-config")
+
 			libs = ["clang"]
 
 			if ENV['LIBCLANG']
 				libs << ENV['LIBCLANG']
-			elsif ENV['LLVM_CONFIG']
-				llvm_library_dir = `#{ENV['LLVM_CONFIG']} --libdir`.chomp
+			elsif llvm_config
+				llvm_library_dir = `#{llvm_config} --libdir`.chomp
 
 				if FFI::Clang.platform == :darwin
 					libs << llvm_library_dir + '/libclang.dylib'
