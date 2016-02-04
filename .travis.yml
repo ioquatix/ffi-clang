@@ -1,22 +1,19 @@
 language: ruby
-rvm:
-  - "2.2.4"
-  - "2.3.0"
-env:
-  - LLVM_VERSION=3.4
-  - LLVM_VERSION=3.5
-  - LLVM_VERSION=3.6
-  - LLVM_VERSION=3.7
+sudo: false
 before_install:
-  - gem update bundler
-  - sudo add-apt-repository --yes ppa:h-rayflood/llvm
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo add-apt-repository --yes 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise main'
-  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
-  - sudo apt-get -qq update
-  - sudo apt-get -qq install libclang-${LLVM_VERSION}-dev clang-${LLVM_VERSION}
   - export LD_LIBRARY_PATH=/usr/lib/llvm-${LLVM_VERSION}/lib/
   - export PATH=/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH
 matrix:
-  allow_failures:
-    - env: LLVM_VERSION=3.5
+  include:
+    # The default build:
+    - &libclang-36
+      addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.6], packages: [libclang-3.6-dev, clang-3.6]}}
+      env: LLVM_VERSION=3.6
+      rvm: "2.3.0"
+    # A second build with the same configuration but using ruby 2.2.4
+    - <<: *libclang-36
+      rvm: "2.2.4"
+    # Other builds on other versions of LLVM, all using ruby 2.3.0
+    - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.7], packages: [libclang-3.7-dev, clang-3.7]}}
+      env: LLVM_VERSION=3.7
+      rvm: "2.3.0"

@@ -25,8 +25,14 @@ module FFI
 	module Clang
 		module Lib
 			extend FFI::Library
-
-			llvm_config = ENV['LLVM_CONFIG'] || MakeMakefile.find_executable0("llvm-config")
+			
+			# Use LLVM_CONFIG if it was explicitly specified:
+			llvm_config = ENV['LLVM_CONFIG']
+			
+			# If we aren't building for a specific version (e.g. travis) try to find llvm-config
+			unless ENV['LLVM_VERSION'] 
+				 llvm_config ||= MakeMakefile.find_executable0("llvm-config")
+			end
 
 			libs = []
 			begin
