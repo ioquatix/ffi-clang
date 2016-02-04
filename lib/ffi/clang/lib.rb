@@ -26,9 +26,17 @@ module FFI
 		module Lib
 			extend FFI::Library
 
-      llvm_config = ENV['LLVM_CONFIG'] || MakeMakefile.find_executable0("llvm-config")
+			llvm_config = ENV['LLVM_CONFIG'] || MakeMakefile.find_executable0("llvm-config")
 
-			libs = ["clang"]
+			libs = []
+			begin
+				xcode_dir = `xcode-select -p`.chomp
+				libs << "#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib"
+			rescue Errno::ENOENT => e
+				# Ignore
+			end
+
+			libs << "clang"
 
 			if ENV['LIBCLANG']
 				libs << ENV['LIBCLANG']

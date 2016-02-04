@@ -348,6 +348,15 @@ module FFI
 
 			attach_function :get_overridden_cursors, :clang_getOverriddenCursors, [CXCursor.by_value, :pointer, :pointer], :void
 			attach_function :dispose_overridden_cursors, :clang_disposeOverriddenCursors, [:pointer], :void
+
+			attach_function :get_typedef_decl_unerlying_type, :clang_getTypedefDeclUnderlyingType, [CXCursor.by_value], CXType.by_value
+			attach_function :get_type_declaration, :clang_getTypeDeclaration, [CXType.by_value], CXCursor.by_value
+
+			attach_function :get_enum_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
+
+			attach_function :get_num_args, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
+
+			attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
 		end
 	end
 end

@@ -149,6 +149,9 @@ module FFI
 			attach_function :get_fuction_type_calling_conv, :clang_getFunctionTypeCallingConv, [CXType.by_value], :calling_conv
 
 			attach_function :equal_types, :clang_equalTypes, [CXType.by_value, CXType.by_value], :uint
+
+			attach_function :get_array_element_type, :clang_getArrayElementType, [CXType.by_value], CXType.by_value
+			attach_function :get_array_size, :clang_getArraySize, [CXType.by_value], :int
 		end
 	end
 end

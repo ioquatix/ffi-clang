@@ -130,6 +130,18 @@ module FFI
 			def ==(other)
 				Lib.equal_types(@type, other.type) != 0
 			end
+
+			def declaration
+				Cursor.new Lib.get_type_declaration(@type), @translation_unit
+			end
+
+			def element_type
+				Type.new Lib.get_array_element_type(@type), @translation_unit
+			end
+
+			def array_size
+				Lib.get_array_size(@type)
+			end
 		end
 	end
 end

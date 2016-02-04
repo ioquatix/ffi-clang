@@ -158,6 +158,10 @@ module FFI
 				Type.new Lib.get_enum_decl_integer_type(@cursor), @translation_unit
 			end
 
+			def typedef_type
+				Type.new Lib.get_typedef_decl_unerlying_type(@cursor), @translation_unit
+			end
+
 			def virtual_base?
 				Lib.is_virtual_base(@cursor) != 0
 			end
@@ -192,6 +196,10 @@ module FFI
 
 			def enum_unsigned_value
 				Lib.get_enum_unsigned_value @cursor
+			end
+
+			def enum_type
+				Type.new Lib.get_enum_type(@cursor), @translation_unit
 			end
 
 			def specialized_template
@@ -232,6 +240,14 @@ module FFI
 
 			def translation_unit
 				@translation_unit
+			end
+
+			def num_args
+				Lib.get_num_args @cursor
+			end
+
+			def variadic?
+				Lib.is_variadic(@cursor) != 0
 			end
 
 			def visit_children(&block)
