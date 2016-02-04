@@ -1,12 +1,12 @@
 language: ruby
 rvm:
-  - "2.0"
-  - "2.1"
+  - "2.2.4"
+  - "2.3.0"
 env:
-  - LLVM_VERSION=3.2
-  - LLVM_VERSION=3.3
   - LLVM_VERSION=3.4
   - LLVM_VERSION=3.5
+  - LLVM_VERSION=3.6
+  - LLVM_VERSION=3.7
 before_install:
   - gem update bundler
   - sudo add-apt-repository --yes ppa:h-rayflood/llvm
