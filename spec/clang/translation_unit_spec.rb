@@ -140,7 +140,7 @@ describe TranslationUnit do
 		it "raises exception if save path is not writable" do
 			FileUtils.mkdir_p File.dirname(may_not_exist_filepath)
 			File.chmod(0444, File.dirname(may_not_exist_filepath))
-			expect{tu.save(may_not_exist_filepath)}.to raise_error
+			expect{tu.save(may_not_exist_filepath)}.to raise_error(FFI::Clang::Error)
 			expect(FileTest.exist?(may_not_exist_filepath)).to be false
 		end
 	end
@@ -176,7 +176,7 @@ describe TranslationUnit do
 
 		it "raises exception if the file is not found when reparsing" do
 			FileUtils.rm path, :force => true
-			expect{@reparse_tu.reparse}.to raise_error
+			expect{@reparse_tu.reparse}.to raise_error(FFI::Clang::Error)
 		end
 	end
 
