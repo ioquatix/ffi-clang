@@ -19,9 +19,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/lib/source_location'
-require 'ffi/clang/lib/string'
+require_relative 'translation_unit'
+require_relative 'source_location'
+require_relative 'string'
 
 module FFI
 	module Clang

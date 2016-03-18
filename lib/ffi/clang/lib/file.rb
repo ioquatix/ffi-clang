@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/string'
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/utils'
+require_relative 'string'
+require_relative 'translation_unit'
+require_relative 'version'
 
 module FFI
 	module Clang

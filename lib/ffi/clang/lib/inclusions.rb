@@ -18,8 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/file'
-require 'ffi/clang/lib/source_location'
+require_relative 'file'
+require_relative 'source_location'
 
 module FFI
 	module Clang

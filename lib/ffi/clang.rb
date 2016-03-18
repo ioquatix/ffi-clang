@@ -42,15 +42,19 @@ module FFI::Clang
 	end
 end
 
-require 'ffi/clang/utils'
-require 'ffi/clang/lib'
-require 'ffi/clang/index'
-require 'ffi/clang/translation_unit'
-require 'ffi/clang/diagnostic'
-require 'ffi/clang/cursor'
-require 'ffi/clang/source_location'
-require 'ffi/clang/source_range'
-require 'ffi/clang/unsaved_file'
-require 'ffi/clang/token'
-require 'ffi/clang/code_completion'
-require 'ffi/clang/compilation_database'
+# Load the shared object:
+require_relative 'clang/lib'
+
+# Wrappers around C functionality:
+require_relative 'clang/utils'
+require_relative 'clang/lib'
+require_relative 'clang/index'
+require_relative 'clang/translation_unit'
+require_relative 'clang/diagnostic'
+require_relative 'clang/cursor'
+require_relative 'clang/source_location'
+require_relative 'clang/source_range'
+require_relative 'clang/unsaved_file'
+require_relative 'clang/token'
+require_relative 'clang/code_completion'
+require_relative 'clang/compilation_database'

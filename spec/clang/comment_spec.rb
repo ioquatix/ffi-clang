@@ -45,7 +45,6 @@ describe Comment do
 		para = comment.child(1)
 		para.kind.should equal(:comment_paragraph)
 		para.num_children.should equal(2)
-		text = para.child
 
 		lines = (0..para.num_children-1).map do |i|
 			para.child(i).text
@@ -67,11 +66,11 @@ describe Comment do
 			param = comment.child(3 + child_idx)
 			param.should be_kind_of(ParamCommandComment)
 
-			param.valid_index?.should == true
-			param.index.should equal(child_idx)
-			param.name.should eq(v[0])
-			param.child.text.should eq v[1]
-			param.comment.should eq v[1]
+			expect(param.valid_index?).to be_truthy
+			expect(param.index).to be == child_idx
+			expect(param.name).to be == v[0]
+			expect(param.child.text).to be == v[1]
+			expect(param.comment).to be == v[1]
 		end
 	end
 

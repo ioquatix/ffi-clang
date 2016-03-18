@@ -20,11 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/cursor'
-require 'ffi/clang/source_location'
-require 'ffi/clang/comment'
-require 'ffi/clang/type'
-require 'ffi/clang/lib/code_completion'
+require_relative 'lib/cursor'
+require_relative 'lib/code_completion'
+
+require_relative 'source_location'
+require_relative 'comment'
+require_relative 'type'
 
 module FFI
 	module Clang
@@ -238,16 +239,8 @@ module FFI
 				Lib.get_language @cursor
 			end
 
-			def translation_unit
-				@translation_unit
-			end
-
 			def num_args
 				Lib.get_num_args @cursor
-			end
-
-			def variadic?
-				Lib.is_variadic(@cursor) != 0
 			end
 
 			def visit_children(&block)
@@ -347,8 +340,6 @@ module FFI
 			def num_arguments
 				Lib.cursor_get_num_arguments(@cursor)
 			end
-
-			attr_reader :cursor
 
 			def ==(other)
 				Lib.are_equal(@cursor, other.cursor) != 0

@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/lib/inclusions'
-require 'ffi/clang/cursor'
-require 'ffi/clang/file'
-require 'ffi/clang/token'
+require_relative 'lib/translation_unit'
+require_relative 'lib/inclusions'
+require_relative 'cursor'
+require_relative 'file'
+require_relative 'token'
 
 module FFI
 	module Clang

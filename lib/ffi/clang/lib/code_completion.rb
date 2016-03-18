@@ -18,9 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/translation_unit'
-require 'ffi/clang/lib/cursor'
-require 'ffi/clang/lib/diagnostic'
+require_relative 'cursor'
+require_relative 'diagnostic'
 
 module FFI
 	module Clang

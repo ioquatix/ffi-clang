@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/diagnostic'
-require 'ffi/clang/source_range'
+require_relative 'lib/diagnostic'
+require_relative 'source_range'
 
 module FFI
 	module Clang

@@ -19,9 +19,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'ffi/clang/lib/cursor'
-require 'ffi/clang/lib/comment'
-require 'ffi/clang/source_location'
+require_relative 'lib/cursor'
+require_relative 'lib/comment'
+require_relative 'source_location'
 
 module FFI
 	module Clang

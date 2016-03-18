@@ -1,5 +1,5 @@
-$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
-require 'ffi/clang'
+
+require_relative '../lib/ffi/clang'
 
 include FFI::Clang
 
