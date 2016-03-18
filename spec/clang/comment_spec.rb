@@ -26,45 +26,45 @@ describe Comment do
 	let (:comment) { find_first(cursor, :cursor_function).comment }
 
 	it "can be obtained from a cursor" do
-		comment.should be_kind_of(Comment)
-		comment.should be_kind_of(FullComment)
-		comment.kind.should equal(:comment_full)
+		expect(comment).to be_kind_of(Comment)
+		expect(comment).to be_kind_of(FullComment)
+		expect(comment.kind).to equal(:comment_full)
 	end
 
 	it "can parse the brief description" do
 		para = comment.child
-		para.kind.should equal(:comment_paragraph)
-		para.should be_kind_of(ParagraphComment)
+		expect(para.kind).to equal(:comment_paragraph)
+		expect(para).to be_kind_of(ParagraphComment)
 		text = para.child
-		text.kind.should equal(:comment_text)
-		text.should be_kind_of(TextComment)
-		text.text.strip.should eq("Short explanation")
+		expect(text.kind).to equal(:comment_text)
+		expect(text).to be_kind_of(TextComment)
+		expect(text.text.strip).to eq("Short explanation")
 	end
 
 	it "can parse the longer description" do
 		para = comment.child(1)
-		para.kind.should equal(:comment_paragraph)
-		para.num_children.should equal(2)
+		expect(para.kind).to equal(:comment_paragraph)
+		expect(para.num_children).to equal(2)
 
 		lines = (0..para.num_children-1).map do |i|
 			para.child(i).text
 		end
 
-		lines.should eq([" This is a longer explanation",
+		expect(lines).to eq([" This is a longer explanation",
 				 " that spans multiple lines"])
 	end
 
 	it "has working helpers" do
-		comment.num_children.should equal(8)
+		expect(comment.num_children).to equal(8)
 
 		para = comment.child(1)
-		para.text.should eq(" This is a longer explanation\n that spans multiple lines")
+		expect(para.text).to eq(" This is a longer explanation\n that spans multiple lines")
 	end
 
 	it "understands params" do
 		[['input', " some input\n "], ['flags', " some flags\n "]].each_with_index do |v, child_idx|
 			param = comment.child(3 + child_idx)
-			param.should be_kind_of(ParamCommandComment)
+			expect(param).to be_kind_of(ParamCommandComment)
 
 			expect(param.valid_index?).to be_truthy
 			expect(param.index).to be == child_idx

@@ -30,15 +30,15 @@ describe Cursor do
 	let(:cursor_pp) { Index.new.parse_translation_unit(fixture_path("docs.c"),[],[],{detailed_preprocessing_record: true}).cursor }
 
 	it "can be obtained from a translation unit" do
-		cursor.should be_kind_of(Cursor)
-		cursor.kind.should equal(:cursor_translation_unit)
-		cursor.null?.should equal(false)
-		cursor.translation_unit?.should equal(true)
+		expect(cursor).to be_kind_of(Cursor)
+		expect(cursor.kind).to equal(:cursor_translation_unit)
+		expect(cursor.null?).to equal(false)
+		expect(cursor.translation_unit?).to equal(true)
 	end
 
 	it "returns the source location of the cursor" do
 		location = cursor.location
-		location.should be_kind_of(SourceLocation)
+		expect(location).to be_kind_of(SourceLocation)
 	end
 
 	describe '#extent' do
@@ -64,8 +64,8 @@ describe Cursor do
 	end
 
 	it "returns the path of the translation unit for the translation unit cursor" do
-		cursor.display_name.should eq(fixture_path("list.c"))
-		cursor.spelling.should eq(fixture_path("list.c"))
+		expect(cursor.display_name).to eq(fixture_path("list.c"))
+		expect(cursor.spelling).to eq(fixture_path("list.c"))
 	end
 
 	it "allows us to visit its children" do
@@ -74,29 +74,29 @@ describe Cursor do
 			counter += 1
 			:recurse
 		end
-		counter.should_not equal(0)
+		expect(counter).not_to equal(0)
 	end
 
 	describe "Null Cursor" do
 		it "can be a null cursor" do
-			Cursor.null_cursor.should be_kind_of(Cursor)
-			Cursor.null_cursor.kind.should equal(:cursor_invalid_file)
+			expect(Cursor.null_cursor).to be_kind_of(Cursor)
+			expect(Cursor.null_cursor.kind).to equal(:cursor_invalid_file)
 		end
 
 		it "is null?" do
-			Cursor.null_cursor.null?.should equal(true)
+			expect(Cursor.null_cursor.null?).to equal(true)
 		end
 
 		it "is invalid?" do
-			Cursor.null_cursor.invalid?.should equal(true)
+			expect(Cursor.null_cursor.invalid?).to equal(true)
 		end
 
 		it "compares as equal to another null cursor instance" do
-			Cursor.null_cursor.should eq(Cursor.null_cursor)
+			expect(Cursor.null_cursor).to eq(Cursor.null_cursor)
 		end
 
 		it "should not equal a Translation Unit cursor" do
-			Cursor.null_cursor.should_not eq(cursor)
+			expect(Cursor.null_cursor).not_to eq(cursor)
 		end
 	end
 
@@ -104,23 +104,23 @@ describe Cursor do
 		let (:func) { find_first(cursor, :cursor_function) }
 
 		it "is not invalid?" do
-			func.invalid?.should equal(false)
+			expect(func.invalid?).to equal(false)
 		end
 
 		it "can find the first function declaration" do
-			func.should_not equal(nil)
-			func.kind.should equal(:cursor_function)
+			expect(func).not_to equal(nil)
+			expect(func.kind).to equal(:cursor_function)
 		end
 
 		it "has an extent representing the bounds of the function" do
-			func.extent.should be_kind_of(SourceRange)
-			func.extent.start.line.should equal(5)
-			func.extent.end.line.should equal(5)
+			expect(func.extent).to be_kind_of(SourceRange)
+			expect(func.extent.start.line).to equal(5)
+			expect(func.extent.end.line).to equal(5)
 		end
 
 		it "returns the name of the function" do
-			func.spelling.should eq("sum")
-			func.display_name.should eq("sum(union List *)")
+			expect(func.spelling).to eq("sum")
+			expect(func.display_name).to eq("sum(union List *)")
 		end
 	end
 
@@ -128,18 +128,18 @@ describe Cursor do
 		let (:struct) { find_first(cursor, :cursor_struct) }
 
 		it "can find the first struct" do
-			struct.should_not equal(nil)
-			struct.kind.should equal(:cursor_struct)
+			expect(struct).not_to equal(nil)
+			expect(struct.kind).to equal(:cursor_struct)
 		end
 
 		it "has an extent representing the bounds of the struct" do
-			struct.extent.start.line.should equal(1)
-			struct.extent.end.line.should equal(4)
+			expect(struct.extent.start.line).to equal(1)
+			expect(struct.extent.end.line).to equal(4)
 		end
 
 		it "returns the name of the struct" do
-			struct.spelling.should eq("List")
-			struct.display_name.should eq("List")
+			expect(struct.spelling).to eq("List")
+			expect(struct.display_name).to eq("List")
 		end
 
 	end
@@ -253,7 +253,7 @@ describe Cursor do
 				child.kind == :cursor_cxx_base_specifier and parent.spelling == 'B' } }
 
 		it 'checks cursor is virtual base' do
-			virtual_base_cursor.virtual_base?.should equal true
+			expect(virtual_base_cursor.virtual_base?).to equal true
 		end
 	end
 
@@ -262,7 +262,7 @@ describe Cursor do
 				child.kind == :cursor_cxx_method and child.spelling == 'func_a' } }
 
 		it 'checks member function is virtual' do
-			virtual_cursor.virtual?.should equal true
+			expect(virtual_cursor.virtual?).to equal true
 		end
 	end
 
@@ -272,7 +272,7 @@ describe Cursor do
 				child.spelling == 'func_a' and parent.spelling == 'A' } }
 
 		it 'checks member function is purely virtual' do
-			pure_virtual_cursor.pure_virtual?.should equal true
+			expect(pure_virtual_cursor.pure_virtual?).to equal true
 		end
 	end
 
@@ -281,7 +281,7 @@ describe Cursor do
 			child.kind == :cursor_cxx_method and child.spelling == 'func_b' } }
 
 		it 'checks cursor is static member function' do
-			static_method_cursor.static?.should equal true
+			expect(static_method_cursor.static?).to equal true
 		end
 	end
 
@@ -290,7 +290,7 @@ describe Cursor do
 			child.kind == :cursor_enum_constant_decl and child.spelling == 'EnumC' } }
 
 		it 'returns enum value' do
-			enum_value_cursor.enum_value.should equal 100
+			expect(enum_value_cursor.enum_value).to equal 100
 		end
 	end
 
@@ -327,13 +327,13 @@ describe Cursor do
 		let (:structs) { find_all(cursor_canon, :cursor_struct) }
 
 		it "mathes 3 cursors" do
-			structs.size.should eq(3)
+			expect(structs.size).to eq(3)
 		end
 
 		it "refers the first cursor as canonical one" do
-			structs[0].canonical.should eq(structs[0])
-			structs[1].canonical.should eq(structs[0])
-			structs[2].canonical.should eq(structs[0])
+			expect(structs[0].canonical).to eq(structs[0])
+			expect(structs[1].canonical).to eq(structs[0])
+			expect(structs[2].canonical).to eq(structs[0])
 		end
 	end
 
@@ -341,13 +341,13 @@ describe Cursor do
 		let (:structs) { find_all(cursor_canon, :cursor_struct) }
 
 		it "mathes 3 cursors" do
-			structs.size.should eq(3)
+			expect(structs.size).to eq(3)
 		end
 
 		it "refers the third cursor as definition one" do
-			structs[0].definition.should eq(structs[2])
-			structs[1].definition.should eq(structs[2])
-			structs[2].definition.should eq(structs[2])
+			expect(structs[0].definition).to eq(structs[2])
+			expect(structs[1].definition).to eq(structs[2])
+			expect(structs[2].definition).to eq(structs[2])
 		end
 	end
 
@@ -366,11 +366,11 @@ describe Cursor do
 				child.kind == :cursor_cxx_method and child.spelling == 'func_d' } }
 
 		it 'returns access specifier symbol', from_3_3: true do
-			access_specifier_cursor.access_specifier.should equal :private
+			expect(access_specifier_cursor.access_specifier).to equal :private
 		end
 
 		it 'returns access specifier symbol(invalid, why?)', upto_3_2: true do
-			access_specifier_cursor.access_specifier.should equal :invalid
+			expect(access_specifier_cursor.access_specifier).to equal :invalid
 		end
 	end
 
@@ -379,11 +379,11 @@ describe Cursor do
 		let(:cxx_language_cursor) { find_matching(cursor_cxx) { |c, p| c.kind == :cursor_struct } }
 
 		it 'returns :c if the cursor language is C' do
-			c_language_cursor.language.should equal :c
+			expect(c_language_cursor.language).to equal :c
 		end
 
 		it 'returns :c_plus_plus if the cursor language is C++' do
-			cxx_language_cursor.language.should equal :c_plus_plus
+			expect(cxx_language_cursor.language).to equal :c_plus_plus
 		end
 	end
 
@@ -391,12 +391,12 @@ describe Cursor do
 		let (:struct) { find_first(cursor, :cursor_struct) }
 
 		it "can find the first struct" do
-			struct.should_not equal(nil)
+			expect(struct).not_to equal(nil)
 		end
 
 		it "returns the translation unit that a cursor originated from" do
-			struct.translation_unit.should be_kind_of(TranslationUnit)
-			struct.translation_unit.spelling.should eq(fixture_path("list.c"))
+			expect(struct.translation_unit).to be_kind_of(TranslationUnit)
+			expect(struct.translation_unit.spelling).to eq(fixture_path("list.c"))
 		end
 	end
 
@@ -405,11 +405,11 @@ describe Cursor do
 		let (:func) { find_first(cursor, :cursor_function) }
 
 		it "returns :external if the cursor is non-static function" do
-			func.linkage.should equal :external
+			expect(func.linkage).to equal :external
 		end
 
 		it "returns :invalid if the cursor does not have linkage" do
-			ref.linkage.should equal :invalid
+			expect(ref.linkage).to equal :invalid
 		end
 	end
 
@@ -418,7 +418,7 @@ describe Cursor do
 				child.kind == :cursor_cxx_method and child.spelling == 'func_d' and parent.spelling != 'D' } }
 
 		it 'returns base class as semantic parent' do
-			parent.semantic_parent.spelling.should eq('D')
+			expect(parent.semantic_parent.spelling).to eq('D')
 		end
 	end
 
@@ -427,7 +427,7 @@ describe Cursor do
 				child.kind == :cursor_cxx_method and child.spelling == 'func_d' and parent.spelling != 'D' } }
 
 		it 'returns translation unit as lexical parent' do
-			parent.lexical_parent.kind.should eq(:cursor_translation_unit)
+			expect(parent.lexical_parent.kind).to eq(:cursor_translation_unit)
 		end
 	end
 
@@ -439,7 +439,7 @@ describe Cursor do
 		let (:struct) { find_all(cursor_canon, :cursor_struct).at(2) }
 
 		it "checks cursor is a definition" do
-			struct.definition?.should be true
+			expect(struct.definition?).to be true
 		end
 	end
 
@@ -447,7 +447,7 @@ describe Cursor do
 		let (:func) { find_first(cursor, :cursor_function) }
 
 		it "returns something in string" do
-			func.usr.should be_kind_of(String)
+			expect(func.usr).to be_kind_of(String)
 		end
 	end
 
@@ -456,7 +456,7 @@ describe Cursor do
 				child.kind == :cursor_function and child.spelling == 'f_variadic' } }
 
 		it "checks cursor is a variadic function" do
-			func.variadic?.should be true
+			expect(func.variadic?).to be true
 		end
 	end
 
@@ -467,7 +467,7 @@ describe Cursor do
 				child.kind == :cursor_type_ref and child.spelling == 'struct A' } }
 
 		it "returns a cursor that this cursor references" do
-			ref.referenced.should eq(struct)
+			expect(ref.referenced).to eq(struct)
 		end
 
 	end
@@ -476,7 +476,7 @@ describe Cursor do
 		let (:func) { find_first(cursor, :cursor_function) }
 
 		it "computes hash for the cursor" do
-			func.hash.should be_kind_of(Fixnum)
+			expect(func.hash).to be_kind_of(Fixnum)
 		end
 	end
 
@@ -484,7 +484,7 @@ describe Cursor do
 		let (:func) { find_first(cursor, :cursor_function) }
 
 		it "returns :available for the cursor availability" do
-			func.availability.should equal(:available)
+			expect(func.availability).to equal(:available)
 		end
 	end
 
@@ -492,8 +492,8 @@ describe Cursor do
 		let (:field) { find_first(cursor, :cursor_field_decl) }
 
 		it "returns type for the cursor" do
-			field.type.should be_kind_of(Type)
-			field.type.kind.should equal(:type_int)
+			expect(field.type).to be_kind_of(Type)
+			expect(field.type.kind).to equal(:type_int)
 		end
 	end
 
@@ -501,8 +501,8 @@ describe Cursor do
 		let (:typedef) { find_first(cursor_cxx, :cursor_typedef_decl) }
 
 		it "returns type that the cursor type is underlying" do
-			typedef.underlying_type.should be_kind_of(Type)
-			typedef.underlying_type.kind.should equal(:type_pointer)
+			expect(typedef.underlying_type).to be_kind_of(Type)
+			expect(typedef.underlying_type.kind).to equal(:type_pointer)
 		end
 	end
 

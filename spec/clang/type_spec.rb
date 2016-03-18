@@ -29,12 +29,12 @@ describe Type do
 	let(:type) { find_first(cursor, :cursor_function).type }
 
 	it "can tell us about the main function", from_3_3: true do
-		type.variadic?.should equal(false)
+		expect(type.variadic?).to equal(false)
 
-		type.num_arg_types.should equal(2)
-		type.arg_type(0).spelling.should eq("int")
-		type.arg_type(1).spelling.should eq("const char *")
-		type.result_type.spelling.should eq("int")
+		expect(type.num_arg_types).to equal(2)
+		expect(type.arg_type(0).spelling).to eq("int")
+		expect(type.arg_type(1).spelling).to eq("const char *")
+		expect(type.result_type.spelling).to eq("int")
 	end
 
   describe '#kind_spelling' do
@@ -42,7 +42,7 @@ describe Type do
       child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'}.type }
 
     it 'returns type kind name with string' do
-      kind_spelling_type.kind_spelling.should eq 'Typedef'
+      expect(kind_spelling_type.kind_spelling).to eq 'Typedef'
     end
   end
 
@@ -90,11 +90,11 @@ describe Type do
       }.type.canonical.pointee }
 
     it 'checks type is const qualified' do
-      pointee_type.const_qualified?.should equal true
+      expect(pointee_type.const_qualified?).to equal true
     end
 
     it 'cannot check whether pointee type is const qualified' do
-      pointer_type.const_qualified?.should equal false
+      expect(pointer_type.const_qualified?).to equal false
     end
   end
 

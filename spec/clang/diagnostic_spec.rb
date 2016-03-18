@@ -6,27 +6,27 @@ describe Diagnostic do
 
 	it "returns a string representation of the diagnostic" do
 		str = diagnostic.format
-		str.should be_kind_of(String)
-		str.should =~ /does not match previous/
+		expect(str).to be_kind_of(String)
+		expect(str).to match(/does not match previous/)
 	end
 
 	it "returns a string representation according to the given opts" do
-		diagnostic.format(:source_location => true).should include("list.c:5")
+		expect(diagnostic.format(:source_location => true)).to include("list.c:5")
 	end
 
 	it "returns the text of the diagnostic" do
-		diagnostic.spelling.should be_kind_of(String)
+		expect(diagnostic.spelling).to be_kind_of(String)
 	end
 
 	it "returns the severity of the diagnostic" do
-		diagnostic.severity.should == :error
+		expect(diagnostic.severity).to eq(:error)
 	end
 
 	it "returns the ranges of the diagnostic" do
 		rs = diagnostics[1].ranges
-		rs.should be_kind_of(Array)
-		rs.should_not be_empty
-		rs.first.should be_kind_of(SourceRange)
+		expect(rs).to be_kind_of(Array)
+		expect(rs).not_to be_empty
+		expect(rs.first).to be_kind_of(SourceRange)
 	end
 
 	it "calls dispose_diagnostic on GC" do
