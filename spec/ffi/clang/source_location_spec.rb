@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'spec_helper'
+require_relative 'spec_helper'
 
 describe SourceLocation do
 	let(:tu)                   { Index.new.parse_translation_unit(fixture_path("list.c")) }

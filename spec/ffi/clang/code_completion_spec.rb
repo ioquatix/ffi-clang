@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'spec_helper'
+require_relative 'spec_helper'
 
 describe CodeCompletion do
 	let(:filename) { fixture_path("completion.cxx") }

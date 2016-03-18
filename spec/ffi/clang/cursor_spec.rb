@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'spec_helper'
+require_relative 'spec_helper'
 
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }

@@ -1,5 +1,5 @@
 
-require_relative '../lib/ffi/clang'
+require_relative '../../../lib/ffi/clang'
 
 include FFI::Clang
 
@@ -16,7 +16,7 @@ end
 
 module ClangSpecHelper
 	def fixture_path(path)
-		File.join File.expand_path("../fixtures", __FILE__), path
+		File.join File.expand_path("fixtures", __dir__), path
 	end
 
 	def find_all(cursor, kind)

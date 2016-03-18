@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'spec_helper'
+require_relative 'spec_helper'
 
 describe FFI::Clang::Utils do
 	describe '#self.clang_version_string' do
