@@ -53,8 +53,12 @@ describe Index do
 	end
 
 	describe '#create_translation_unit' do
-		before :all do
-			system("#{CLANG_COMPILER} -c #{fixture_path('simple.c')} -emit-ast -o #{TMP_DIR}/simple.ast")
+		let(:simple_ast_path) {"#{TMP_DIR}/simple.ast"}
+		
+		before :each do
+			translation_unit = index.parse_translation_unit fixture_path("simple.c")
+			
+			translation_unit.save(simple_ast_path)
 		end
 
 		it "can create translation unit from a ast file" do

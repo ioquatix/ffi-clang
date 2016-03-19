@@ -5,15 +5,6 @@ include FFI::Clang
 
 TMP_DIR = File.expand_path("../tmp/", __FILE__)
 
-if ENV['LLVM_CONFIG']
-  llvm_bindir = `#{ENV['LLVM_CONFIG']} --bindir`.chomp
-  CLANG_COMPILER = File.expand_path('clang', llvm_bindir)
-  CLANGPP_COMPILER = File.expand_path('clang++', llvm_bindir)
-else
-  CLANG_COMPILER = 'clang'
-  CLANGPP_COMPILER = 'clang++'
-end
-
 module ClangSpecHelper
 	def fixture_path(path)
 		File.join File.expand_path("fixtures", __dir__), path
