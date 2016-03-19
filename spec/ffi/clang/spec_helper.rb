@@ -11,38 +11,19 @@ module ClangSpecHelper
 	end
 
 	def find_all(cursor, kind)
-		ret = []
-
-		cursor.visit_children do |cursor, parent|
-			if (cursor.kind == kind)
-				ret << cursor
-			end
-			:recurse
-		end
-
-		ret
+		cursor.find_all(kind)
 	end
 
 	def find_first(cursor, kind)
-		find_all(cursor, kind).first
+		cursor.find_first(kind)
 	end
 
 	def find_all_matching(cursor, &term)
-		ret = []
-
-		cursor.visit_children do |child, parent|
-			if term.call child, parent
-				ret << child
-			end
-
-			:recurse
-		end
-
-		ret
+		cursor.find_all_matching(&term)
 	end
 
 	def find_matching(cursor, &term)
-		find_all_matching(cursor, &term).first
+		cursor.find_matching(&term)
 	end
 end
 

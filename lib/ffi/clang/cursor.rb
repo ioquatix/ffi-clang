@@ -345,6 +345,36 @@ module FFI
 				Lib.are_equal(@cursor, other.cursor) != 0
 			end
 
+			def find_all(kind)
+				find_all_matching do |child, parent|
+					child.kind == kind
+				end
+			end
+
+			def find_first(kind)
+				find_all(kind).first
+			end
+
+			def find_all_matching
+				return to_enum(:find_all_matching) unless block_given?
+				
+				matching = []
+
+				self.visit_children do |child, parent|
+					if yield(child, parent)
+						matching << child
+					end
+
+					:recurse
+				end
+
+				return matching
+			end
+
+			def find_matching(&term)
+				find_all_matching(&term).first
+			end
+
 			class PlatformAvailability < AutoPointer
 				def initialize(memory_pointer)
 					pointer = FFI::Pointer.new(memory_pointer)
