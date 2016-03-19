@@ -26,7 +26,7 @@ describe Index do
 	end
 
 	after :all do
-		FileUtils.rm_rf TMP_DIR
+		# FileUtils.rm_rf TMP_DIR
 	end
 
 	let(:index) { Index.new }
@@ -39,16 +39,16 @@ describe Index do
 
 	describe '#parse_translation_unit' do
 		it "can parse a source file" do
-			tu = index.parse_translation_unit fixture_path("a.c")
-			expect(tu).to be_kind_of(TranslationUnit)
+			translation_unit = index.parse_translation_unit fixture_path("a.c")
+			expect(translation_unit).to be_kind_of(TranslationUnit)
 		end
 
 		it "raises error when file is not found" do
-			expect { index.parse_translation_unit fixture_path("xxxxxxxxx.c") }.to raise_error
+			expect { index.parse_translation_unit fixture_path("xxxxxxxxx.c") }.to raise_error(FFI::Clang::Error)
 		end
 
 		it "can handle command line options" do
-		   expect{index.parse_translation_unit(fixture_path("a.c"), ["-std=c++11"])}.not_to raise_error
+			expect{index.parse_translation_unit(fixture_path("a.c"), ["-std=c++11"])}.not_to raise_error
 		end
 	end
 
@@ -59,13 +59,13 @@ describe Index do
 
 		it "can create translation unit from a ast file" do
 			expect(FileTest.exist?("#{TMP_DIR}/simple.ast")).to be true
-			tu = index.create_translation_unit "#{TMP_DIR}/simple.ast"
-			expect(tu).to be_kind_of(TranslationUnit)
+			translation_unit = index.create_translation_unit "#{TMP_DIR}/simple.ast"
+			expect(translation_unit).to be_kind_of(TranslationUnit)
 		end
 
 		it "raises error when file is not found" do
 			expect(FileTest.exist?('not_found.ast')).to be false
-			expect { index.create_translation_unit 'not_found.ast' }.to raise_error
+			expect { index.create_translation_unit 'not_found.ast' }.to raise_error(FFI::Clang::Error)
 		end
 	end
 end

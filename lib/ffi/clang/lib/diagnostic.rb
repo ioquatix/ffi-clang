@@ -54,7 +54,7 @@ module FFI
 			attach_function :dispose_diagnostic, :clang_disposeDiagnostic, [:CXDiagnostic], :void
 
 			# DiagnosticSet (not used yet)
-			# attach_function :get_diagnostic_set_from_tu, :clang_getDiagnosticSetFromTU, [:CXTranslationUnit], :CXDiagnosticSet
+			# attach_function :get_diagnostic_set_from_translation_unit, :clang_getDiagnosticSetFromTU, [:CXTranslationUnit], :CXDiagnosticSet
 			# attach_function :dispose_diagnostic_set, :clang_disposeDiagnosticSet, [:CXDiagnosticSet], :void
 			# attach_function :load_diagnostics, :clang_loadDiagnostics, [:string, :pointer, :pointer], :CXDiagnosticSet
 

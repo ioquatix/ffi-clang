@@ -47,7 +47,7 @@ module FFI
 				:none, 0,
 				:unknown, 1,
 				:translation_errors, 2,
-				:invalid_tu, 3
+				:invalid_translation_unit, 3
 			]
 
 			ReparseFlags = enum [

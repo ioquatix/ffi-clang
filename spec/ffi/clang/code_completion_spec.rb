@@ -22,10 +22,10 @@ require_relative 'spec_helper'
 
 describe CodeCompletion do
 	let(:filename) { fixture_path("completion.cxx") }
-	let(:tu) { Index.new.parse_translation_unit(filename) }
+	let(:translation_unit) { Index.new.parse_translation_unit(filename) }
 	let(:line) { 7 }
 	let(:column) { 6 }
-	let(:results) { tu.code_complete(filename, line, column) }
+	let(:results) { translation_unit.code_complete(filename, line, column) }
 
 	describe "self.default_code_completion_options" do
 		let(:options) { FFI::Clang::CodeCompletion.default_code_completion_options }

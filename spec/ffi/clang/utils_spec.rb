@@ -25,7 +25,7 @@ describe FFI::Clang::Utils do
 		let (:version) { Utils::clang_version_string }
 		it "returns a version string for showing to user" do
 			expect(version).to be_kind_of(String)
-			expect(version).to match(/clang version \d+\.\d+/)
+			expect(version).to match(/Apple LLVM version \d+\.\d+\.\d+|clang version \d+\.\d+/)
 		end
 	end
 

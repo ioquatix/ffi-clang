@@ -21,19 +21,19 @@
 require_relative 'spec_helper'
 
 describe SourceRange do
-	let(:tu) { Index.new.parse_translation_unit(fixture_path("list.c")) }
-	let(:tu_range) { tu.cursor.extent }
+	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
+	let(:translation_unit_range) { translation_unit.cursor.extent }
 
 	it "can be obtained from a cursor" do
-		expect(tu_range).to be_kind_of(SourceRange)
-		expect(tu_range.null?).to be false
+		expect(translation_unit_range).to be_kind_of(SourceRange)
+		expect(translation_unit_range.null?).to be false
 	end
 
 	it "has start and end source location" do
-		expect(tu_range.start).to be_kind_of(SourceLocation)
-		expect(tu_range.start.null?).to be false
-		expect(tu_range.end).to be_kind_of(SourceLocation)
-		expect(tu_range.end.null?).to be false
+		expect(translation_unit_range.start).to be_kind_of(SourceLocation)
+		expect(translation_unit_range.start.null?).to be false
+		expect(translation_unit_range.end).to be_kind_of(SourceLocation)
+		expect(translation_unit_range.end.null?).to be false
 	end
 
 	describe "Null Range" do
@@ -57,7 +57,7 @@ describe SourceRange do
 	end
 
     describe "Get Range" do
-        let(:range) { SourceRange.new(tu_range.start, tu_range.end) }
+        let(:range) { SourceRange.new(translation_unit_range.start, translation_unit_range.end) }
 
         it "can be obtained from two source locations" do
 			expect(range).to be_kind_of(SourceRange)
@@ -65,12 +65,12 @@ describe SourceRange do
         end
 
         it "is same to original source range" do
-			expect(range).to eq(tu_range)
+			expect(range).to eq(translation_unit_range)
         end
 
         it "is same to original source range's locations" do
-			expect(range.start).to eq(tu_range.start)
-			expect(range.end).to eq(tu_range.end)
+			expect(range.start).to eq(translation_unit_range.start)
+			expect(range.end).to eq(translation_unit_range.end)
         end
     end
 end

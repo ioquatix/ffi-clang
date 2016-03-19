@@ -45,9 +45,9 @@ module FFI
 			end
 
 			def create_translation_unit(ast_filename)
-				tu_pointer = Lib.create_translation_unit(self, ast_filename)
-				raise Error, "error parsing #{ast_filename.inspect}" if tu_pointer.null?
-				TranslationUnit.new tu_pointer, self
+				translation_unit_pointer = Lib.create_translation_unit(self, ast_filename)
+				raise Error, "error parsing #{ast_filename.inspect}" if translation_unit_pointer.null?
+				TranslationUnit.new translation_unit_pointer, self
 			end
 
 			private

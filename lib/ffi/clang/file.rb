@@ -26,9 +26,9 @@ module FFI
 		class File < Pointer
 			attr_reader :translation_unit
 
-			def initialize(pointer, tu)
+			def initialize(pointer, translation_unit)
 				super pointer
-				@translation_unit = tu
+				@translation_unit = translation_unit
 
 				if FFI::Clang::Utils.satisfy_version?('3.3')
 					pointer = MemoryPointer.new(Lib::CXFileUniqueID)

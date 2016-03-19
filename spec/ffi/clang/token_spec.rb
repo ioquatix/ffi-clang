@@ -21,10 +21,10 @@
 require_relative 'spec_helper'
 
 describe Tokens do
-	let(:tu) { Index.new.parse_translation_unit(fixture_path("list.c")) }
-	let(:cursor) { tu.cursor }
+	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
+	let(:cursor) { translation_unit.cursor }
 	let(:range) { find_first(cursor, :cursor_struct).extent }
-	let(:tokens) { tu.tokenize(range) }
+	let(:tokens) { translation_unit.tokenize(range) }
 
 	it "can be obtained from a translation unit" do
 		expect(tokens).to be_kind_of(Tokens)
@@ -53,10 +53,10 @@ describe Tokens do
 end
 
 describe Token do
-	let(:tu) { Index.new.parse_translation_unit(fixture_path("list.c")) }
-	let(:cursor) { tu.cursor }
+	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
+	let(:cursor) { translation_unit.cursor }
 	let(:range) { find_first(cursor, :cursor_struct).extent }
-	let(:token) { tu.tokenize(range).first }
+	let(:token) { translation_unit.tokenize(range).first }
 
 	it "can be obtained from a translation unit" do
 		expect(token).to be_kind_of(Token)
