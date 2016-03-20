@@ -19,11 +19,11 @@ module ClangSpecHelper
 	end
 
 	def find_all_matching(cursor, &term)
-		cursor.find_all_matching(&term)
+		cursor.filter(&term)
 	end
 
 	def find_matching(cursor, &term)
-		cursor.find_matching(&term)
+		cursor.filter(&term).first
 	end
 end
 

@@ -345,18 +345,18 @@ module FFI
 				Lib.are_equal(@cursor, other.cursor) != 0
 			end
 
-			def find_all(kind)
-				find_all_matching do |child, parent|
-					child.kind == kind
+			def find_all(*kinds)
+				filter do |child, parent|
+					kinds.include?(child.kind)
 				end
 			end
 
-			def find_first(kind)
-				find_all(kind).first
+			def find_first(*kinds)
+				find_all(*kinds).first
 			end
 
-			def find_all_matching
-				return to_enum(:find_all_matching) unless block_given?
+			def filter
+				return to_enum(:select) unless block_given?
 				
 				matching = []
 
@@ -371,8 +371,10 @@ module FFI
 				return matching
 			end
 
-			def find_matching(&term)
-				find_all_matching(&term).first
+			def select
+				filter do |child, parent|
+					yield(child)
+				end
 			end
 
 			class PlatformAvailability < AutoPointer
