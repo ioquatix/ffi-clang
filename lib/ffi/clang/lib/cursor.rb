@@ -25,7 +25,6 @@ require_relative 'translation_unit'
 require_relative 'diagnostic'
 require_relative 'comment'
 require_relative 'type'
-require_relative 'version'
 
 module FFI
 	module Clang

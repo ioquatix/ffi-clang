@@ -19,14 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'lib/version'
-
 module FFI
 	module Clang
 		VERSION = "0.4.0"
-		
-		def self.clang_version_string
-			Lib.extract_string Lib.get_clang_version
-		end
 	end
 end

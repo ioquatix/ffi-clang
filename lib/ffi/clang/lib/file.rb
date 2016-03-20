@@ -22,7 +22,6 @@
 
 require_relative 'string'
 require_relative 'translation_unit'
-require_relative 'version'
 
 module FFI
 	module Clang
