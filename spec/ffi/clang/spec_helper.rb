@@ -29,7 +29,7 @@ end
 
 RSpec.configure do |c|
 	c.include ClangSpecHelper
-	supported_versions = ['3.2', '3.3', '3.4', '3.5']
+	supported_versions = ['3.4', '3.5', '3.6', '3.7', '3.8']
 	current_version = ENV['LLVM_VERSION'] || supported_versions.last
 	supported_versions.reverse_each { |version|
 		break if version == current_version

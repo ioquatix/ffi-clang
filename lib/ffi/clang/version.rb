@@ -1,5 +1,5 @@
 # Copyright, 2010-2012 by Jari Bakken.
-# Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
+# Copyright, 2016, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,5 +22,9 @@
 module FFI
 	module Clang
 		VERSION = "0.4.0"
+		
+		def self.clang_version_string
+			Lib.extract_string Lib.get_clang_version
+		end
 	end
 end

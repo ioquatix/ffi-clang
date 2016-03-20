@@ -17,3 +17,6 @@ matrix:
     - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.7], packages: [libclang-3.7-dev, clang-3.7]}}
       env: LLVM_VERSION=3.7
       rvm: "2.3.0"
+    - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.8], packages: [libclang-3.8-dev, clang-3.8]}}
+      env: LLVM_VERSION=3.8
+      rvm: "2.3.0"

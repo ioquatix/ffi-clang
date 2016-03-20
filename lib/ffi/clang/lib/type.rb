@@ -112,9 +112,7 @@ module FFI
 			end
 
 			attach_function :get_type_kind_spelling, :clang_getTypeKindSpelling, [:kind], CXString.by_value
-			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :get_type_spelling, :clang_getTypeSpelling, [CXType.by_value], CXString.by_value
-			end
+			attach_function :get_type_spelling, :clang_getTypeSpelling, [CXType.by_value], CXString.by_value
 
 			attach_function :is_function_type_variadic, :clang_isFunctionTypeVariadic, [CXType.by_value], :uint
 			attach_function :is_pod_type, :clang_isPODType, [CXType.by_value], :uint
@@ -122,9 +120,8 @@ module FFI
 			attach_function :get_pointee_type, :clang_getPointeeType, [CXType.by_value], CXType.by_value
 			attach_function :get_result_type, :clang_getResultType, [CXType.by_value], CXType.by_value
 			attach_function :get_canonical_type, :clang_getCanonicalType, [CXType.by_value], CXType.by_value
-			if FFI::Clang::Utils.satisfy_version?('3.4')
-				attach_function :type_get_class_type, :clang_Type_getClassType, [CXType.by_value], CXType.by_value
-			end
+			
+			attach_function :type_get_class_type, :clang_Type_getClassType, [CXType.by_value], CXType.by_value
 
 			attach_function :is_const_qualified_type, :clang_isConstQualifiedType, [CXType.by_value], :uint
 			attach_function :is_volatile_qualified_type, :clang_isVolatileQualifiedType, [CXType.by_value], :uint
@@ -137,15 +134,11 @@ module FFI
 			attach_function :get_array_size, :clang_getArraySize, [CXType.by_value], :long_long
 			attach_function :get_array_element_type ,:clang_getArrayElementType, [CXType.by_value], CXType.by_value
 
-			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :type_get_align_of, :clang_Type_getAlignOf, [CXType.by_value], :long_long
-				attach_function :type_get_size_of, :clang_Type_getSizeOf, [CXType.by_value], :long_long
-				attach_function :type_get_offset_of, :clang_Type_getOffsetOf, [CXType.by_value, :string], :long_long
-			end
+			attach_function :type_get_align_of, :clang_Type_getAlignOf, [CXType.by_value], :long_long
+			attach_function :type_get_size_of, :clang_Type_getSizeOf, [CXType.by_value], :long_long
+			attach_function :type_get_offset_of, :clang_Type_getOffsetOf, [CXType.by_value, :string], :long_long
 
-			if FFI::Clang::Utils.satisfy_version?('3.4')
-				attach_function :type_get_cxx_ref_qualifier, :clang_Type_getCXXRefQualifier, [CXType.by_value], :ref_qualifier_kind
-			end
+			attach_function :type_get_cxx_ref_qualifier, :clang_Type_getCXXRefQualifier, [CXType.by_value], :ref_qualifier_kind
 			
 			attach_function :get_fuction_type_calling_conv, :clang_getFunctionTypeCallingConv, [CXType.by_value], :calling_conv
 

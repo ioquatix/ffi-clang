@@ -1,4 +1,4 @@
-# Copyright, 2014, by Masahiro Sano.
+# Copyright, 2014 by Masahiro Sano.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,49 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'lib/file'
+require_relative 'spec_helper'
 
-module FFI
-	module Clang
-		class File < Pointer
-			attr_reader :translation_unit
+require 'ffi/clang/version'
 
-			def initialize(pointer, translation_unit)
-				super pointer
-				@translation_unit = translation_unit
-
-				pointer = MemoryPointer.new(Lib::CXFileUniqueID)
-				Lib.get_file_unique_id(self, pointer)
-				@unique_id = Lib::CXFileUniqueID.new(pointer)
-			end
-
-			def to_s
-				name
-			end
-
-			def name
-				Lib.extract_string Lib.get_file_name(self)
-			end
-
-			def time
-				Time.at(Lib.get_file_time(self))
-			end
-
-			def include_guarded?
-				Lib.is_file_multiple_include_guarded(@translation_unit, self) != 0
-			end
-
-			def device
-				@unique_id[:device]
-			end
-
-			def inode
-				@unique_id[:inode]
-			end
-
-			def modification
-				Time.at(@unique_id[:modification])
-			end
-		end
+describe FFI::Clang.clang_version_string do
+	it "returns a version string for showing to user" do
+		expect(subject).to be_kind_of(String)
+		expect(subject).to match(/Apple LLVM version \d+\.\d+\.\d+|clang version \d+\.\d+/)
 	end
 end

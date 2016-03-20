@@ -38,7 +38,7 @@ module FFI
 			begin
 				xcode_dir = `xcode-select -p`.chomp
 				libs << "#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib"
-			rescue Errno::ENOENT => e
+			rescue Errno::ENOENT
 				# Ignore
 			end
 

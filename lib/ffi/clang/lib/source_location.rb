@@ -39,15 +39,13 @@ module FFI
 			attach_function :get_location_offset, :clang_getLocationForOffset, [:CXTranslationUnit, :CXFile, :uint], CXSourceLocation.by_value
 			attach_function :get_expansion_location, :clang_getExpansionLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void
 			attach_function :get_presumed_location, :clang_getPresumedLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer], :void
-			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :get_file_location, :clang_getFileLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void
-			end
+
+			attach_function :get_file_location, :clang_getFileLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void
+
 			attach_function :get_spelling_location, :clang_getSpellingLocation, [CXSourceLocation.by_value, :pointer, :pointer, :pointer, :pointer], :void
 
-			if FFI::Clang::Utils.satisfy_version?('3.4')
-				attach_function :location_in_system_header, :clang_Location_isInSystemHeader, [CXSourceLocation.by_value], :int
-				attach_function :location_is_from_main_file, :clang_Location_isFromMainFile, [CXSourceLocation.by_value], :int
-			end
+			attach_function :location_in_system_header, :clang_Location_isInSystemHeader, [CXSourceLocation.by_value], :int
+			attach_function :location_is_from_main_file, :clang_Location_isFromMainFile, [CXSourceLocation.by_value], :int
 		end
 	end
 end

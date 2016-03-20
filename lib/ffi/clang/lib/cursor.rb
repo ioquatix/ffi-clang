@@ -259,16 +259,14 @@ module FFI
 
 			attach_function :is_virtual_base, :clang_isVirtualBase, [CXCursor.by_value], :uint
 			attach_function :is_dynamic_call, :clang_Cursor_isDynamicCall, [CXCursor.by_value], :uint
-			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
-			end
+			attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
+
 			attach_function :is_definition, :clang_isCursorDefinition, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
 
-			if FFI::Clang::Utils.satisfy_version?('3.4')
-				attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
-			end
+			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
+			
 			attach_function :cxx_get_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :access_specifier
 			
 			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
@@ -330,10 +328,8 @@ module FFI
 			attach_function :get_included_file, :clang_getIncludedFile, [CXCursor.by_value], :CXFile
 			attach_function :get_cursor_hash, :clang_hashCursor, [CXCursor.by_value], :uint
 
-			if FFI::Clang::Utils.satisfy_version?('3.3')
-				attach_function :is_bit_field,:clang_Cursor_isBitField, [CXCursor.by_value], :uint
-				attach_function :get_field_decl_bit_width, :clang_getFieldDeclBitWidth, [CXCursor.by_value], :int
-			end
+			attach_function :is_bit_field,:clang_Cursor_isBitField, [CXCursor.by_value], :uint
+			attach_function :get_field_decl_bit_width, :clang_getFieldDeclBitWidth, [CXCursor.by_value], :int
 
 			attach_function :get_overloaded_decl, :clang_getOverloadedDecl, [CXCursor.by_value, :uint], CXCursor.by_value
 			attach_function :get_num_overloaded_decls, :clang_getNumOverloadedDecls, [CXCursor.by_value], :uint
