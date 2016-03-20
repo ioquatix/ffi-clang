@@ -40,11 +40,24 @@ module FFI
 			end
 
 			def start
-				ExpansionLocation.new(Lib.get_range_start @range)
+				@start ||= ExpansionLocation.new(Lib.get_range_start @range)
 			end
 
 			def end
-				ExpansionLocation.new(Lib.get_range_end @range)
+				@end ||= ExpansionLocation.new(Lib.get_range_end @range)
+			end
+
+			# The size, in bytes, of the source range.
+			def bytesize
+				self.end.offset - self.start.offset
+			end
+
+			# Read the part of the source file referred to by this source range.
+			def text
+				::File.open(self.start.file, "r") do |file|
+					file.seek(self.start.offset)
+					return file.read(self.bytesize)
+				end
 			end
 
 			def null?
