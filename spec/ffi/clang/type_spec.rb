@@ -28,7 +28,7 @@ describe Type do
 	let(:cursor_list) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:type) { find_first(cursor, :cursor_function).type }
 
-	it "can tell us about the main function", from_3_3: true do
+	it "can tell us about the main function" do
 		expect(type.variadic?).to equal(false)
 
 		expect(type.num_arg_types).to equal(2)
@@ -51,12 +51,7 @@ describe Type do
         child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
       }.type.canonical }
 
-    it 'extracts typedef', upto_3_2: true do
-      expect(canonical_type).to be_kind_of(Type)
-      expect(canonical_type.kind).to be(:type_pointer)
-    end
-
-    it 'extracts typedef', from_3_3: true do
+    it 'extracts typedef' do
       expect(canonical_type).to be_kind_of(Type)
       expect(canonical_type.kind).to be(:type_pointer)
       expect(canonical_type.spelling).to eq('const int *')
@@ -68,12 +63,7 @@ describe Type do
         child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
       }.type.canonical.pointee }
 
-    it 'gets pointee type of pointer, C++ reference', upto_3_2: true do
-      expect(pointee_type).to be_kind_of(Type)
-      expect(pointee_type.kind).to be(:type_int)
-    end
-
-    it 'gets pointee type of pointer, C++ reference', from_3_3: true do
+    it 'gets pointee type of pointer, C++ reference' do
       expect(pointee_type).to be_kind_of(Type)
       expect(pointee_type.kind).to be(:type_int)
       expect(pointee_type.spelling).to eq('const int')
@@ -160,7 +150,7 @@ describe Type do
     end
   end
 
-  describe '#alignof', from_3_3: true do
+  describe '#alignof' do
     let(:array_type) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_variable and child.spelling == 'int_array'
       }.type }
@@ -171,7 +161,7 @@ describe Type do
     end
   end
 
-  describe '#sizeof', from_3_3: true do
+  describe '#sizeof' do
     let(:array_type) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_variable and child.spelling == 'int_array'
       }.type }
@@ -182,7 +172,7 @@ describe Type do
     end
   end
 
-  describe '#offsetof', from_3_3: true do
+  describe '#offsetof' do
     let(:struct) { find_matching(cursor_list) { |child, parent|
         child.kind == :cursor_struct and child.spelling == 'List'
       }.type }
@@ -193,7 +183,7 @@ describe Type do
     end
   end
 
-  describe '#ref_qualifier', from_3_4: true do
+  describe '#ref_qualifier' do
     let(:lvalue) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_cxx_method and child.spelling == 'func_lvalue_ref'
       }.type }
@@ -227,7 +217,7 @@ describe Type do
     end
   end
 
-  describe '#class_type', from_3_4: true do
+  describe '#class_type' do
     let(:member_pointer) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_variable and child.spelling == 'member_pointer'
       }.type }
@@ -265,12 +255,8 @@ describe Type do
         child.kind == :cursor_function and child.spelling == 'f_variadic'
       }.type }
 
-    it 'returns the calling convention associated with the function type', from_3_4: true do
+    it 'returns the calling convention associated with the function type' do
       expect(function.calling_conv).to be(:calling_conv_c)
-    end
-
-    it 'returns the calling convention associated with the function type', upto_3_3: true do
-      expect(function.calling_conv).to be(:calling_conv_default)
     end
   end
 

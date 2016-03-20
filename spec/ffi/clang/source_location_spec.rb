@@ -65,7 +65,7 @@ describe SourceLocation do
 		end
 	end
 
-	describe "#from_main_file?", from_3_4: true do
+	describe "#from_main_file?" do
 		it "returns true if the cursor location is in main file" do
 			expect(loc1_cursor.location.from_main_file?).to be true
 		end
@@ -75,7 +75,7 @@ describe SourceLocation do
 		end
 	end
 
-	describe "#in_system_header?", from_3_4: true do
+	describe "#in_system_header?" do
 		it "returns false if the cursor location is not in system header" do
 			expect(loc1_cursor.location.in_system_header?).to be false
 		end
@@ -111,7 +111,7 @@ describe SourceLocation do
 		end
 	end
 
-	describe "#file_location", from_3_3: true do
+	describe "#file_location" do
 		let (:file_location) { loc1_cursor.location.file_location }
 
 		it "should be FileLocaion" do

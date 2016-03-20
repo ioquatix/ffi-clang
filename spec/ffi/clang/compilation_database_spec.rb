@@ -53,7 +53,7 @@ describe CompilationDatabase do
 		end
 	end
 
-	describe '#all_compile_commands', from_3_3: true do
+	describe '#all_compile_commands' do
 		it "returns all compile commands in the database" do
 			expect(cdb.all_compile_commands).to be_kind_of(CompilationDatabase::CompileCommands)
 			expect(cdb.all_compile_commands.size).to eq(3)
@@ -75,7 +75,7 @@ describe CompilationDatabase do
 				expect(commands.size).to eq(1)
 			end
 
-			it "returns the number of CompileCommand", from_3_3: true do
+			it "returns the number of CompileCommand" do
 				expect(cdb.all_compile_commands.size).to eq(3)
 			end
 		end
@@ -135,7 +135,7 @@ describe CompilationDatabase do
 			end
 		end
 
-		describe '#num_mapped_sources', from_3_4: true do
+		describe '#num_mapped_sources' do
 			# TODO: a case which has mapped sources
 
 			it "returns the number of source mappings" do
@@ -144,7 +144,7 @@ describe CompilationDatabase do
 			end
 		end
 
-		describe '#mapped_source_path', from_3_4: true do
+		describe '#mapped_source_path' do
 			it "returns the I'th mapped source path" do
 				# TODO: a case which returns real source path
 				# expect(cmd.mapped_source_path(0)).to be_kind_of(String)
@@ -155,7 +155,7 @@ describe CompilationDatabase do
 			end
 		end
 
-		describe '#mapped_source_content', from_3_4: true do
+		describe '#mapped_source_content' do
 			it "returns the I'th mapped source content" do
 				# TODO: a case which returns real source path
 				# expect(cmd.mapped_source_content(0)).to be_kind_of(String)
@@ -166,7 +166,7 @@ describe CompilationDatabase do
 			end
 		end
 
-		describe '#mapped_sources', from_3_4: true do
+		describe '#mapped_sources' do
 			# TODO: a case which has mapped sources
 
 			it "returns all mapped sources as Array" do

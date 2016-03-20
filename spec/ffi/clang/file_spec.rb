@@ -64,19 +64,19 @@ describe File do
 		end
 	end
 
-	describe "#device", from_3_3: true do
+	describe "#device" do
 		it 'returns device from CXFileUniqueID' do
 			expect(file_list.device).to be_kind_of(Integer)
 		end
 	end
 
-	describe "#inode", from_3_3: true do
+	describe "#inode" do
 		it 'returns inode from CXFileUniqueID' do
 			expect(file_list.inode).to be_kind_of(Integer)
 		end
 	end
 
-	describe "#modification", from_3_3: true do
+	describe "#modification" do
 		it 'returns modification time as Time from CXFileUniqueID' do
 			expect(file_list.modification).to be_kind_of(Time)
 		end
