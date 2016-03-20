@@ -41,8 +41,10 @@ module FFI
 					if parts = clang_version_string.match(/^Apple LLVM version (\d+)\.(\d+).\d \(clang-.*\)$/)
 						@@clang_version = [3, 7] # Fake it.
 
-						puts "Using libclang: #{Lib::ffi_libraries[0].name}"
-						puts "Clang version detected: #{@@clang_version.inspect}"
+						if $VERBOSE
+							puts "Using libclang: #{Lib::ffi_libraries[0].name}"
+							puts "Clang version detected: #{@@clang_version.inspect}"
+						end
 					elsif parts = clang_version_string.match(/(?:clang version|based on LLVM) (\d+)\.(\d+)(svn)?/)
 						major = parts[1].to_i
 						minor = parts[2].to_i
@@ -55,8 +57,10 @@ module FFI
 					
 						@@clang_version = [major, minor]
 						
-						puts "Using libclang: #{Lib::ffi_libraries[0].name}"
-						puts "Clang version detected: #{@@clang_version.inspect}"
+						if $VERBOSE
+							puts "Using libclang: #{Lib::ffi_libraries[0].name}"
+							puts "Clang version detected: #{@@clang_version.inspect}"
+						end
 					else
 						abort "Invalid/unsupported clang version string."
 					end
