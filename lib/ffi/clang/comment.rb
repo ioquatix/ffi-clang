@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright, 2013, by Carlos Martín Nieto <cmn@dwim.me>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -205,6 +204,7 @@ module FFI
 			def text
 				self.map(&:text).join("")
 			end
+
 			alias_method :comment, :text
 
 			def valid_index?
@@ -272,6 +272,10 @@ module FFI
 
 			def to_xml
 				Lib.extract_string Lib.full_comment_get_as_xml(@comment)
+			end
+			
+			def text
+				self.children.collect{|child| child.text.strip}.join("\n")
 			end
 		end
 	end
