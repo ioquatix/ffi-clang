@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'pry'
-
 require 'rainbow'
 require 'ffi/clang'
 
@@ -28,7 +26,6 @@ ARGV.each do |path|
 		if comment = declaration.comment
 			# puts Rainbow(comment.inspect).gray
 			puts Rainbow(comment.text)
-			binding.pry
 		end
 	end
 end
