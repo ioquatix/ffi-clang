@@ -1,4 +1,3 @@
-require_relative 'spec_helper'
 
 describe Diagnostic do
 	let(:diagnostics) { Index.new.parse_translation_unit(fixture_path("list.c")).diagnostics }

@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe SourceRange do
 	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
 	let(:translation_unit_range) { translation_unit.cursor.extent }

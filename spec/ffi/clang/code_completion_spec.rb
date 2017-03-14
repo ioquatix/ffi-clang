@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe CodeCompletion do
 	let(:filename) { fixture_path("completion.cxx") }
 	let(:translation_unit) { Index.new.parse_translation_unit(filename) }

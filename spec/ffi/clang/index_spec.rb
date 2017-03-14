@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe Index do
 	before :all do
 		FileUtils.mkdir_p TMP_DIR

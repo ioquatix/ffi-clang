@@ -21,8 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
@@ -124,7 +122,7 @@ describe Cursor do
 		let (:call) { find_first(cursor, :cursor_call_expr) }
 
 		it "should find a method call" do
-			call.should_not equal(nil)
+			call.should_not be_nil
 		end
 	end
 

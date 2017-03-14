@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe File do
 	let(:file_list) { Index.new.parse_translation_unit(fixture_path("list.c")).file(fixture_path("list.c")) }
 	let(:file_docs) { Index.new.parse_translation_unit(fixture_path("docs.c")).file(fixture_path("docs.h")) }

@@ -6,20 +6,26 @@ before_install:
 matrix:
   include:
     # The default build:
-    - &libclang-36
-      addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.6], packages: [libclang-3.6-dev, clang-3.6]}}
-      env: LLVM_VERSION=3.6
-      rvm: "2.3.0"
+    - &libclang-38
+      addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.8], packages: [libclang-3.8-dev, clang-3.8]}}
+      env: LLVM_VERSION=3.8
+      rvm: "2.4.0"
     # A second build with the same configuration but using ruby 2.2.4
-    - <<: *libclang-36
-      rvm: "2.2.4"
+    - <<: *libclang-38
+      rvm: "2.3.3"
     # Other builds on other versions of LLVM, all using ruby 2.3.0
     - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.7], packages: [libclang-3.7-dev, clang-3.7]}}
       env: LLVM_VERSION=3.7
-      rvm: "2.3.0"
+      rvm: "2.4.0"
     - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.8], packages: [libclang-3.8-dev, clang-3.8]}}
       env: LLVM_VERSION=3.8
-      rvm: "2.3.0"
+      rvm: "2.4.0"
+    - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-3.9], packages: [libclang-3.9-dev, clang-3.9]}}
+      env: LLVM_VERSION=3.9
+      rvm: "2.4.0"
+    - addons: {apt: {sources: [ubuntu-toolchain-r-test, llvm-toolchain-precise-4.0], packages: [libclang-4.0-dev, clang-4.0]}}
+      env: LLVM_VERSION=3.8
+      rvm: "2.4.0"
   allow_failures:
-  - env: LLVM_VERSION=3.8
+  - env: LLVM_VERSION=4.0
     rvm: "2.3.0"

@@ -21,15 +21,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe SourceLocation do
-	let(:translation_unit)                   { Index.new.parse_translation_unit(fixture_path("list.c")) }
-	let(:translation_unit_location)          { translation_unit.cursor.location }
-	let(:diagnostic_location)  { translation_unit.diagnostics.first.location }
-	let(:loc1_translation_unit)              { Index.new.parse_translation_unit(fixture_path("location1.c")) }
-	let(:loc1_cursor)          { find_first(loc1_translation_unit.cursor, :cursor_function) }
-	let(:docs_cursor)          { Index.new.parse_translation_unit(fixture_path("docs.c")).cursor }
+	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
+	let(:translation_unit_location) { translation_unit.cursor.location }
+	let(:diagnostic_location) { translation_unit.diagnostics.first.location }
+	let(:loc1_translation_unit) { Index.new.parse_translation_unit(fixture_path("location1.c")) }
+	let(:loc1_cursor) { find_first(loc1_translation_unit.cursor, :cursor_function) }
+	let(:docs_cursor) { Index.new.parse_translation_unit(fixture_path("docs.c")).cursor }
 
 	it "should have a nil File if the SourceLocation is for a Translation Unit" do
 		expect(translation_unit_location.file).to be_nil

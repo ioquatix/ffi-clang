@@ -19,8 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe Comment do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("docs.cc")).cursor }
 	let (:comment) { find_first(cursor, :cursor_function).comment }

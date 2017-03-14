@@ -1,13 +1,13 @@
 
-require_relative '../../../lib/ffi/clang'
+require_relative '../lib/ffi/clang'
 
 include FFI::Clang
 
-TMP_DIR = File.expand_path("../tmp/", __FILE__)
+TMP_DIR = File.expand_path("tmp", __dir__)
 
 module ClangSpecHelper
 	def fixture_path(path)
-		File.join File.expand_path("fixtures", __dir__), path
+		File.join File.expand_path("ffi/clang/fixtures", __dir__), path
 	end
 
 	def find_all(cursor, kind)
@@ -29,7 +29,7 @@ end
 
 RSpec.configure do |c|
 	c.include ClangSpecHelper
-	supported_versions = ['3.4', '3.5', '3.6', '3.7', '3.8']
+	supported_versions = ['3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '4.0']
 	current_version = ENV['LLVM_VERSION'] || supported_versions.last
 	supported_versions.reverse_each { |version|
 		break if version == current_version

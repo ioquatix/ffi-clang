@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'spec_helper'
-
 describe Tokens do
 	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
 	let(:cursor) { translation_unit.cursor }
