@@ -4,6 +4,7 @@ gemspec
 
 group :development do
 	gem 'transpec'
+	gem 'pry'
 end
 
 group :test do

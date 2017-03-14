@@ -1,6 +1,8 @@
 
 require_relative '../lib/ffi/clang'
 
+require 'pry'
+
 include FFI::Clang
 
 TMP_DIR = File.expand_path("tmp", __dir__)
