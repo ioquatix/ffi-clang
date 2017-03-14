@@ -46,7 +46,7 @@ module FFI
 			end
 
 			def self.release(pointer)
-				Lib.dispose_tokens(pointer, pointer.token_size, pointer.translation_unit)
+				Lib.dispose_tokens(pointer.translation_unit, pointer, pointer.token_size)
 			end
 
 			def each(&block)
