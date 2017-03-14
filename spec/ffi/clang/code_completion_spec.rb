@@ -99,8 +99,10 @@ describe CodeCompletion do
 		it "#sort!" do
 			results.sort!
 			
-			# may be sorted with typed_text kind, first result will start with 'a'
-			expect(results.first.string.chunks.select{|x| x[:kind] == :typed_text}.first[:text]).to be =~ /^_M_allocate/
+			possibilities = results.first.string.chunks.select{|x| x[:kind] == :typed_text}.collect{|chunk| chunk[:text]}
+			
+			# may be sorted with typed_text kind, first result will start with 'a'.. not necessarily
+			expect(possibilities).to be == possibilities.sort
 		end
 	end
 
