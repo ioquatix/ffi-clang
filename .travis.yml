@@ -27,4 +27,4 @@ matrix:
       rvm: "2.4.0"
   allow_failures:
   - env: LLVM_VERSION=4.0
-    rvm: "2.3.0"
+    rvm: "2.4.0"

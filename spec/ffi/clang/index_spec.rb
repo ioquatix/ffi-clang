@@ -29,6 +29,7 @@ describe Index do
 
 	let(:index) { Index.new }
 
+	# This spec is flakey for some reason.
 	it "calls dispose_index_debug_unit on GC" do
 		index.autorelease = false
 		expect(Lib).to receive(:dispose_index).with(index).once
