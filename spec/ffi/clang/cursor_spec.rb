@@ -21,6 +21,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+describe "Function Call Cursors" do
+	let(:translation_unit) {Index.new.parse_translation_unit(fixture_path("class.cpp"))}
+	let(:cursor) {translation_unit.cursor}
+	let(:call) {find_first(cursor, :cursor_call_expr)}
+
+	it "should parse correctly" do
+		expect(translation_unit.diagnostics).to be == []
+	end
+
+	it "should find a method call" do
+		call.should_not be_nil
+	end
+end
+
+
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
@@ -114,15 +129,6 @@ describe Cursor do
 		it "returns the name of the function" do
 			expect(func.spelling).to eq("sum")
 			expect(func.display_name).to eq("sum(union List *)")
-		end
-	end
-
-	describe "Function Call Cursors" do
-		let(:class_cursor) { Index.new.parse_translation_unit(fixture_path("class.cpp")).cursor }
-		let (:call) { find_first(cursor, :cursor_call_expr) }
-
-		it "should find a method call" do
-			call.should_not be_nil
 		end
 	end
 

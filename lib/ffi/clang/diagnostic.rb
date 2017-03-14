@@ -99,6 +99,10 @@ module FFI
 				Lib.get_diagnostic_category(self)
 			end
 
+			def inspect
+				"#{self.location}: #{self.format}"
+			end
+
 			private
 
 			def display_opts(opts)

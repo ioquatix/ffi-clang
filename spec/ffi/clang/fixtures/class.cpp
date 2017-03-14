@@ -1,4 +1,8 @@
+struct Factory {
+  void create();
+};
+
 void Factory::create()
 {
-  a -> functionCall();
+  this->create();
 }

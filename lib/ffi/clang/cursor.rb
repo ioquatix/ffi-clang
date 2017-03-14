@@ -377,6 +377,10 @@ module FFI
 				end
 			end
 
+			def to_a
+				filter.collect{|child, parent| child}
+			end
+
 			class PlatformAvailability < AutoPointer
 				def initialize(memory_pointer)
 					pointer = FFI::Pointer.new(memory_pointer)
