@@ -27,7 +27,7 @@ describe "Function Call Cursors" do
 	let(:call) {find_first(cursor, :cursor_call_expr)}
 
 	it "should parse correctly" do
-		expect(translation_unit.diagnostics).to be == []
+		expect(translation_unit.diagnostics).to be_empty
 	end
 
 	it "should find a method call" do

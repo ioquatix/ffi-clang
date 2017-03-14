@@ -100,7 +100,7 @@ describe CodeCompletion do
 			results.sort!
 			
 			# may be sorted with typed_text kind, first result will start with 'a'
-			expect(results.results.first.string.chunks.select{|x| x[:kind] == :typed_text}.first[:text]).to be =~ /^a/
+			expect(results.first.string.chunks.select{|x| x[:kind] == :typed_text}.first[:text]).to be =~ /^_M_allocate/
 		end
 	end
 
