@@ -2,14 +2,14 @@
 # Copyright, 2013, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # Copyright, 2013, by Garry C. Marshall. <http://www.meaningfulname.net>
 # Copyright, 2014, by Masahiro Sano.
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 #
@@ -116,6 +116,15 @@ describe Cursor do
 		it "returns the name of the function" do
 			expect(func.spelling).to eq("sum")
 			expect(func.display_name).to eq("sum(union List *)")
+		end
+	end
+
+	describe "Function Call Cursors" do
+		let(:class_cursor) { Index.new.parse_translation_unit(fixture_path("class.cpp")).cursor }
+		let (:call) { find_first(cursor, :cursor_call_expr) }
+
+		it "should find a method call" do
+			call.should_not equal(nil)
 		end
 	end
 
@@ -288,7 +297,7 @@ describe Cursor do
 
 	describe '#dynamic_call?' do
 		let(:dynamic_call) { find_matching(cursor_cxx) { |child, parent|
-				child.kind == :cursor_call_expr and child.spelling == 'func_a' and 
+				child.kind == :cursor_call_expr and child.spelling == 'func_a' and
 				child.semantic_parent.spelling == 'f_dynamic_call' } }
 
 		it 'checks if the method call is dynamic' do
