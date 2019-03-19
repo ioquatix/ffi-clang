@@ -37,6 +37,12 @@ module FFI
 				:cxx_chained_pch, 0x20,
 				:skip_function_bodies, 0x40,
 				:include_brief_comments_in_code_completion, 0x80,
+				:create_preamble_on_first_parse, 0x100,
+				:keep_going, 0x200,
+				:single_file_parse, 0x400,
+				:limit_skip_function_bodies_to_preamble, 0x800,
+				:include_attributed_type, 0x1000,
+				:visit_implicit_attributes, 0x2000
 			]
 
 			SaveTranslationUnitFlags = enum [
