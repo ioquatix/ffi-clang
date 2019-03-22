@@ -61,9 +61,7 @@ module FFI
 			def self.bitmask_from(enum, opts)
 				bitmask = 0
 
-				opts.each do |key, val|
-					next unless val
-
+				opts.each do |key, value|
 					if int = enum[key]
 						bitmask |= int
 					else

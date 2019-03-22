@@ -49,6 +49,22 @@ describe Index do
 		it "can handle command line options" do
 			expect{index.parse_translation_unit(fixture_path("a.c"), ["-std=c++11"])}.not_to raise_error
 		end
+
+		it 'can handle translation unit options' do 
+			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], [:incomplete, :single_file_parse, :cache_completion_results])}.not_to raise_error
+		end
+
+		it 'can handle missing translation options' do 
+			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], [])}.not_to raise_error
+		end
+
+		it 'can handle translation options with random values' do 
+			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], {:incomplete => 654, :single_file_parse => 8, :cache_completion_results => 93})}.not_to raise_error
+		end
+
+		it "raises error when one of the translation options is invalid" do
+			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], [:incomplete, :random_option, :cache_completion_results])}.to raise_error(FFI::Clang::Error)
+		end
 	end
 
 	describe '#create_translation_unit' do
