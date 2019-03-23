@@ -26,7 +26,7 @@ describe Tokens do
 
 	it "can be obtained from a translation unit" do
 		expect(tokens).to be_kind_of(Tokens)
-		expect(tokens.size).to eq(13)
+		expect(tokens.size).to be >= 12
 		expect(tokens.tokens).to be_kind_of(Array)
 		expect(tokens.tokens.first).to be_kind_of(Token)
 	end

@@ -29,19 +29,23 @@ module ClangSpecHelper
 	end
 end
 
-RSpec.configure do |c|
-	c.include ClangSpecHelper
+RSpec.configure do |config|
+	# Enable flags like --only-failures and --next-failure
+	config.example_status_persistence_file_path = ".rspec_status"
+	
+	config.include ClangSpecHelper
+	
 	supported_versions = ['3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '4.0']
 	current_version = ENV['LLVM_VERSION'] || supported_versions.last
 	supported_versions.reverse_each { |version|
 		break if version == current_version
 		sym = ('from_' + version.tr('.', '_')).to_sym
-		c.filter_run_excluding sym => true
+		config.filter_run_excluding sym => true
 	}
 
 	supported_versions.each { |version|
 		break if version == current_version
 		sym = ('upto_' + version.tr('.', '_')).to_sym
-		c.filter_run_excluding sym => true
+		config.filter_run_excluding sym => true
 	}
 end
