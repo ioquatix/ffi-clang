@@ -31,7 +31,7 @@ describe "Function Call Cursors" do
 	end
 
 	it "should find a method call" do
-		call.should_not be_nil
+		expect(call).to_not be_nil
 	end
 end
 
