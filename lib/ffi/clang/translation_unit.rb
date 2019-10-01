@@ -91,8 +91,12 @@ module FFI
 				ExpansionLocation.new Lib.get_location_offset(self, file, offset)
 			end
 
-			def file(file_name)
-				File.new(Lib.get_file(self, file_name), self)
+			def file(file_name = nil)
+				if file_name.nil?
+					File.new(Lib.get_file(self, Lib.get_translation_unit_spelling(self)), self)
+				else
+					File.new(Lib.get_file(self, file_name), self)
+				end
 			end
 
 			def spelling
