@@ -59,10 +59,16 @@ describe TranslationUnit do
 	end
 
 	describe "#file" do
-		let (:file) { translation_unit.file(fixture_path("a.c")) }
+		let (:specified_file) { translation_unit.file(fixture_path("a.c")) }
+		let (:unspecified_file) { translation_unit.file }
 
 		it "returns File instance" do
-			expect(file).to be_kind_of(FFI::Clang::File)
+			expect(specified_file).to be_kind_of(FFI::Clang::File)
+		end
+
+		it "returns main file when file name is not specified" do
+			expect(unspecified_file).to be_kind_of(FFI::Clang::File)
+			expect(unspecified_file.name).to include("a.c")
 		end
 	end
 
