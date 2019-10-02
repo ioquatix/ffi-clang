@@ -250,6 +250,15 @@ module FFI
 				)
 			end
 
+			enum :visitor_result, [:break, :continue]
+
+			class CXCursorAndRangeVisitor < FFI::Struct
+				layout(
+					:context, :pointer,
+					:visit, callback([:pointer, CXCursor.by_value, CXSourceRange.by_value], :visitor_result),
+				)
+			end
+
 			enum :cxx_access_specifier, [:invalid, :public, :protected, :private]
 			attach_function :get_cxx_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :cxx_access_specifier
 
@@ -311,6 +320,9 @@ module FFI
 
 			callback :visit_children_function, [CXCursor.by_value, CXCursor.by_value, :pointer], :child_visit_result
 			attach_function :visit_children, :clang_visitChildren, [CXCursor.by_value, :visit_children_function, :pointer], :uint
+
+			enum :result, [:success, :invalid, :visit_break]
+			attach_function :find_references_in_file, :clang_findReferencesInFile, [CXCursor.by_value, :CXFile, CXCursorAndRangeVisitor.by_value], :result
 
 			attach_function :get_cursor_type, :clang_getCursorType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_cursor_result_type, :clang_getCursorResultType, [CXCursor.by_value], CXType.by_value
