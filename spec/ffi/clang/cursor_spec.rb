@@ -392,6 +392,28 @@ describe Cursor do
 		end
 	end
 
+	describe '#find_references_in_file' do
+		let (:struct_cursor) {find_first(cursor_canon, :cursor_struct) }
+
+		it "visits references to the cursor in the main file" do
+			counter = 0
+			struct_cursor.find_references_in_file do |ref_cursor, ref_src_loc|
+				counter += 1
+				:continue
+			end
+			expect(counter).not_to equal(0)
+		end
+
+		it "visits references to the cursor in the indicated file" do
+			counter = 0
+			struct_cursor.find_references_in_file(fixture_path("canonical.c")) do |ref_cursor, ref_src_loc|
+				counter += 1
+				:continue
+			end
+			expect(counter).not_to equal(0)
+		end
+	end
+
 	describe '#linkage' do
 		let (:ref) { find_first(cursor, :cursor_type_ref) }
 		let (:func) { find_first(cursor, :cursor_function) }

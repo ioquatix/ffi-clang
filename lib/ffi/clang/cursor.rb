@@ -24,6 +24,7 @@ require_relative 'lib/cursor'
 require_relative 'lib/code_completion'
 
 require_relative 'source_location'
+require_relative 'source_range'
 require_relative 'comment'
 require_relative 'type'
 
@@ -249,6 +250,18 @@ module FFI
 				end
 				
 				Lib.visit_children(@cursor, adapter, nil)
+			end
+
+			def find_references_in_file(file = nil, &block)
+				file ||= Lib.get_translation_unit_spelling(@translation_unit)
+
+				visit_adapter = Proc.new do |unused, cxcursor, cxsource_range|
+					block.call Cursor.new(cxcursor, @translation_unit), SourceRange.new(cxsource_range)
+				end
+				visitor = FFI::Clang::Lib::CXCursorAndRangeVisitor.new
+				visitor[:visit] = visit_adapter
+
+				Lib.find_references_in_file(@cursor, Lib.get_file(@translation_unit, file), visitor)
 			end
 
 			def linkage
