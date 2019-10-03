@@ -394,6 +394,15 @@ module FFI
 				filter.collect{|child, parent| child}
 			end
 
+			def references
+				refs = []
+				self.find_references_in_file do |cursor, unused|
+					refs << cursor
+					:continue
+				end
+				refs
+			end
+
 			class PlatformAvailability < AutoPointer
 				def initialize(memory_pointer)
 					pointer = FFI::Pointer.new(memory_pointer)

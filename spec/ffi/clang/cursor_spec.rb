@@ -672,6 +672,16 @@ describe Cursor do
 		end
 	end
 
+	describe '#references' do
+		let (:references) { find_first(cursor_canon, :cursor_struct).references }
+
+		it "returns an Array of reference Cursors" do
+			expect(references).to be_kind_of(Array)
+			expect(references).length).not_to equal(0)
+			expect(references).to all(be_a (FFI::Clang::Cursor))
+		end
+	end
+
 	describe Cursor::PlatformAvailability do
 		let(:func) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'availability_func'} }
