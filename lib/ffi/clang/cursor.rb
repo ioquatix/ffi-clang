@@ -394,9 +394,9 @@ module FFI
 				filter.collect{|child, parent| child}
 			end
 
-			def references
+			def references(file = nil)
 				refs = []
-				self.find_references_in_file do |cursor, unused|
+				self.find_references_in_file(file) do |cursor, unused|
 					refs << cursor
 					:continue
 				end
