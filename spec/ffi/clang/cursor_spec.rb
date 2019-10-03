@@ -673,12 +673,20 @@ describe Cursor do
 	end
 
 	describe '#references' do
-		let (:references) { find_first(cursor_canon, :cursor_struct).references }
+		let (:struct_cursor) { find_first(cursor_canon, :cursor_struct) }
+		let (:unspecified_references) { struct_cursor.references }
+		let (:specified_references) { struct_cursor.references(fixture_path("canonical.c")) }
 
-		it "returns an Array of reference Cursors" do
-			expect(references).to be_kind_of(Array)
-			expect(references).length).not_to equal(0)
-			expect(references).to all(be_a (FFI::Clang::Cursor))
+		it "returns an Array of reference Cursors in the main file" do
+			expect(unspecified_references).to be_kind_of(Array)
+			expect(unspecified_references.length).not_to equal(0)
+			expect(unspecified_references).to all(be_a (FFI::Clang::Cursor))
+		end
+
+		it "returns an Array of reference Cursors in the specified file" do
+			expect(specified_references).to be_kind_of(Array)
+			expect(specified_references.length).not_to equal(0)
+			expect(specified_references).to all(be_a (FFI::Clang::Cursor))
 		end
 	end
 
