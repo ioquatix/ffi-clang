@@ -48,11 +48,15 @@ module FFI
 				libs << ENV['LIBCLANG']
 			elsif llvm_config
 				llvm_library_dir = `#{llvm_config} --libdir`.chomp
-
-				if FFI::Clang.platform == :darwin
-					libs << llvm_library_dir + '/libclang.dylib'
+				platform = FFI::Clang.platform
+				case platform
+			        when :darwin
+				  libs << llvm_library_dir + '/libclang.dylib'
+				when :windows
+				  llvm_bin_dir = `#{llvm_config} --bindir`.chomp
+				  libs << llvm_bin_dir + '/libclang.dll'
 				else
-					libs << llvm_library_dir + '/libclang.so'
+				  libs << llvm_library_dir + '/libclang.so'
 				end
 			end
 
