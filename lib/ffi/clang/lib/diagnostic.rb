@@ -22,18 +22,11 @@
 require_relative 'translation_unit'
 require_relative 'source_location'
 require_relative 'string'
+require_relative 'source_range'
 
 module FFI
 	module Clang
 		module Lib
-			class CXSourceRange < FFI::Struct
-				layout(
-					:ptr_data, [:pointer, 2],
-					:begin_int_data, :uint,
-					:end_int_data, :uint
-				)
-			end
-
 			typedef :pointer, :CXDiagnostic
 			typedef :pointer, :CXDiagnosticSet
 
