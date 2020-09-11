@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-	gem 'transpec'
+	gem 'transpec', git: "https://github.com/yujinakayama/transpec.git"
 	gem 'pry'
 end
 
