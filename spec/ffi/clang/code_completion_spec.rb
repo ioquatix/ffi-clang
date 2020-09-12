@@ -121,6 +121,9 @@ describe CodeCompletion do
 		let(:str) { results.sort!; results.find{|x| x.string.chunk_text(1) == 'assign'}.string }
 
 		it "#num_chunks" do
+			$stderr.puts results.inspect
+			$stderr.puts results.map{|r| r.string.chunks}.inspect
+			
 			expect(str.num_chunks).to be >= 5
 		end
 
