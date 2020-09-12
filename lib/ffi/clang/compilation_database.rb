@@ -119,6 +119,10 @@ module FFI
 						{path: mapped_source_path(i), content: mapped_source_content(i)}
 					}
 				end
+				
+				def inspect
+					"<#{self.class} #{self.args}>"
+				end
 			end
 		end
 	end

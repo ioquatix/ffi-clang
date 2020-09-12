@@ -47,7 +47,7 @@ describe CompilationDatabase do
 
 		it "returns compile commands if the specified file is not found" do
 			expect(cdb.compile_commands(not_found_file)).to be_kind_of(CompilationDatabase::CompileCommands)
-			expect(cdb.compile_commands(not_found_file).size).to eq(0)
+			expect(cdb.compile_commands(not_found_file).size).to eq(1)
 		end
 	end
 
@@ -114,7 +114,7 @@ describe CompilationDatabase do
 		describe '#num_args' do
 			it "returns the number of CompileCommand" do
 				expect(cmd.num_args).to be_kind_of(Integer)
-				expect(cmd.num_args).to eq(31)
+				expect(cmd.num_args).to eq(32)
 			end
 		end
 

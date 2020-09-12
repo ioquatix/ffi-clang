@@ -22,16 +22,18 @@ describe CodeCompletion do
 	let(:filename) { fixture_path("completion.cxx") }
 	let(:translation_unit) { Index.new.parse_translation_unit(filename) }
 	let(:line) { 7 }
-	let(:column) { 6 }
+	let(:column) { 5 }
 	let(:results) { translation_unit.code_complete(filename, line, column) }
-
+	
 	describe "self.default_code_completion_options" do
 		let(:options) { FFI::Clang::CodeCompletion.default_code_completion_options }
+		
 		it "returns a default set of code-completion options" do
 			expect(options).to be_kind_of(Hash)
-			options.keys.each { |key|
+			
+			options.keys.each do |key|
 				expect(FFI::Clang::Lib::CodeCompleteFlags.symbols).to include(key)
-			}
+			end
 		end
 	end
 
@@ -118,63 +120,65 @@ describe CodeCompletion do
 	end
 
 	describe CodeCompletion::String do
-		let(:str) { results.sort!; results.find{|x| x.string.chunk_text(1) == 'assign'}.string }
+		subject{ results.sort!; results.find{|x| x.string.chunk_text(0) == 'assign'}.string }
 
 		it "#num_chunks" do
-			expect(str.num_chunks).to be >= 5
+			pp results.size
+			# pp results.map{|r| r.string.chunks}
+			expect(subject.num_chunks).to be >= 5
 		end
 
 		it "#chunk_kind" do
-			expect(str.chunk_kind(0)).to eq(:result_type)
-			expect(str.chunk_kind(1)).to eq(:typed_text)
+			expect(subject.chunk_kind(0)).to eq(:result_type)
+			expect(subject.chunk_kind(1)).to eq(:typed_text)
 		end
 
 		it "#chunk_text" do
-			expect(str.chunk_text(0)).to be =~ /void/
-			expect(str.chunk_text(1)).to eq('assign')
+			expect(subject.chunk_text(0)).to be =~ /void/
+			expect(subject.chunk_text(1)).to eq('assign')
 		end
 
 		it "#chunk_completion" do
-			expect(str.chunk_completion(0)).to be_kind_of(CodeCompletion::String)
+			expect(subject.chunk_completion(0)).to be_kind_of(CodeCompletion::String)
 		end
 
 		it "#chunks" do
-			expect(str.chunks).to be_kind_of(Array)
-			expect(str.chunks.first).to be_kind_of(Hash)
-			expect(str.chunks.size).to eq(str.num_chunks)
+			expect(subject.chunks).to be_kind_of(Array)
+			expect(subject.chunks.first).to be_kind_of(Hash)
+			expect(subject.chunks.size).to eq(subject.num_chunks)
 		end
 
 		it "#priority" do
-			expect(str.priority).to be_kind_of(Integer)
+			expect(subject.priority).to be_kind_of(Integer)
 		end
 
 		it "#availability" do
-			expect(str.availability).to be_kind_of(Symbol)
-			expect(str.availability).to eq(:available)
+			expect(subject.availability).to be_kind_of(Symbol)
+			expect(subject.availability).to eq(:available)
 		end
 
 		it "#num_annotations" do
-			expect(str.num_annotations).to be_kind_of(Integer)
-			expect(str.num_annotations).to eq(0)
+			expect(subject.num_annotations).to be_kind_of(Integer)
+			expect(subject.num_annotations).to eq(0)
 		end
 
 		it "#annotation" do
-			expect(str.annotation(100)).to be_nil
+			expect(subject.annotation(100)).to be_nil
 			# TODO: need tests for String which has annotation
 		end
 
 		it "#annotations" do
-			expect(str.annotations).to be_kind_of(Array)
+			expect(subject.annotations).to be_kind_of(Array)
 			# TODO: need tests for String which has annotation
 		end
 
 		it "#parent" do
-			expect(str.parent).to be_kind_of(String)
-			expect(str.parent).to be =~ /std.+vector/
+			expect(subject.parent).to be_kind_of(String)
+			expect(subject.parent).to be =~ /std.+vector/
 		end
 
 		it "#comment" do
-			expect(str.comment).to be_nil
+			expect(subject.comment).to be_nil
 			# TODO: need tests for String which has real comment
 		end
 	end
