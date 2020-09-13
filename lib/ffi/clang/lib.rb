@@ -37,7 +37,15 @@ module FFI
 			libs = []
 			begin
 				xcode_dir = `xcode-select -p`.chomp
-				libs << "#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib"
+				%W[
+					#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib
+					#{xcode_dir}/usr/lib/libclang.dylib
+				].each do |f|
+					if File.exist? f
+						libs << f
+						break
+					end
+				end
 			rescue Errno::ENOENT
 				# Ignore
 			end
