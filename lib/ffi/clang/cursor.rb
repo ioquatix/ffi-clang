@@ -253,7 +253,7 @@ module FFI
 			end
 
 			def find_references_in_file(file = nil, &block)
-				file ||= Lib.get_translation_unit_spelling(@translation_unit)
+				file ||= Lib.extract_string Lib.get_translation_unit_spelling(@translation_unit)
 
 				visit_adapter = Proc.new do |unused, cxcursor, cxsource_range|
 					block.call Cursor.new(cxcursor, @translation_unit), SourceRange.new(cxsource_range)
