@@ -93,14 +93,14 @@ module FFI
 
 			def file(file_name = nil)
 				if file_name.nil?
-					File.new(Lib.get_file(self, Lib.get_translation_unit_spelling(self)), self)
+					File.new(Lib.get_file(self, spelling), self)
 				else
 					File.new(Lib.get_file(self, file_name), self)
 				end
 			end
 
 			def spelling
-				Lib.get_translation_unit_spelling(self)
+				Lib.extract_string Lib.get_translation_unit_spelling(self)
 			end
 
 			def resource_usage
