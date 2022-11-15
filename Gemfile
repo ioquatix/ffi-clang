@@ -2,12 +2,11 @@ source 'https://rubygems.org'
 
 gemspec
 
-group :development do
-	gem 'transpec', git: "https://github.com/yujinakayama/transpec.git"
-	gem 'pry'
+group :maintenance, optional: true do
+	gem "bake-gem"
+	gem "bake-modernize"
 end
 
 group :test do
 	gem 'simplecov'
-	gem 'coveralls', require: false
 end
