@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
 
 # Released under the MIT License.
 # Copyright, 2013, by Garry Marshall.
 # Copyright, 2013-2022, by Samuel Williams.
-# Copyright, 2014, by Masahiro Sano.
-
-# Released under the MIT License.
-# Copyright, 2013, by Garry Marshall.
-# Copyright, 2013-2016, by Samuel Williams.
 # Copyright, 2014, by Masahiro Sano.
 
 require_relative 'source_location'

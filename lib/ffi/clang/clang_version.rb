@@ -1,10 +1,7 @@
-# Copyright, 2016, by Samuel G. D. Williams. <http: //www.codeotaku.com>
+# frozen_string_literal: true
 
 # Released under the MIT License.
 # Copyright, 2016-2022, by Samuel Williams.
-
-# Released under the MIT License.
-# Copyright, 2016, by Samuel Williams.
 
 require_relative 'lib/clang_version'
 

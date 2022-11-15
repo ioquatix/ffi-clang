@@ -479,7 +479,7 @@ describe Cursor do
 		let (:func) { find_first(cursor, :cursor_function) }
 
 		it "computes hash for the cursor" do
-			expect(func.hash).to be_kind_of(Fixnum)
+			expect(func.hash).to be_kind_of(Integer)
 		end
 	end
 

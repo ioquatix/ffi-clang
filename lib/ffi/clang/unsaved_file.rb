@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
 
 # Released under the MIT License.
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2013-2022, by Samuel Williams.
-# Copyright, 2014, by Masahiro Sano.
-
-# Released under the MIT License.
-# Copyright, 2013, by Carlos Martín Nieto.
-# Copyright, 2013-2014, by Samuel Williams.
 # Copyright, 2014, by Masahiro Sano.
 
 module FFI
