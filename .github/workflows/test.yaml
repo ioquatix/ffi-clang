@@ -10,7 +10,7 @@ env:
 
 jobs:
   test:
-    name: ${{matrix.ruby}} on ${{matrix.os}}
+    name: ${{matrix.ruby}} on ${{matrix.os}} clang ${{matrix.clang}}
     runs-on: ${{matrix.os}}-latest
     continue-on-error: ${{matrix.experimental}}
     
@@ -25,12 +25,28 @@ jobs:
           - "3.0"
           - "3.1"
         
+        clang:
+          - "4.0"
+        
         experimental: [false]
         
         include:
           - os: ubuntu
             ruby: head
+            clang: "4.0"
             experimental: true
+          - os: ubuntu
+            ruby: "3.1"
+            clang: "5.0"
+            experimental: false
+          # - os: ubuntu
+          #   ruby: "3.1"
+          #   clang: "6.0"
+          #   experimental: false
+          # - os: ubuntu
+          #   ruby: "3.1"
+          #   clang: "7.0"
+          #   experimental: false
     
     steps:
     - uses: actions/checkout@v3
@@ -42,7 +58,7 @@ jobs:
     - name: Install LLVM and Clang
       uses: KyleMayes/install-llvm-action@v1
       with:
-        version: "4.0"
+        version: ${{matrix.clang}}
     
     - name: Run tests
       timeout-minutes: 10
