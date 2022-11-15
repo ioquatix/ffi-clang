@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2010, by Jari Bakken.
+# Copyright, 2012, by Hal Brodigan.
+# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2014, by Masahiro Sano.
 
 describe Diagnostic do
 	let(:diagnostics) { Index.new.parse_translation_unit(fixture_path("list.c")).diagnostics }

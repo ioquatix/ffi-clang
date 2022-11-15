@@ -1,6 +1,7 @@
-#
-#  This file is part of the "Teapot" project, and is released under the MIT license.
-#
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2013-2022, by Samuel Williams.
 
 teapot_version "0.8.0"
 
