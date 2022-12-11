@@ -19,10 +19,20 @@
 # THE SOFTWARE.
 
 describe CodeCompletion do
-	let(:filename) { fixture_path("completion.cxx") }
-	let(:translation_unit) { Index.new.parse_translation_unit(filename) }
+	let(:includes) {[
+		"-I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0",
+		"-I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu",
+		"-I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward",
+		"-I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include",
+		"-I/usr/local/include",
+		"-I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed",
+		"-I/usr/include",
+	]}
+	
+	let(:filename) { fixture_path("completion.cpp") }
+	let(:translation_unit) { Index.new.parse_translation_unit(filename, ["-stdlib=libc++"]) }
 	let(:line) { 7 }
-	let(:column) { 5 }
+	let(:column) { 6 }
 	let(:results) { translation_unit.code_complete(filename, line, column) }
 	
 	describe "self.default_code_completion_options" do
@@ -120,11 +130,9 @@ describe CodeCompletion do
 	end
 
 	describe CodeCompletion::String do
-		subject{ results.sort!; results.find{|x| x.string.chunk_text(0) == 'assign'}.string }
+		subject{ results.sort!; results.find{|x| x.string.chunk_text(1) == 'assign'}.string }
 
 		it "#num_chunks" do
-			pp results.size
-			# pp results.map{|r| r.string.chunks}
 			expect(subject.num_chunks).to be >= 5
 		end
 
