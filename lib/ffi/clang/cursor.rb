@@ -314,10 +314,6 @@ module FFI
 				overriddens
 			end
 
-			def hash
-				Lib.get_cursor_hash(@cursor)
-			end
-
 			def bitfield?
 				Lib.is_bit_field(@cursor) != 0
 			end
@@ -346,8 +342,13 @@ module FFI
 				Lib.cursor_get_num_arguments(@cursor)
 			end
 
-			def ==(other)
+			def eql?(other)
 				Lib.are_equal(@cursor, other.cursor) != 0
+			end
+			alias == eql?
+
+			def hash
+				Lib.get_cursor_hash(@cursor)
 			end
 
 			def find_all(*kinds)
