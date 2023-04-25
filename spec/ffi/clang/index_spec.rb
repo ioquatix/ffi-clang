@@ -36,7 +36,7 @@ describe Index do
 		end
 
 		it "can handle command line options" do
-			expect{index.parse_translation_unit(fixture_path("a.c"), ["-std=c++11"])}.not_to raise_error
+			index.parse_translation_unit(fixture_path("a.c"), ["-std=c99"])
 		end
 
 		it 'can handle translation unit options' do 
