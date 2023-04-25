@@ -232,7 +232,7 @@ module FFI
 				:cursor_omp_depobj_directive, 286,
 				:cursor_omp_scan_directive, 287,
 				# :cursor_last_stmt, :cursor_omp_scan_directive,
-				:cursor_translation_unit, 300,
+				:cursor_translation_unit, 350,
 				:cursor_first_attr, 400,
 				:cursor_unexposed_attr, 400,
 				:cursor_ibaction_attr, 401,
