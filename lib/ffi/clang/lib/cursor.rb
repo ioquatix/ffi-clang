@@ -20,6 +20,9 @@ require_relative 'type'
 module FFI
 	module Clang
 		module Lib
+			# In Clang 15 the enum value changed from 300 to 350!
+			CUSOR_TRANSLATION_UNIT = Clang.clang_version < Gem::Version.new('15.0.0') ? 300 : 350
+
 			enum :cursor_kind, [
 				:cursor_unexposed_decl, 1,
 				:cursor_struct, 2,
@@ -232,7 +235,7 @@ module FFI
 				:cursor_omp_depobj_directive, 286,
 				:cursor_omp_scan_directive, 287,
 				# :cursor_last_stmt, :cursor_omp_scan_directive,
-				:cursor_translation_unit, 350,
+				:cursor_translation_unit, CUSOR_TRANSLATION_UNIT,
 				:cursor_first_attr, 400,
 				:cursor_unexposed_attr, 400,
 				:cursor_ibaction_attr, 401,

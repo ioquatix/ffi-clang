@@ -10,5 +10,10 @@ module FFI
 		def self.clang_version_string
 			Lib.extract_string Lib.get_clang_version
 		end
+
+		def self.clang_version
+			clang_version = self.clang_version_string.match(/\d+\.\d+\.\d+/)
+			Gem::Version.new(clang_version)
+		end
 	end
 end
