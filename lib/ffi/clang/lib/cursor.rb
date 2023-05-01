@@ -476,6 +476,23 @@ module FFI
 			attach_function :get_enum_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
 
 			attach_function :get_num_args, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
+
+      attach_function :is_converting_constructor, :clang_CXXConstructor_isConvertingConstructor, [CXCursor.by_value], :uint
+      attach_function :is_copy_constructor, :clang_CXXConstructor_isCopyConstructor, [CXCursor.by_value], :uint
+      attach_function :is_default_constructor, :clang_CXXConstructor_isDefaultConstructor, [CXCursor.by_value], :uint
+      attach_function :is_move_constructor, :clang_CXXConstructor_isMoveConstructor, [CXCursor.by_value], :uint
+      attach_function :is_mutable, :clang_CXXField_isMutable, [CXCursor.by_value], :uint
+      attach_function :is_defaulted, :clang_CXXMethod_isDefaulted, [CXCursor.by_value], :uint
+      attach_function :is_abstract, :clang_CXXRecord_isAbstract, [CXCursor.by_value], :uint
+      attach_function :is_enum_scoped, :clang_EnumDecl_isScoped, [CXCursor.by_value], :uint
+      attach_function :is_const, :clang_CXXMethod_isConst, [CXCursor.by_value], :uint
+
+      if Clang.clang_version >= Gem::Version.new('16.0.0')
+        attach_function :is_deleted, :clang_CXXMethod_isDeleted, [CXCursor.by_value], :uint
+        attach_function :is_copy_assignment_operator, :clang_CXXMethod_isCopyAssignmentOperator, [CXCursor.by_value], :uint
+        attach_function :is_move_assignment_operator, :clang_CXXMethod_isMoveAssignmentOperator, [CXCursor.by_value], :uint
+        attach_function :is_explicit, :clang_CXXMethod_isExplicit, [CXCursor.by_value], :uint
+      end
 		end
 	end
 end

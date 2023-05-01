@@ -396,6 +396,58 @@ module FFI
 				refs
 			end
 
+			def converting_constructor?
+				Lib.is_converting_constructor(@cursor) != 0
+			end
+
+			def copy_constructor?
+				Lib.is_copy_constructor(@cursor) != 0
+			end
+
+			def default_constructor?
+				Lib.is_default_constructor(@cursor) != 0
+			end
+
+			def move_constructor?
+				Lib.is_move_constructor(@cursor) != 0
+			end
+
+			def mutable?
+				Lib.is_mutable(@cursor) != 0
+			end
+
+			def defaulted?
+				Lib.is_defaulted(@cursor) != 0
+			end
+
+			def deleted?
+				Lib.is_deleted(@cursor) != 0
+			end
+
+			def copy_assignment_operator?
+				Lib.is_copy_assignment_operator(@cursor) != 0
+			end
+
+			def move_assignment_operator?
+				Lib.is_move_assignment_operator(@cursor) != 0
+			end
+
+			def explicit?
+				Lib.is_explicit(@cursor) != 0
+			end
+
+			def abstract?
+				Lib.is_abstract(@cursor) != 0
+			end
+
+			def enum_scoped?
+				Lib.is_enum_scoped(@cursor) != 0
+			end
+
+			def const?
+				Lib.is_const(@cursor) != 0
+			end
+
 			class PlatformAvailability < AutoPointer
 				def initialize(memory_pointer)
 					pointer = FFI::Pointer.new(memory_pointer)
