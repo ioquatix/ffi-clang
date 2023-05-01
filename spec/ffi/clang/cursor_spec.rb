@@ -25,7 +25,7 @@ describe "Function Call Cursors" do
 end
 
 
-describe "Class Cursor" do
+describe FFI::Clang::Cursor do
 	let(:translation_unit) {Index.new.parse_translation_unit(fixture_path("class.cpp"))}
 	let(:cursor) {translation_unit.cursor}
 	let (:class1) { find_all(cursor, :cursor_class_decl)[0] }
