@@ -25,6 +25,79 @@ describe "Function Call Cursors" do
 end
 
 
+describe "Class Cursor" do
+	let(:translation_unit) {Index.new.parse_translation_unit(fixture_path("class.cpp"))}
+	let(:cursor) {translation_unit.cursor}
+	let (:class1) { find_all(cursor, :cursor_class_decl)[0] }
+	let (:class2) { find_all(cursor, :cursor_class_decl)[1] }
+	let (:class3) { find_all(cursor, :cursor_class_decl)[2] }
+
+	it "can find the first class" do
+		expect(class1).not_to equal(nil)
+		expect(class1.kind).to equal(:cursor_class_decl)
+	end
+
+	it "returns the name of the class" do
+		expect(class1.spelling).to eq("MyClass1")
+		expect(class1.display_name).to eq("MyClass1")
+		expect(class2.spelling).to eq("MyClass2")
+		expect(class2.display_name).to eq("MyClass2")
+		expect(class3.spelling).to eq("MyClass3")
+		expect(class3.display_name).to eq("MyClass3")
+	end
+
+	it "has constructors" do
+		constructors = find_all(class2, :cursor_constructor)
+		expect(constructors.length).to eq(5)
+
+		expect(constructors[0].default_constructor?).to eq(true)
+		expect(constructors[0].copy_constructor?).to eq(false)
+		expect(constructors[0].move_constructor?).to eq(false)
+		expect(constructors[0].converting_constructor?).to eq(false)
+
+		expect(constructors[1].default_constructor?).to eq(false)
+		expect(constructors[1].copy_constructor?).to eq(false)
+		expect(constructors[1].move_constructor?).to eq(false)
+		expect(constructors[1].converting_constructor?).to eq(true)
+
+		expect(constructors[2].default_constructor?).to eq(false)
+		expect(constructors[2].copy_constructor?).to eq(false)
+		expect(constructors[2].move_constructor?).to eq(false)
+		expect(constructors[2].converting_constructor?).to eq(false)
+
+		expect(constructors[3].default_constructor?).to eq(false)
+		expect(constructors[3].copy_constructor?).to eq(true)
+		expect(constructors[3].move_constructor?).to eq(false)
+		expect(constructors[3].converting_constructor?).to eq(true)
+		expect(constructors[3].defaulted?).to eq(true)
+
+		expect(constructors[4].default_constructor?).to eq(false)
+		expect(constructors[4].copy_constructor?).to eq(false)
+		expect(constructors[4].move_constructor?).to eq(true)
+		expect(constructors[4].converting_constructor?).to eq(true)
+		expect(constructors[3].defaulted?).to eq(true)
+	end
+
+	it "has destructors" do
+		constructors = find_all(class2, :cursor_constructor)
+		expect(constructors.length).to eq(5)
+	end
+
+	it "class is abstract" do
+		expect(class1.abstract?).to eq(false)
+		expect(class2.abstract?).to eq(false)
+		expect(class3.abstract?).to eq(true)
+	end
+
+	it "field is mutable abstract" do
+		fields = find_all(class3, :cursor_field_decl)
+
+		field = fields[0]
+		expect(field.mutable?).to eq(true)
+	end
+end
+
+
 describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
@@ -138,7 +211,6 @@ describe Cursor do
 			expect(struct.spelling).to eq("List")
 			expect(struct.display_name).to eq("List")
 		end
-
 	end
 
 	describe '#kind_spelling' do
