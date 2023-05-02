@@ -148,10 +148,6 @@ module FFI
 				Type.new Lib.get_typedef_decl_underlying_type(@cursor), @translation_unit
 			end
 
-			def enum_decl_integer_type
-				Type.new Lib.get_enum_decl_integer_type(@cursor), @translation_unit
-			end
-
 			def typedef_type
 				Type.new Lib.get_typedef_decl_unerlying_type(@cursor), @translation_unit
 			end

@@ -442,7 +442,7 @@ module FFI
 			attach_function :get_cursor_type, :clang_getCursorType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_cursor_result_type, :clang_getCursorResultType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_typedef_decl_underlying_type, :clang_getTypedefDeclUnderlyingType, [CXCursor.by_value], CXType.by_value
-			attach_function :get_enum_decl_integer_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
+      attach_function :get_enum_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_type_declaration, :clang_getTypeDeclaration, [CXType.by_value], FFI::Clang::Lib::CXCursor.by_value
 
 			attach_function :get_cursor_referenced, :clang_getCursorReferenced, [CXCursor.by_value], CXCursor.by_value
@@ -472,8 +472,6 @@ module FFI
 			attach_function :dispose_overridden_cursors, :clang_disposeOverriddenCursors, [:pointer], :void
 
 			attach_function :get_typedef_decl_unerlying_type, :clang_getTypedefDeclUnderlyingType, [CXCursor.by_value], CXType.by_value
-
-			attach_function :get_enum_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
 
 			attach_function :get_num_args, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
 

@@ -612,13 +612,13 @@ describe Cursor do
 		end
 	end
 
-	describe '#enum_decl_integer_type' do
+	describe '#enum_type' do
 		let(:enum) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_enum_decl and child.spelling == 'normal_enum' } }
 
 		it "returns the integer type of the enum declaration" do
-			expect(enum.enum_decl_integer_type).to be_kind_of(Type)
-			expect(enum.enum_decl_integer_type.kind).to be(:type_uint)
+			expect(enum.enum_type).to be_kind_of(Type)
+			expect(enum.enum_type.kind).to be(:type_uint)
 		end
 	end
 
