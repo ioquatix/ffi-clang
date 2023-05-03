@@ -47,8 +47,8 @@ describe Index do
 			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], [])}.not_to raise_error
 		end
 
-		it 'can handle translation options with random values' do 
-			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], {:incomplete => 654, :single_file_parse => 8, :cache_completion_results => 93})}.not_to raise_error
+		it 'throws error on options with random values' do
+			expect{index.parse_translation_unit(fixture_path("a.c"), [], [], [:not_valid])}.to raise_error
 		end
 
 		it "raises error when one of the translation options is invalid" do

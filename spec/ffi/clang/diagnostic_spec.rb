@@ -17,7 +17,7 @@ describe Diagnostic do
 	end
 
 	it "returns a string representation according to the given opts" do
-		expect(diagnostic.format(:source_location => true)).to include("list.c:5")
+		expect(diagnostic.format([:source_location])).to include("list.c:5")
 	end
 
 	it "returns the text of the diagnostic" do
@@ -43,9 +43,9 @@ describe Diagnostic do
 
 	context "#self.default_display_opts" do
 		it "returns the set of display options" do
-			expect(FFI::Clang::Diagnostic.default_display_opts).to be_kind_of(Hash)
-			expect(FFI::Clang::Diagnostic.default_display_opts.keys.map(&:class).uniq).to eq([Symbol])
-			expect(FFI::Clang::Diagnostic.default_display_opts.values.uniq).to eq([true])
+			expect(FFI::Clang::Diagnostic.default_display_opts).to be_kind_of(Array)
+			expect(FFI::Clang::Diagnostic.default_display_opts.map(&:class).uniq).to eq([Symbol])
+			expect(FFI::Clang::Diagnostic.default_display_opts.uniq).to eq([:source_location, :column, :source_ranges, :option])
 		end
 	end
 

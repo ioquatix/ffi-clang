@@ -106,9 +106,9 @@ describe TranslationUnit do
 	describe "#self.default_editing_translation_unit_options" do
 		let (:opts) { FFI::Clang::TranslationUnit.default_editing_translation_unit_options }
 		it "returns hash with symbols of TranslationUnitFlags" do
-			expect(opts).to be_kind_of(Hash)
-			opts.keys.each { |key|
-				expect(FFI::Clang::Lib::TranslationUnitFlags.symbols).to include(key)
+			expect(opts).to be_kind_of(Array)
+			opts.each {|symbol|
+				expect(FFI::Clang::Lib::TranslationUnitFlags.symbols).to include(symbol)
 			}
 		end
 	end
@@ -116,9 +116,9 @@ describe TranslationUnit do
 	describe "#default_save_options" do
 		let (:opts) { translation_unit.default_save_options }
 		it "returns hash with symbols of SaveTranslationUnitFlags" do
-			expect(opts).to be_kind_of(Hash)
-			opts.keys.each { |key|
-				expect(FFI::Clang::Lib::SaveTranslationUnitFlags.symbols).to include(key)
+			expect(opts).to be_kind_of(Array)
+			opts.each {|symbol|
+				expect(FFI::Clang::Lib::SaveTranslationUnitFlags.symbols).to include(symbol)
 			}
 		end
 	end
@@ -142,9 +142,9 @@ describe TranslationUnit do
 	describe "#default_reparse_options" do
 		let (:opts) { translation_unit.default_reparse_options }
 		it "returns hash with symbols of ReparseFlags" do
-			expect(opts).to be_kind_of(Hash)
-			opts.keys.each { |key|
-				expect(FFI::Clang::Lib::ReparseFlags.symbols).to include(key)
+			expect(opts).to be_kind_of(Array)
+			opts.each {|symbol|
+				expect(FFI::Clang::Lib::ReparseFlags.symbols).to include(symbol)
 			}
 		end
 	end

@@ -69,11 +69,11 @@ module FFI
 			def self.bitmask_from(enum, opts)
 				bitmask = 0
 
-				opts.each do |key, value|
-					if int = enum[key]
+				opts.each do |symbol|
+					if int = enum[symbol]
 						bitmask |= int
 					else
-						raise Error, "unknown option: #{key.inspect}, expected one of #{enum.symbols}"
+  						raise Error, "unknown option: #{symbol}, expected one of #{enum.symbols}"
 					end
 				end
 
@@ -82,19 +82,19 @@ module FFI
 
 			def self.opts_from(enum, bitmask)
 				bit = 1
-				opts = {}
+				result = []
 				while bitmask != 0
 					if bitmask & 1
-						if sym = enum[bit]
-							opts[sym] = true
+						if symbol = enum[bit]
+							result << symbol
 						else
-							raise Error, "unknown values: #{bit}, expected one of #{enum.symbols}"
+							raise(Error, "unknown values: #{bit}, expected one of #{enum.symbols}")
 						end
 					end
 					bitmask >>= 1
 					bit <<= 1
 				end
-				opts
+				result
 			end
 		end
 	end

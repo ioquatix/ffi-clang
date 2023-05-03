@@ -14,9 +14,9 @@ describe CodeCompletion do
 	describe "self.default_code_completion_options" do
 		let(:options) { FFI::Clang::CodeCompletion.default_code_completion_options }
 		it "returns a default set of code-completion options" do
-			expect(options).to be_kind_of(Hash)
-			options.keys.each { |key|
-				expect(FFI::Clang::Lib::CodeCompleteFlags.symbols).to include(key)
+			expect(options).to be_kind_of(Array)
+			options.each {|symbol|
+				expect(FFI::Clang::Lib::CodeCompleteFlags.symbols).to include(symbol)
 			}
 		end
 	end
@@ -58,9 +58,9 @@ describe CodeCompletion do
 		end
 
 		it "#contexts" do
-			expect(results.contexts).to be_kind_of(Hash)
-			results.contexts.keys.each { |key|
-				expect(FFI::Clang::Lib::CompletionContext.symbols).to include(key)
+			expect(results.contexts).to be_kind_of(Array)
+			results.contexts.each {|symbol|
+				expect(FFI::Clang::Lib::CompletionContext.symbols).to include(symbol)
 			}
 		end
 
