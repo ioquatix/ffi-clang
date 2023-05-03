@@ -10,7 +10,7 @@ module FFI
 	module Clang
 		class CodeCompletion
 			def self.default_code_completion_options
-				Lib.opts_from Lib::CodeCompleteFlags, Lib.default_code_completion_options
+				Lib.opts_from(Lib::CodeCompleteFlags, Lib.default_code_completion_options)
 			end
 
 			class Results < FFI::AutoPointer

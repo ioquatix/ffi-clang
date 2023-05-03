@@ -102,7 +102,7 @@ describe Cursor do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:cursor_canon) { Index.new.parse_translation_unit(fixture_path("canonical.c")).cursor }
-	let(:cursor_pp) { Index.new.parse_translation_unit(fixture_path("docs.c"),[],[],{detailed_preprocessing_record: true}).cursor }
+	let(:cursor_pp) { Index.new.parse_translation_unit(fixture_path("docs.c"),[],[],[:detailed_preprocessing_record]).cursor }
 
 	it "can be obtained from a translation unit" do
 		expect(cursor).to be_kind_of(Cursor)

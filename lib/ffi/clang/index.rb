@@ -22,7 +22,7 @@ module FFI
 				Lib.dispose_index(pointer)
 			end
 
-			def parse_translation_unit(source_file, command_line_args = nil, unsaved = [], opts = {})
+			def parse_translation_unit(source_file, command_line_args = nil, unsaved = [], opts = [])
 				command_line_args = Array(command_line_args)
 				unsaved_files = UnsavedFile.unsaved_pointer_from(unsaved)
 
@@ -53,7 +53,7 @@ module FFI
 			end
 
 			def options_bitmask_from(opts)
-				Lib.bitmask_from Lib::TranslationUnitFlags, opts
+				Lib.bitmask_from(Lib::TranslationUnitFlags, opts)
 			end
 		end
 	end

@@ -14,7 +14,7 @@ module FFI
 	module Clang
 		class Diagnostic < AutoPointer
 			def self.default_display_opts
-				Lib.opts_from Lib::DiagnosticDisplayOptions, Lib.default_diagnostic_display_options
+				Lib.opts_from(Lib::DiagnosticDisplayOptions, Lib.default_diagnostic_display_options)
 			end
 
 			def initialize(translation_unit, pointer)
@@ -96,7 +96,7 @@ module FFI
 				if opts.empty?
 					Lib.default_diagnostic_display_options
 				else
-					Lib.bitmask_from Lib::DiagnosticDisplayOptions, opts
+					Lib.bitmask_from(Lib::DiagnosticDisplayOptions, opts)
 				end
 			end
 		end
