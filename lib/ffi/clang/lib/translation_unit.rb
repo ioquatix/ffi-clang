@@ -63,6 +63,14 @@ module FFI
 				:preprocessor_header_search, 14,
 			]
 
+			ErrorCodes = enum [
+				:cx_error_success, 0,
+				:cx_error_failure, 1,
+				:cx_error_crashed, 2,
+				:cx_error_invalid_arguments, 3,
+				:cx_error_ast_read_error, 4,
+			]
+
 			class CXTUResourceUsage < FFI::Struct
 				layout(
 					:data, :pointer,
@@ -80,6 +88,7 @@ module FFI
 
 			# Source code translation units:
 			attach_function :parse_translation_unit, :clang_parseTranslationUnit, [:CXIndex, :string, :pointer, :int, :pointer, :uint, :uint], :CXTranslationUnit
+			attach_function :parse_translation_unit2, :clang_parseTranslationUnit2, [:CXIndex, :string, :pointer, :int, :pointer, :uint, :uint, :pointer], ErrorCodes
 			attach_function :create_translation_unit, :clang_createTranslationUnit, [:CXIndex, :string], :CXTranslationUnit
 			attach_function :dispose_translation_unit, :clang_disposeTranslationUnit, [:CXTranslationUnit], :void
 			attach_function :get_translation_unit_spelling, :clang_getTranslationUnitSpelling, [:CXTranslationUnit], CXString.by_value
