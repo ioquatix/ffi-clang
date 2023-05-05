@@ -22,14 +22,20 @@ module FFI
 				Lib.dispose_index(pointer)
 			end
 
-			def parse_translation_unit(source_file, command_line_args = nil, unsaved = [], opts = [])
+			def parse_translation_unit(source_file, command_line_args = nil, unsaved = [], opts = {})
 				command_line_args = Array(command_line_args)
 				unsaved_files = UnsavedFile.unsaved_pointer_from(unsaved)
 
-				translation_unit_pointer = Lib.parse_translation_unit(self, source_file, args_pointer_from(command_line_args), command_line_args.size, unsaved_files, unsaved.length, options_bitmask_from(opts))
+				translation_unit_pointer_out = FFI::MemoryPointer.new(:pointer)
 
-				raise Error, "error parsing #{source_file.inspect}" if translation_unit_pointer.null?
+				error_code = Lib.parse_translation_unit2(self, source_file, args_pointer_from(command_line_args), command_line_args.size, unsaved_files, unsaved.length, options_bitmask_from(opts), translation_unit_pointer_out)
+				if error_code != :cx_error_success
+					error_name = Lib::ErrorCodes.from_native(error_code, nil)
+					message = "Error parsing file. Code: #{error_name}. File: #{source_file.inspect}"
+					raise(Error, message)
+				end
 
+				translation_unit_pointer = translation_unit_pointer_out.read_pointer
 				TranslationUnit.new translation_unit_pointer, self
 			end
 
