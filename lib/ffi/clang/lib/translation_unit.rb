@@ -28,7 +28,9 @@ module FFI
 				:single_file_parse, 0x400,
 				:limit_skip_function_bodies_to_preamble, 0x800,
 				:include_attributed_type, 0x1000,
-				:visit_implicit_attributes, 0x2000
+				:visit_implicit_attributes, 0x2000,
+				:ignore_non_errors_from_included_files, 0x4000,
+				:retain_excluded_conditional_blocks, 0x8000,
 			]
 
 			SaveTranslationUnitFlags = enum [
