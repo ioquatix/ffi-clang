@@ -15,6 +15,7 @@
 require_relative 'lib/cursor'
 require_relative 'lib/code_completion'
 
+require_relative 'printing_policy'
 require_relative 'source_location'
 require_relative 'source_range'
 require_relative 'comment'
@@ -118,13 +119,24 @@ module FFI
 
 			def display_name
 				Lib.extract_string Lib.get_cursor_display_name(@cursor)
-			end
+      end
+
+      def qualified_name
+        if self.kind != :cursor_translation_unit
+          result = self.semantic_parent.qualified_name
+          result ? "#{result}::#{self.spelling}" : self.spelling
+        end
+      end
 
 			def spelling
 				Lib.extract_string Lib.get_cursor_spelling(@cursor)
-			end
+      end
 
-			def usr
+      def printing_policy
+        PrintingPolicy.new(cursor)
+      end
+
+      def usr
 				Lib.extract_string Lib.get_cursor_usr(@cursor)
 			end
 
