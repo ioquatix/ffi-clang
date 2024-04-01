@@ -41,8 +41,17 @@ module FFI
 				Lib.get_num_arg_types(@type)
 			end
 
+			def pointer?
+				[:type_pointer, :type_block_pointer, :type_obj_c_object_pointer, :type_member_pointer].
+					include?(self.kind)
+			end
+
 			def pointee
-				Type.new Lib.get_pointee_type(@type), @translation_unit
+				if self.pointer?
+					Type.new Lib.get_pointee_type(@type), @translation_unit
+				else
+					nil
+				end
 			end
 
 			def canonical
@@ -50,7 +59,11 @@ module FFI
 			end
 
 			def class_type
-				Type.new Lib.type_get_class_type(@type), @translation_unit
+				if self.kind == :type_member_pointer
+					Type.new Lib.type_get_class_type(@type), @translation_unit
+				else
+					nil
+				end
 			end
 
 			def const_qualified?
@@ -65,24 +78,50 @@ module FFI
 				Lib.is_restrict_qualified_type(@type) != 0
 			end
 
+			def function?
+				[:type_function_no_proto, :type_function_proto].include?(self.kind)
+			end
+
 			def arg_type(i)
-				Type.new Lib.get_arg_type(@type, i), @translation_unit
+				if self.function?
+					Type.new Lib.get_arg_type(@type, i), @translation_unit
+				else
+					nil
+				end
 			end
 
 			def result_type
-				Type.new Lib.get_result_type(@type), @translation_unit
+				if self.function?
+					Type.new Lib.get_result_type(@type), @translation_unit
+				else
+					nil
+				end
 			end
 
 			def element_type
-				Type.new Lib.get_element_type(@type), @translation_unit
+				# Although element_type supports arrays, use array_element_type for that
+				if [:type_vector, :type_complex].include?(self.kind)
+					Type.new Lib.get_element_type(@type), @translation_unit
+				else
+					nil
+				end
 			end
 
 			def num_elements
 				Lib.get_num_elements(@type)
 			end
 
+			def array?
+				[:type_constant_array, :type_incomplete_array, :type_variable_array, :type_dependent_sized_array].
+					include?(self.kind)
+			end
+
 			def array_element_type
-				Type.new Lib.get_array_element_type(@type), @translation_unit
+				if self.array?
+					Type.new Lib.get_array_element_type(@type), @translation_unit
+				else
+					nil
+				end
 			end
 
 			def array_size
