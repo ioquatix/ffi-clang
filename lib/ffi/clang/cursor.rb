@@ -212,6 +212,21 @@ module FFI
 				Cursor.new Lib.get_cursor_definition(@cursor), @translation_unit
 			end
 
+			def opaque_declaration?
+				# Is this a declaration that does not have a definition in the translation unit
+				self.declaration? && !self.definition? && self.definition.invalid?
+			end
+
+			def forward_declaration?
+				# Is this a forward declaration for a definition contained in the same translation_unit?
+				# https://joshpeterson.github.io/identifying-a-forward-declaration-with-libclang
+				#
+				# Possible alternate implementations?
+				# self.declaration? && !self.definition? && self.definition
+				# !self.definition? && self.definition
+				self.declaration? && !self.eql?(self.definition) && !self.definition.invalid?
+			end
+
 			def referenced
 				Cursor.new Lib.get_cursor_referenced(@cursor), @translation_unit
 			end

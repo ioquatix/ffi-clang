@@ -103,6 +103,7 @@ describe Cursor do
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:cursor_canon) { Index.new.parse_translation_unit(fixture_path("canonical.c")).cursor }
 	let(:cursor_pp) { Index.new.parse_translation_unit(fixture_path("docs.c"),[],[],[:detailed_preprocessing_record]).cursor }
+	let(:cursor_forward) { Index.new.parse_translation_unit(fixture_path("forward.h")).cursor }
 
 	it "can be obtained from a translation unit" do
 		expect(cursor).to be_kind_of(Cursor)
@@ -685,7 +686,7 @@ describe Cursor do
 	end
 
 	describe '#num_arguments' do
-	    let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
+			let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 		let(:func) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_function and child.spelling == 'f_non_variadic' } }
 
@@ -796,6 +797,27 @@ describe Cursor do
 		describe "#message" do
 			it "returns an optional message to provide to a user of this API" do
 				expect(availability.message).to be_kind_of(String)
+			end
+		end
+	end
+
+	describe '#forward' do
+		let(:opaque) { find_matching(cursor_forward) { |child, parent|
+			child.kind == :cursor_struct and child.spelling == 'Opaque' } }
+		let(:forward) { find_matching(cursor_forward) { |child, parent|
+			child.kind == :cursor_struct and child.spelling == 'Forward' } }
+
+		describe '#opaque' do
+			it "is an opaque declaration" do
+				expect(opaque.opaque_declaration?).to eq(true)
+				expect(opaque.forward_declaration?).to eq(false)
+			end
+		end
+
+		describe '#forward' do
+			it "is an forward declaration" do
+				expect(forward.opaque_declaration?).to eq(false)
+				expect(forward.forward_declaration?).to eq(true)
 			end
 		end
 	end
