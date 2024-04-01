@@ -26,9 +26,9 @@ module FFI
 			enum :cursor_kind, [
 				:cursor_unexposed_decl, 1,
 				:cursor_struct, 2,
-				# :cusor_struct_decl, :cursor_struct
+				# :cursor_struct_decl, :cursor_struct
 				:cursor_union, 3,
-				# :cusor_union_decl, :cursor_union
+				# :cursor_union_decl, :cursor_union
 				:cursor_class_decl, 4,
 				:cursor_enum_decl, 5,
 				:cursor_field_decl, 6,
