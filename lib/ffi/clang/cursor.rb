@@ -119,24 +119,24 @@ module FFI
 
 			def display_name
 				Lib.extract_string Lib.get_cursor_display_name(@cursor)
-      end
+			end
 
-      def qualified_name
-        if self.kind != :cursor_translation_unit
-          result = self.semantic_parent.qualified_name
-          result ? "#{result}::#{self.spelling}" : self.spelling
-        end
-      end
+			def qualified_name
+				if self.kind != :cursor_translation_unit
+					result = self.semantic_parent.qualified_name
+					result ? "#{result}::#{self.spelling}" : self.spelling
+				end
+			end
 
 			def spelling
 				Lib.extract_string Lib.get_cursor_spelling(@cursor)
-      end
+			end
 
-      def printing_policy
-        PrintingPolicy.new(cursor)
-      end
+			def printing_policy
+				PrintingPolicy.new(cursor)
+			end
 
-      def usr
+			def usr
 				Lib.extract_string Lib.get_cursor_usr(@cursor)
 			end
 
