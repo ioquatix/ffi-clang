@@ -387,6 +387,10 @@ module FFI
 				end
 			end
 
+			def to_s
+				"Cursor <#{self.kind.to_s.gsub(/^cursor_/, '')}: #{self.spelling}>"
+			end
+
 			def to_a
 				filter.collect{|child, parent| child}
 			end
