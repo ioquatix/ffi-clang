@@ -160,10 +160,6 @@ module FFI
 				Type.new Lib.get_typedef_decl_underlying_type(@cursor), @translation_unit
 			end
 
-			def typedef_type
-				Type.new Lib.get_typedef_decl_unerlying_type(@cursor), @translation_unit
-			end
-
 			def virtual_base?
 				Lib.is_virtual_base(@cursor) != 0
 			end
@@ -201,7 +197,7 @@ module FFI
 			end
 
 			def enum_type
-				Type.new Lib.get_enum_type(@cursor), @translation_unit
+				Type.new Lib.get_enum_decl_integer_type(@cursor), @translation_unit
 			end
 
 			def specialized_template
