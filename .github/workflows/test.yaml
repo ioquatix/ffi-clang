@@ -27,6 +27,8 @@ jobs:
 
         clang:
           - "15.0"
+          - "16.0"
+          - "17.0"
 
         experimental: [false]
         
