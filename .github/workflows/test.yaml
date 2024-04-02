@@ -21,14 +21,13 @@ jobs:
           # - macos
         
         ruby:
-          - "2.7"
-          - "3.0"
           - "3.1"
           - "3.2"
-        
+          - "3.3"
+
         clang:
           - "15.0"
-        
+
         experimental: [false]
         
         include:
@@ -38,14 +37,14 @@ jobs:
             experimental: true
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{matrix.ruby}}
         bundler-cache: true
     
     - name: Install LLVM and Clang
-      uses: KyleMayes/install-llvm-action@v1
+      uses: KyleMayes/install-llvm-action@v2
       with:
         version: ${{matrix.clang}}
     

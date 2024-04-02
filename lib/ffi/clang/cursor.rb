@@ -15,6 +15,7 @@
 require_relative 'lib/cursor'
 require_relative 'lib/code_completion'
 
+require_relative 'printing_policy'
 require_relative 'source_location'
 require_relative 'source_range'
 require_relative 'comment'
@@ -120,8 +121,19 @@ module FFI
 				Lib.extract_string Lib.get_cursor_display_name(@cursor)
 			end
 
+			def qualified_name
+				if self.kind != :cursor_translation_unit
+					result = self.semantic_parent.qualified_name
+					result ? "#{result}::#{self.spelling}" : self.spelling
+				end
+			end
+
 			def spelling
 				Lib.extract_string Lib.get_cursor_spelling(@cursor)
+			end
+
+			def printing_policy
+				PrintingPolicy.new(cursor)
 			end
 
 			def usr
@@ -146,10 +158,6 @@ module FFI
 
 			def underlying_type
 				Type.new Lib.get_typedef_decl_underlying_type(@cursor), @translation_unit
-			end
-
-			def typedef_type
-				Type.new Lib.get_typedef_decl_unerlying_type(@cursor), @translation_unit
 			end
 
 			def virtual_base?
@@ -189,7 +197,7 @@ module FFI
 			end
 
 			def enum_type
-				Type.new Lib.get_enum_type(@cursor), @translation_unit
+				Type.new Lib.get_enum_decl_integer_type(@cursor), @translation_unit
 			end
 
 			def specialized_template
@@ -202,6 +210,21 @@ module FFI
 
 			def definition
 				Cursor.new Lib.get_cursor_definition(@cursor), @translation_unit
+			end
+
+			def opaque_declaration?
+				# Is this a declaration that does not have a definition in the translation unit
+				self.declaration? && !self.definition? && self.definition.invalid?
+			end
+
+			def forward_declaration?
+				# Is this a forward declaration for a definition contained in the same translation_unit?
+				# https://joshpeterson.github.io/identifying-a-forward-declaration-with-libclang
+				#
+				# Possible alternate implementations?
+				# self.declaration? && !self.definition? && self.definition
+				# !self.definition? && self.definition
+				self.declaration? && !self.eql?(self.definition) && !self.definition.invalid?
 			end
 
 			def referenced
@@ -377,6 +400,10 @@ module FFI
 				filter do |child, parent|
 					yield(child)
 				end
+			end
+
+			def to_s
+				"Cursor <#{self.kind.to_s.gsub(/^cursor_/, '')}: #{self.spelling}>"
 			end
 
 			def to_a
