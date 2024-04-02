@@ -2,12 +2,14 @@
 
 # Released under the MIT License.
 # Copyright, 2010, by Jari Bakken.
-# Copyright, 2013-2022, by Samuel Williams.
-# Copyright, 2020, by Luikore.
+# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2020, by Zete Lui.
 
 source 'https://rubygems.org'
 
 gemspec
+
+gem "rake"
 
 group :maintenance, optional: true do
 	gem "bake-gem"
@@ -15,5 +17,7 @@ group :maintenance, optional: true do
 end
 
 group :test do
+	gem "bake-test"
+	gem "rspec", ">= 3.4.0"
 	gem 'simplecov'
 end

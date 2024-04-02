@@ -2,10 +2,11 @@
 
 # Released under the MIT License.
 # Copyright, 2013, by Carlos Martín Nieto.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2024, by Samuel Williams.
 # Copyright, 2013, by Takeshi Watanabe.
 # Copyright, 2014, by Masahiro Sano.
 # Copyright, 2014, by Niklas Therning.
+# Copyright, 2024, by Charlie Savage.
 
 module FFI
 	module Clang

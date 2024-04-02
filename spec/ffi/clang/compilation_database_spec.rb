@@ -2,8 +2,8 @@
 
 # Released under the MIT License.
 # Copyright, 2014, by Masahiro Sano.
-# Copyright, 2014-2022, by Samuel Williams.
-# Copyright, 2020, by Luikore.
+# Copyright, 2014-2024, by Samuel Williams.
+# Copyright, 2020, by Zete Lui.
 
 describe CompilationDatabase do
 	let(:dirpath) { fixture_path('') }

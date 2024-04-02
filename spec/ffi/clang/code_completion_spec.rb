@@ -2,7 +2,8 @@
 
 # Released under the MIT License.
 # Copyright, 2014, by Masahiro Sano.
-# Copyright, 2014-2022, by Samuel Williams.
+# Copyright, 2014-2024, by Samuel Williams.
+# Copyright, 2023, by Charlie Savage.
 
 describe CodeCompletion do
 	let(:filename) { fixture_path("completion.cxx") }

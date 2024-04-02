@@ -2,13 +2,14 @@
 
 # Released under the MIT License.
 # Copyright, 2013, by Garry Marshall.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2024, by Samuel Williams.
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2013, by Takeshi Watanabe.
 # Copyright, 2014, by Masahiro Sano.
 # Copyright, 2014, by George Pimm.
 # Copyright, 2017, by Cameron Dutro.
 # Copyright, 2019, by Michael Metivier.
+# Copyright, 2023-2024, by Charlie Savage.
 
 describe "Function Call Cursors" do
 	let(:translation_unit) {Index.new.parse_translation_unit(fixture_path("class.cpp"))}

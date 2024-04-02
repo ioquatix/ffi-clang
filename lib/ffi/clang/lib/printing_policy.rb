@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2014, by Masahiro Sano.
-# Copyright, 2014-2022, by Samuel Williams.
+# Copyright, 2024, by Charlie Savage.
+# Copyright, 2024, by Samuel Williams.
 
 module FFI
 	module Clang

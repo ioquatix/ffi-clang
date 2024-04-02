@@ -2,7 +2,7 @@
 
 Copyright, 2010-2012, by Jari Bakken.  
 Copyright, 2012, by Hal Brodigan.  
-Copyright, 2013-2022, by Samuel Williams.  
+Copyright, 2013-2024, by Samuel Williams.  
 Copyright, 2013, by Garry Marshall.  
 Copyright, 2013-2014, by Carlos Martín Nieto.  
 Copyright, 2013, by Dave Wilkinson.  
@@ -16,8 +16,9 @@ Copyright, 2017, by Cameron Dutro.
 Copyright, 2019, by Hayden Purdy.  
 Copyright, 2019, by Michael Metivier.  
 Copyright, 2019, by Dominic Sisnero.  
-Copyright, 2020, by Luikore.  
+Copyright, 2020, by Zete Lui.  
 Copyright, 2022, by Motonori Iwamuro.  
+Copyright, 2023-2024, by Charlie Savage.  
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2016-2022, by Samuel Williams.
+# Copyright, 2016-2024, by Samuel Williams.
+# Copyright, 2023, by Charlie Savage.
 
 require_relative 'lib/clang_version'
 

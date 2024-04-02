@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2024, by Samuel Williams.
 # Copyright, 2014, by Masahiro Sano.
 # Copyright, 2019, by Hayden Purdy.
 # Copyright, 2022, by Motonori Iwamuro.
+# Copyright, 2023, by Charlie Savage.
 
 require_relative 'index'
 

@@ -2,7 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2013, by Garry Marshall.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2024, by Samuel Williams.
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2013, by Dave Wilkinson.
 # Copyright, 2013, by Takeshi Watanabe.
@@ -10,7 +10,8 @@
 # Copyright, 2014, by George Pimm.
 # Copyright, 2014, by Niklas Therning.
 # Copyright, 2019, by Michael Metivier.
-# Copyright, 2020, by Luikore.
+# Copyright, 2020, by Zete Lui.
+# Copyright, 2023-2024, by Charlie Savage.
 
 require_relative 'translation_unit'
 require_relative 'diagnostic'
