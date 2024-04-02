@@ -474,22 +474,88 @@ module FFI
 
 			attach_function :get_num_args, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
 
-      attach_function :is_converting_constructor, :clang_CXXConstructor_isConvertingConstructor, [CXCursor.by_value], :uint
-      attach_function :is_copy_constructor, :clang_CXXConstructor_isCopyConstructor, [CXCursor.by_value], :uint
-      attach_function :is_default_constructor, :clang_CXXConstructor_isDefaultConstructor, [CXCursor.by_value], :uint
-      attach_function :is_move_constructor, :clang_CXXConstructor_isMoveConstructor, [CXCursor.by_value], :uint
-      attach_function :is_mutable, :clang_CXXField_isMutable, [CXCursor.by_value], :uint
-      attach_function :is_defaulted, :clang_CXXMethod_isDefaulted, [CXCursor.by_value], :uint
-      attach_function :is_abstract, :clang_CXXRecord_isAbstract, [CXCursor.by_value], :uint
-      attach_function :is_enum_scoped, :clang_EnumDecl_isScoped, [CXCursor.by_value], :uint
-      attach_function :is_const, :clang_CXXMethod_isConst, [CXCursor.by_value], :uint
+			attach_function :is_converting_constructor, :clang_CXXConstructor_isConvertingConstructor, [CXCursor.by_value], :uint
+			attach_function :is_copy_constructor, :clang_CXXConstructor_isCopyConstructor, [CXCursor.by_value], :uint
+			attach_function :is_default_constructor, :clang_CXXConstructor_isDefaultConstructor, [CXCursor.by_value], :uint
+			attach_function :is_move_constructor, :clang_CXXConstructor_isMoveConstructor, [CXCursor.by_value], :uint
+			attach_function :is_mutable, :clang_CXXField_isMutable, [CXCursor.by_value], :uint
+			attach_function :is_defaulted, :clang_CXXMethod_isDefaulted, [CXCursor.by_value], :uint
+			attach_function :is_abstract, :clang_CXXRecord_isAbstract, [CXCursor.by_value], :uint
+			attach_function :is_enum_scoped, :clang_EnumDecl_isScoped, [CXCursor.by_value], :uint
+			attach_function :is_const, :clang_CXXMethod_isConst, [CXCursor.by_value], :uint
 
-      if Clang.clang_version >= Gem::Version.new('16.0.0')
-        attach_function :is_deleted, :clang_CXXMethod_isDeleted, [CXCursor.by_value], :uint
-        attach_function :is_copy_assignment_operator, :clang_CXXMethod_isCopyAssignmentOperator, [CXCursor.by_value], :uint
-        attach_function :is_move_assignment_operator, :clang_CXXMethod_isMoveAssignmentOperator, [CXCursor.by_value], :uint
-        attach_function :is_explicit, :clang_CXXMethod_isExplicit, [CXCursor.by_value], :uint
-      end
+			if Clang.clang_version >= Gem::Version.new('16.0.0')
+				attach_function :get_unqualified_type, :clang_getUnqualifiedType, [CXType.by_value], CXType.by_value
+				attach_function :get_non_reference_type, :clang_getNonReferenceType, [CXType.by_value], CXType.by_value
+				attach_function :is_deleted, :clang_CXXMethod_isDeleted, [CXCursor.by_value], :uint
+				attach_function :is_copy_assignment_operator, :clang_CXXMethod_isCopyAssignmentOperator, [CXCursor.by_value], :uint
+				attach_function :is_move_assignment_operator, :clang_CXXMethod_isMoveAssignmentOperator, [CXCursor.by_value], :uint
+			end
+
+			if Clang.clang_version >= Gem::Version.new('17.0.0')
+				attach_function :is_explicit, :clang_CXXMethod_isExplicit, [CXCursor.by_value], :uint
+
+				enum :binary_operator_kind, [
+					:binary_operator_invalid,
+					:binary_operator_ptr_mem_d,
+					:binary_operator_ptr_mem_i,
+					:binary_operator_mul,
+					:binary_operator_div,
+					:binary_operator_rem,
+					:binary_operator_add,
+					:binary_operator_sub,
+					:binary_operator_shl,
+					:binary_operator_shr,
+					:binary_operator_cmp,
+					:binary_operator_lt,
+					:binary_operator_gt,
+					:binary_operator_le,
+					:binary_operator_ge,
+					:binary_operator_eq,
+					:binary_operator_ne,
+					:binary_operator_and,
+					:binary_operator_xor,
+					:binary_operator_or,
+					:binary_operator_l_and,
+					:binary_operator_l_or,
+					:binary_operator_assign,
+					:binary_operator_mul_assign,
+					:binary_operator_div_assign,
+					:binary_operator_rem_assign,
+					:binary_operator_add_assign,
+					:binary_operator_sub_assign,
+					:binary_operator_shl_assign,
+					:binary_operator_shr_assign,
+					:binary_operator_and_assign,
+					:binary_operator_xor_assign,
+					:binary_operator_or_assign,
+					:binary_operator_comma
+				]
+
+				attach_function :get_binary_operator_kind_spelling, :clang_getBinaryOperatorKindSpelling, [:binary_operator_kind], CXString.by_value
+				attach_function :get_cursor_binary_operator_kind, :clang_getCursorBinaryOperatorKind, [CXCursor.by_value], :binary_operator_kind
+
+				enum :unary_operator_kind, [
+					:unary_operator_Invalid,
+					:unary_operator_PostInc,
+					:unary_operator_PostDec,
+					:unary_operator_PreInc,
+					:unary_operator_PreDec,
+					:unary_operator_AddrOf,
+					:unary_operator_Deref,
+					:unary_operator_Plus,
+					:unary_operator_Minus,
+					:unary_operator_Not,
+					:unary_operator_LNot,
+					:unary_operator_Real,
+					:unary_operator_Imag,
+					:unary_operator_Extension,
+					:unary_operator_Coawait
+				]
+
+				attach_function :get_unary_operator_kind_spelling, :clang_getUnaryOperatorKindSpelling, [:unary_operator_kind], CXString.by_value
+				attach_function :get_cursor_unary_operator_kind, :clang_getCursorUnaryOperatorKind, [CXCursor.by_value], :unary_operator_kind
+			end
 		end
 	end
 end
