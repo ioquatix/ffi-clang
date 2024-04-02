@@ -99,8 +99,7 @@ module FFI
 			end
 
 			def element_type
-				# Although element_type supports arrays, use array_element_type for that
-				if [:type_vector, :type_complex].include?(self.kind)
+				if self.array? || [:type_vector, :type_complex].include?(self.kind)
 					Type.new Lib.get_element_type(@type), @translation_unit
 				else
 					nil

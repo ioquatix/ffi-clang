@@ -811,11 +811,11 @@ describe Cursor do
 			it "is an opaque declaration" do
 				expect(opaque.opaque_declaration?).to eq(true)
 				expect(opaque.forward_declaration?).to eq(false)
-			end
+			end 
 		end
 
 		describe '#forward' do
-			it "is an forward declaration" do
+			it "is a forward declaration" do
 				expect(forward.opaque_declaration?).to eq(false)
 				expect(forward.forward_declaration?).to eq(true)
 			end
