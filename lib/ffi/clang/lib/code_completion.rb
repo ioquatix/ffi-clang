@@ -96,16 +96,16 @@ module FFI
 			attach_function :get_completion_brief_comment, :clang_getCompletionBriefComment, [:CXCompletionString], CXString.by_value
 
 			# CXCodeCompleteResults functions
-			attach_function :get_code_complete_get_num_diagnostics, :clang_codeCompleteGetNumDiagnostics, [CXCodeCompleteResults.ptr], :uint
-			attach_function :get_code_complete_get_diagnostic, :clang_codeCompleteGetDiagnostic, [CXCodeCompleteResults.ptr, :uint], :CXDiagnostic
-			attach_function :get_code_complete_get_contexts, :clang_codeCompleteGetContexts, [CXCodeCompleteResults.ptr], :ulong_long
-			attach_function :get_code_complete_get_container_kind, :clang_codeCompleteGetContainerKind, [CXCodeCompleteResults.ptr, :pointer], :cursor_kind
-			attach_function :get_code_complete_get_container_usr, :clang_codeCompleteGetContainerUSR, [CXCodeCompleteResults.ptr], CXString.by_value
-			attach_function :get_code_complete_get_objc_selector, :clang_codeCompleteGetObjCSelector, [CXCodeCompleteResults.ptr], CXString.by_value
+			attach_function :get_code_complete_get_num_diagnostics, :clang_codeCompleteGetNumDiagnostics, [CXCodeCompleteResults.by_ref], :uint
+			attach_function :get_code_complete_get_diagnostic, :clang_codeCompleteGetDiagnostic, [CXCodeCompleteResults.by_ref, :uint], :CXDiagnostic
+			attach_function :get_code_complete_get_contexts, :clang_codeCompleteGetContexts, [CXCodeCompleteResults.by_ref], :ulong_long
+			attach_function :get_code_complete_get_container_kind, :clang_codeCompleteGetContainerKind, [CXCodeCompleteResults.by_ref, :pointer], :cursor_kind
+			attach_function :get_code_complete_get_container_usr, :clang_codeCompleteGetContainerUSR, [CXCodeCompleteResults.by_ref], CXString.by_value
+			attach_function :get_code_complete_get_objc_selector, :clang_codeCompleteGetObjCSelector, [CXCodeCompleteResults.by_ref], CXString.by_value
 
 			# Other functions
-			attach_function :code_complete_at, :clang_codeCompleteAt, [:CXTranslationUnit, :string, :uint, :uint, :pointer, :uint, :uint], CXCodeCompleteResults.ptr
-			attach_function :dispose_code_complete_results, :clang_disposeCodeCompleteResults, [CXCodeCompleteResults.ptr], :void
+			attach_function :code_complete_at, :clang_codeCompleteAt, [:CXTranslationUnit, :string, :uint, :uint, :pointer, :uint, :uint], CXCodeCompleteResults.by_ref
+			attach_function :dispose_code_complete_results, :clang_disposeCodeCompleteResults, [CXCodeCompleteResults.by_ref], :void
 			attach_function :get_cursor_completion_string, :clang_getCursorCompletionString, [CXCursor.by_value], :CXCompletionString
 			attach_function :default_code_completion_options, :clang_defaultCodeCompleteOptions, [], :uint
 			attach_function :sort_code_completion_results, :clang_sortCodeCompletionResults, [:pointer, :uint], :void

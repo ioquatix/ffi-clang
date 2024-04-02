@@ -27,7 +27,8 @@ module FFI
 				end
 
 				def self.release(pointer)
-					Lib.dispose_code_complete_results(pointer)
+          results = Lib::CXCodeCompleteResults.new(pointer)
+					Lib.dispose_code_complete_results(results)
 				end
 
 				def each(&block)
