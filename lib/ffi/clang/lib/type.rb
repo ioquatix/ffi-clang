@@ -140,6 +140,16 @@ module FFI
 				:calling_conv_intel_ocl_bicc, 9,
 				:calling_conv_x86_64_win64, 10,
 				:calling_conv_x86_64_sysv, 11,
+				:calling_conv_x86_vector_call, 12,
+				:calling_conv_swift, 13,
+				:calling_conv_preserve_most, 14,
+				:calling_conv_preserve_all, 15,
+				:calling_conv_aarch64_vector_call, 16,
+				:calling_conv_swift_async, 17,
+				:calling_conv_aarch64_sve_pcs, 18,
+				:calling_conv_m68k_rtd, 19,
+				:calling_conv_preserve_none, 20,
+				:calling_conv_riscv_vector_call, 21,
 				:calling_conv_invalid, 100,
 				:calling_conv_unexposed, 200
 			]
@@ -156,6 +166,7 @@ module FFI
 				:layout_error_dependent, -3,
 				:layout_error_not_constant_size, -4,
 				:layout_error_invalid_field_name, -5,
+				:layout_error_undeduced, -6
 			]
 
 			class CXType < FFI::Struct
@@ -174,7 +185,7 @@ module FFI
 			attach_function :get_pointee_type, :clang_getPointeeType, [CXType.by_value], CXType.by_value
 			attach_function :get_result_type, :clang_getResultType, [CXType.by_value], CXType.by_value
 			attach_function :get_canonical_type, :clang_getCanonicalType, [CXType.by_value], CXType.by_value
-			
+
 			attach_function :type_get_class_type, :clang_Type_getClassType, [CXType.by_value], CXType.by_value
 
 			attach_function :is_const_qualified_type, :clang_isConstQualifiedType, [CXType.by_value], :uint
@@ -193,7 +204,7 @@ module FFI
 			attach_function :type_get_offset_of, :clang_Type_getOffsetOf, [CXType.by_value, :string], :long_long
 
 			attach_function :type_get_cxx_ref_qualifier, :clang_Type_getCXXRefQualifier, [CXType.by_value], :ref_qualifier_kind
-			
+
 			attach_function :get_fuction_type_calling_conv, :clang_getFunctionTypeCallingConv, [CXType.by_value], :calling_conv
 
 			attach_function :equal_types, :clang_equalTypes, [CXType.by_value, CXType.by_value], :uint
