@@ -110,8 +110,21 @@ module FFI
 				Lib.is_unexposed(kind) != 0
 			end
 
-			def location
+			def expansion_location
 				ExpansionLocation.new(Lib.get_cursor_location(@cursor))
+			end
+			alias :location :expansion_location
+
+			def presumed_location
+				PresumedLocation.new(Lib.get_cursor_location(@cursor))
+			end
+
+			def spelling_location
+				SpellingLocation.new(Lib.get_cursor_location(@cursor))
+			end
+
+			def file_location
+				FileLocation.new(Lib.get_cursor_location(@cursor))
 			end
 
 			def extent

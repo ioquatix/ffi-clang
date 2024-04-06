@@ -30,22 +30,6 @@ module FFI
 				Lib.location_is_from_main_file(@location) != 0
 			end
 
-			def expansion_location
-				ExpansionLocation.new(@location)
-			end
-
-			def presumed_location
-				PresumedLocation.new(@location)
-			end
-
-			def spelling_location
-				SpellingLocation.new(@location)
-			end
-
-			def file_location
-				FileLocation.new(@location)
-			end
-
 			def null?
 				Lib.equal_locations(@location, Lib.get_null_location) != 0
 			end
@@ -73,6 +57,14 @@ module FFI
 				@column = column.get_uint(0)
 				@offset = offset.get_uint(0)
 			end
+
+			def as_string
+				"#{@file}:#{@line}:#{@column}:#{@offset}"
+			end
+
+			def to_s
+				"ExpansionLocation <#{self.as_string}>"
+			end
 		end
 
 		class PresumedLocation < SourceLocation
@@ -82,14 +74,22 @@ module FFI
 				super(location)
 
 				cxstring = MemoryPointer.new Lib::CXString
-				line	 = MemoryPointer.new :uint
-				column	 = MemoryPointer.new :uint
+				line   = MemoryPointer.new :uint
+				column   = MemoryPointer.new :uint
 
 				Lib::get_presumed_location(@location, cxstring, line, column)
 
 				@filename = Lib.extract_string cxstring
 				@line = line.get_uint(0)
 				@column = column.get_uint(0)
+			end
+
+			def as_string
+				"#{@filename}:#{@line}:#{@column}"
+			end
+
+			def to_s
+				"PresumedLocation <#{self.as_string}>"
 			end
 		end
 
@@ -111,6 +111,14 @@ module FFI
 				@column = column.get_uint(0)
 				@offset = offset.get_uint(0)
 			end
+
+			def as_string
+				"#{@file}:#{@line}:#{@column}:#{@offset}"
+			end
+
+			def to_s
+				"SpellingLocation <#{self.as_string}>"
+			end
 		end
 
 		class FileLocation < SourceLocation
@@ -130,6 +138,14 @@ module FFI
 				@line = line.get_uint(0)
 				@column = column.get_uint(0)
 				@offset = offset.get_uint(0)
+			end
+
+			def as_string
+				"#{@file}:#{@line}:#{@column}:#{@offset}"
+			end
+
+			def to_s
+				"FileLocation <#{self.as_string}>"
 			end
 		end
 	end
