@@ -64,7 +64,7 @@ describe SourceLocation do
 	end
 
 	describe "#expansion_location" do
-		let (:expansion_location) { loc1_cursor.location.expansion_location }
+		let (:expansion_location) { loc1_cursor.expansion_location }
 
 		it "should be ExpansionLocaion" do
 			expect(expansion_location).to be_kind_of(SourceLocation)
@@ -77,7 +77,7 @@ describe SourceLocation do
 	end
 
 	describe "#presumed_location" do
-		let (:presumed_location) { loc1_cursor.location.presumed_location }
+		let (:presumed_location) { loc1_cursor.presumed_location }
 
 		it "should be FileLocaion" do
 			expect(presumed_location).to be_kind_of(SourceLocation)
@@ -94,7 +94,7 @@ describe SourceLocation do
 	end
 
 	describe "#file_location" do
-		let (:file_location) { loc1_cursor.location.file_location }
+		let (:file_location) { loc1_cursor.file_location }
 
 		it "should be FileLocaion" do
 			expect(file_location).to be_kind_of(SourceLocation)
@@ -107,7 +107,7 @@ describe SourceLocation do
 	end
 
 	describe "#spelling_location" do
-		let (:spelling_location) { loc1_cursor.location.spelling_location }
+		let (:spelling_location) { loc1_cursor.spelling_location }
 
 		it "should be SpellingLocaion" do
 			expect(spelling_location).to be_kind_of(SourceLocation)
