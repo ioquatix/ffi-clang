@@ -441,6 +441,8 @@ module FFI
 			attach_function :find_references_in_file, :clang_findReferencesInFile, [CXCursor.by_value, :CXFile, CXCursorAndRangeVisitor.by_value], :result
 
 			attach_function :get_cursor_type, :clang_getCursorType, [CXCursor.by_value], CXType.by_value
+			attach_function :cursor_is_anonymous, :clang_Cursor_isAnonymous, [CXCursor.by_value], :uint
+			attach_function :cursor_is_anonymous_record_decl, :clang_Cursor_isAnonymousRecordDecl, [CXCursor.by_value], :uint
 			attach_function :get_cursor_result_type, :clang_getCursorResultType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_typedef_decl_underlying_type, :clang_getTypedefDeclUnderlyingType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_enum_decl_integer_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value

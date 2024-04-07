@@ -105,6 +105,7 @@ describe Cursor do
 	let(:cursor_canon) { Index.new.parse_translation_unit(fixture_path("canonical.c")).cursor }
 	let(:cursor_pp) { Index.new.parse_translation_unit(fixture_path("docs.c"),[],[],[:detailed_preprocessing_record]).cursor }
 	let(:cursor_forward) { Index.new.parse_translation_unit(fixture_path("forward.h")).cursor }
+	let(:cursor_anonymous) { Index.new.parse_translation_unit(fixture_path("anonymous.h")).cursor }
 
 	it "can be obtained from a translation unit" do
 		expect(cursor).to be_kind_of(Cursor)
@@ -820,6 +821,15 @@ describe Cursor do
 				expect(forward.opaque_declaration?).to eq(false)
 				expect(forward.forward_declaration?).to eq(true)
 			end
+		end
+	end
+
+	describe '#anonymous' do
+		let(:struct) { find_matching(cursor_anonymous) { |child, parent|
+			child.kind == :cursor_struct	} }
+
+		it "is an an anonymous structure" do
+			expect(struct.anonymous?).to eq(true)
 		end
 	end
 end

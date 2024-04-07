@@ -62,6 +62,14 @@ module FFI
 				CodeCompletion::String.new Lib.get_cursor_completion_string(@cursor)
 			end
 
+			def anonymous?
+				Lib.cursor_is_anonymous(@cursor) != 0
+			end
+
+			def anonymous_record_declaration?
+				Lib.cursor_is_anonymous_record_decl(@cursor) != 0
+			end
+
 			def declaration?
 				Lib.is_declaration(kind) != 0
 			end
