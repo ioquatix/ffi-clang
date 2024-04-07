@@ -6,6 +6,7 @@
 # Copyright, 2013-2022, by Samuel Williams.
 # Copyright, 2013, by Garry Marshall.
 # Copyright, 2014, by Masahiro Sano.
+# Copyright, 2024, by Charlie Savage.
 
 require_relative 'lib/source_location'
 require_relative 'lib/file'

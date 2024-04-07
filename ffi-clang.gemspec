@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
 	spec.version = FFI::Clang::VERSION
 	
 	spec.summary = "Ruby FFI bindings for libclang C interface."
-	spec.authors = ["Samuel Williams", "Masahiro Sano", "Carlos Martín Nieto", "Jari Bakken", "Charlie Savage", "Takeshi Watanabe", "Garry Marshall", "George Pimm", "Zete Lui", "Greg Hazel", "Michael Metivier", "Dave Wilkinson", "Hayden Purdy", "Mike Dalessio", "Motonori Iwamuro", "Niklas Therning", "Cameron Dutro", "Dominic Sisnero", "Hal Brodigan"]
+	spec.authors = ["Samuel Williams", "Masahiro Sano", "Carlos Martín Nieto", "Charlie Savage", "Jari Bakken", "Takeshi Watanabe", "Garry Marshall", "George Pimm", "Zete Lui", "Greg Hazel", "Michael Metivier", "Dave Wilkinson", "Hayden Purdy", "Mike Dalessio", "Motonori Iwamuro", "Niklas Therning", "Cameron Dutro", "Dominic Sisnero", "Hal Brodigan"]
 	spec.license = "MIT"
 	
 	spec.cert_chain  = ['release.cert']
@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
 	
 	spec.metadata = {
 		"funding_uri" => "https://github.com/sponsors/ioquatix/",
+		"source_code_uri" => "https://github.com/ioquatix/ffi-clang.git",
 	}
 	
 	spec.files = Dir.glob(['{ext,lib}/**/*', '*.md'], File::FNM_DOTMATCH, base: __dir__)
