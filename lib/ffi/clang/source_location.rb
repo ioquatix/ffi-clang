@@ -74,8 +74,8 @@ module FFI
 				super(location)
 
 				cxstring = MemoryPointer.new Lib::CXString
-				line   = MemoryPointer.new :uint
-				column   = MemoryPointer.new :uint
+				line = MemoryPointer.new :uint
+				column = MemoryPointer.new :uint
 
 				Lib::get_presumed_location(@location, cxstring, line, column)
 
