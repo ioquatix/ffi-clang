@@ -10,7 +10,7 @@ describe Type do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("a.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:cursor_list) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
-	let(:type) { find_first(cursor, :cursor_function).type }
+	let(:type) { find_by_kind(cursor, :cursor_function).type }
 
 	it "can tell us about the main function" do
 		expect(type.variadic?).to equal(false)
@@ -220,7 +220,7 @@ describe Type do
     let(:struct_decl) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_struct and child.spelling == 'D'
       } }
-    let(:no_decl) { find_first(cursor_cxx, :cursor_cxx_method).type }
+    let(:no_decl) { find_by_kind(cursor_cxx, :cursor_cxx_method).type }
 
     it 'returns the class type of the member pointer type' do
       expect(struct_ref.declaration).to be_kind_of(Cursor)

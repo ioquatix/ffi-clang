@@ -7,7 +7,7 @@
 describe Tokens do
 	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
 	let(:cursor) { translation_unit.cursor }
-	let(:range) { find_first(cursor, :cursor_struct).extent }
+	let(:range) { find_by_kind(cursor, :cursor_struct).extent }
 	let(:tokens) { translation_unit.tokenize(range) }
 
 	it "can be obtained from a translation unit" do
@@ -39,7 +39,7 @@ end
 describe Token do
 	let(:translation_unit) { Index.new.parse_translation_unit(fixture_path("list.c")) }
 	let(:cursor) { translation_unit.cursor }
-	let(:range) { find_first(cursor, :cursor_struct).extent }
+	let(:range) { find_by_kind(cursor, :cursor_struct).extent }
 	let(:token) { translation_unit.tokenize(range).first }
 
 	it "can be obtained from a translation unit" do
