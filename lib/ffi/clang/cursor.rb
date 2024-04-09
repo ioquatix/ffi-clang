@@ -25,6 +25,8 @@ require_relative 'type'
 module FFI
 	module Clang
 		class Cursor
+			include Enumerable
+
 			attr_reader :cursor
 			attr_reader :translation_unit
 
@@ -163,7 +165,7 @@ module FFI
 			end
 
 			def kind
-				@cursor[:kind]
+				@cursor ? @cursor[:kind] : nil
 			end
 
 			def kind_spelling
@@ -277,12 +279,34 @@ module FFI
 				Lib.get_num_args @cursor
 			end
 
-			def visit_children(&block)
+			def each(recurse = true, &block)
+				return to_enum(:each, recurse) unless block_given?
+
 				adapter = Proc.new do |cxcursor, parent_cursor, unused|
-					block.call Cursor.new(cxcursor, @translation_unit), Cursor.new(parent_cursor, @translation_unit)
+					# Call the block and capture the result. This lets advanced users
+					# modify the recursion on a case by case basis if needed
+					result = block.call Cursor.new(cxcursor, @translation_unit), Cursor.new(parent_cursor, @translation_unit)
+					case result
+						when :continue
+							:continue
+						when :recurse
+							:recurse
+						else
+							recurse ? :recurse : :continue
+					end
 				end
-				
+
 				Lib.visit_children(@cursor, adapter, nil)
+			end
+
+			def find_by_kind(recurse, *kinds)
+				result = Array.new
+				self.each(recurse) do |child, parent|
+					if kinds.include?(child.kind)
+						result << child
+					end
+				end
+				result
 			end
 
 			def find_references_in_file(file = nil, &block)
@@ -392,44 +416,8 @@ module FFI
 				Lib.get_cursor_hash(@cursor)
 			end
 
-			def find_all(*kinds)
-				filter do |child, parent|
-					kinds.include?(child.kind)
-				end
-			end
-
-			def find_first(*kinds)
-				find_all(*kinds).first
-			end
-
-			def filter
-				return to_enum(:select) unless block_given?
-				
-				matching = []
-
-				self.visit_children do |child, parent|
-					if yield(child, parent)
-						matching << child
-					end
-
-					:recurse
-				end
-
-				return matching
-			end
-
-			def select
-				filter do |child, parent|
-					yield(child)
-				end
-			end
-
 			def to_s
 				"Cursor <#{self.kind.to_s.gsub(/^cursor_/, '')}: #{self.spelling}>"
-			end
-
-			def to_a
-				filter.collect{|child, parent| child}
 			end
 
 			def references(file = nil)

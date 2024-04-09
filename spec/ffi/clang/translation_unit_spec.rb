@@ -164,9 +164,9 @@ describe TranslationUnit do
 			File::open(path, "w+") { |io|
 			   io.write("int a;")
 			}
-			expect(find_first(@reparse_translation_unit.cursor, :cursor_variable)).to be nil
+			expect(find_by_kind(@reparse_translation_unit.cursor, :cursor_variable)).to be nil
 			expect{@reparse_translation_unit.reparse}.not_to raise_error
-			expect(find_first(@reparse_translation_unit.cursor, :cursor_variable).spelling).to eq("a")
+			expect(find_by_kind(@reparse_translation_unit.cursor, :cursor_variable).spelling).to eq("a")
 		end
 
 		it "raises exception if the file is not found when reparsing" do

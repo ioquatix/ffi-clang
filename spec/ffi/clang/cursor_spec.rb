@@ -14,7 +14,7 @@
 describe "Function Call Cursors" do
 	let(:translation_unit) {Index.new.parse_translation_unit(fixture_path("class.cpp"))}
 	let(:cursor) {translation_unit.cursor}
-	let(:call) {find_first(cursor, :cursor_call_expr)}
+	let(:call) {find_by_kind(cursor, :cursor_call_expr)}
 
 	it "should parse correctly" do
 		expect(translation_unit.diagnostics).to be_empty
@@ -29,9 +29,9 @@ end
 describe FFI::Clang::Cursor do
 	let(:translation_unit) {Index.new.parse_translation_unit(fixture_path("class.cpp"))}
 	let(:cursor) {translation_unit.cursor}
-	let (:class1) { find_all(cursor, :cursor_class_decl)[0] }
-	let (:class2) { find_all(cursor, :cursor_class_decl)[1] }
-	let (:class3) { find_all(cursor, :cursor_class_decl)[2] }
+	let (:class1) { find_all_by_kind(cursor, :cursor_class_decl)[0] }
+	let (:class2) { find_all_by_kind(cursor, :cursor_class_decl)[1] }
+	let (:class3) { find_all_by_kind(cursor, :cursor_class_decl)[2] }
 
 	it "can find the first class" do
 		expect(class1).not_to equal(nil)
@@ -48,7 +48,7 @@ describe FFI::Clang::Cursor do
 	end
 
 	it "has constructors" do
-		constructors = find_all(class2, :cursor_constructor)
+		constructors = find_all_by_kind(class2, :cursor_constructor)
 		expect(constructors.length).to eq(5)
 
 		expect(constructors[0].default_constructor?).to eq(true)
@@ -80,7 +80,7 @@ describe FFI::Clang::Cursor do
 	end
 
 	it "has destructors" do
-		constructors = find_all(class2, :cursor_constructor)
+		constructors = find_all_by_kind(class2, :cursor_constructor)
 		expect(constructors.length).to eq(5)
 	end
 
@@ -91,7 +91,7 @@ describe FFI::Clang::Cursor do
 	end
 
 	it "field is mutable abstract" do
-		fields = find_all(class3, :cursor_field_decl)
+		fields = find_all_by_kind(class3, :cursor_field_decl)
 
 		field = fields[0]
 		expect(field.mutable?).to eq(true)
@@ -143,7 +143,7 @@ describe Cursor do
 
 	it "allows us to visit its children" do
 		counter = 0
-		cursor.visit_children do |cursor, parent|
+		cursor.each do |cursor, parent|
 			counter += 1
 			:recurse
 		end
@@ -174,7 +174,7 @@ describe Cursor do
 	end
 
 	describe "Function Cursors" do
-		let (:func) { find_first(cursor, :cursor_function) }
+		let (:func) { find_by_kind(cursor, :cursor_function) }
 
 		it "is not invalid?" do
 			expect(func.invalid?).to equal(false)
@@ -198,7 +198,7 @@ describe Cursor do
 	end
 
 	describe "Struct Cursors" do
-		let (:struct) { find_first(cursor, :cursor_struct) }
+		let (:struct) { find_by_kind(cursor, :cursor_struct) }
 
 		it "can find the first struct" do
 			expect(struct).not_to equal(nil)
@@ -217,7 +217,7 @@ describe Cursor do
 	end
 
 	describe '#kind_spelling' do
-		let (:struct) { find_first(cursor, :cursor_struct) }
+		let (:struct) { find_by_kind(cursor, :cursor_struct) }
 
 		it "returns the spelling of the given kind" do
 			expect(struct.kind_spelling).to eq('StructDecl')
@@ -225,7 +225,7 @@ describe Cursor do
 	end
 
 	describe '#declaration?' do
-		let (:struct) { find_first(cursor, :cursor_struct) }
+		let (:struct) { find_by_kind(cursor, :cursor_struct) }
 
 		it "checks the cursor is declaration" do
 			expect(struct.declaration?).to be true
@@ -233,7 +233,7 @@ describe Cursor do
 	end
 
 	describe '#reference?' do
-		let (:ref) { find_first(cursor, :cursor_type_ref) }
+		let (:ref) { find_by_kind(cursor, :cursor_type_ref) }
 
 		it "checks the cursor is reference" do
 			expect(ref.reference?).to be true
@@ -241,7 +241,7 @@ describe Cursor do
 	end
 
 	describe '#expression?' do
-		let (:literal) { find_first(cursor, :cursor_integer_literal) }
+		let (:literal) { find_by_kind(cursor, :cursor_integer_literal) }
 
 		it "checks the cursor is expression" do
 			expect(literal.expression?).to be true
@@ -249,7 +249,7 @@ describe Cursor do
 	end
 
 	describe '#statement?' do
-		let (:return_stmt) { find_first(cursor, :cursor_return_stmt) }
+		let (:return_stmt) { find_by_kind(cursor, :cursor_return_stmt) }
 
 		it "checks the cursor is statement" do
 			expect(return_stmt.statement?).to be true
@@ -257,7 +257,7 @@ describe Cursor do
 	end
 
 	describe '#attribute?' do
-		let (:attr) { find_first(cursor_cxx, :cursor_unexposed_attr) }
+		let (:attr) { find_by_kind(cursor_cxx, :cursor_unexposed_attr) }
 
 		it "checks the cursor is attribute" do
 			expect(attr.attribute?).to be true
@@ -292,7 +292,7 @@ describe Cursor do
 	end
 
 	describe '#preprocessing?' do
-		let (:pp) { find_first(cursor_pp, :cursor_macro_definition) }
+		let (:pp) { find_by_kind(cursor_pp, :cursor_macro_definition) }
 
 		it 'checks the cursor is preprocessing' do
 			expect(pp.preprocessing?).to be true
@@ -384,7 +384,7 @@ describe Cursor do
 	end
 
 	describe '#canonical' do
-		let (:structs) { find_all(cursor_canon, :cursor_struct) }
+		let (:structs) { find_all_by_kind(cursor_canon, :cursor_struct) }
 
 		it "mathes 3 cursors" do
 			expect(structs.size).to eq(3)
@@ -398,7 +398,7 @@ describe Cursor do
 	end
 
 	describe '#definition' do
-		let (:structs) { find_all(cursor_canon, :cursor_struct) }
+		let (:structs) { find_all_by_kind(cursor_canon, :cursor_struct) }
 
 		it "mathes 3 cursors" do
 			expect(structs.size).to eq(3)
@@ -444,7 +444,7 @@ describe Cursor do
 	end
 
 	describe '#translation_unit' do
-		let (:struct) { find_first(cursor, :cursor_struct) }
+		let (:struct) { find_by_kind(cursor, :cursor_struct) }
 
 		it "can find the first struct" do
 			expect(struct).not_to equal(nil)
@@ -457,7 +457,7 @@ describe Cursor do
 	end
 
 	describe '#find_references_in_file' do
-		let (:struct_cursor) {find_first(cursor_canon, :cursor_struct) }
+		let (:struct_cursor) {find_by_kind(cursor_canon, :cursor_struct) }
 
 		it "visits references to the cursor in the main file" do
 			counter = 0
@@ -479,8 +479,8 @@ describe Cursor do
 	end
 
 	describe '#linkage' do
-		let (:ref) { find_first(cursor, :cursor_type_ref) }
-		let (:func) { find_first(cursor, :cursor_function) }
+		let (:ref) { find_by_kind(cursor, :cursor_type_ref) }
+		let (:func) { find_by_kind(cursor, :cursor_function) }
 
 		it "returns :external if the cursor is non-static function" do
 			expect(func.linkage).to equal :external
@@ -514,7 +514,7 @@ describe Cursor do
 	end
 
 	describe '#definition?' do
-		let (:struct) { find_all(cursor_canon, :cursor_struct).at(2) }
+		let (:struct) { find_all_by_kind(cursor_canon, :cursor_struct).at(2) }
 
 		it "checks cursor is a definition" do
 			expect(struct.definition?).to be true
@@ -522,7 +522,7 @@ describe Cursor do
 	end
 
 	describe '#usr' do
-		let (:func) { find_first(cursor, :cursor_function) }
+		let (:func) { find_by_kind(cursor, :cursor_function) }
 
 		it "returns something in string" do
 			expect(func.usr).to be_kind_of(String)
@@ -551,7 +551,7 @@ describe Cursor do
 	end
 
 	describe '#hash' do
-		let (:func) { find_first(cursor, :cursor_function) }
+		let (:func) { find_by_kind(cursor, :cursor_function) }
 
 		it "computes hash for the cursor" do
 			expect(func.hash).to be_kind_of(Integer)
@@ -559,7 +559,7 @@ describe Cursor do
 	end
 
 	describe '#availability' do
-		let (:func) { find_first(cursor, :cursor_function) }
+		let (:func) { find_by_kind(cursor, :cursor_function) }
 
 		it "returns :available for the cursor availability" do
 			expect(func.availability).to equal(:available)
@@ -567,7 +567,7 @@ describe Cursor do
 	end
 
 	describe '#type' do
-		let (:field) { find_first(cursor, :cursor_field_decl) }
+		let (:field) { find_by_kind(cursor, :cursor_field_decl) }
 
 		it "returns type for the cursor" do
 			expect(field.type).to be_kind_of(Type)
@@ -576,7 +576,7 @@ describe Cursor do
 	end
 
 	describe '#underlying_type' do
-		let (:typedef) { find_first(cursor_cxx, :cursor_typedef_decl) }
+		let (:typedef) { find_by_kind(cursor_cxx, :cursor_typedef_decl) }
 
 		it "returns type that the cursor type is underlying" do
 			expect(typedef.underlying_type).to be_kind_of(Type)
@@ -728,7 +728,7 @@ describe Cursor do
 	end
 
 	describe '#included_file' do
-		let (:inclusion) { find_first(cursor_pp, :cursor_inclusion_directive) }
+		let (:inclusion) { find_by_kind(cursor_pp, :cursor_inclusion_directive) }
 
 		it 'returns the file that is included by the given inclusion directive cursor' do
 			expect(inclusion.included_file).to be_kind_of(FFI::Clang::File)
@@ -737,7 +737,7 @@ describe Cursor do
 	end
 
 	describe '#references' do
-		let (:struct_cursor) { find_first(cursor_canon, :cursor_struct) }
+		let (:struct_cursor) { find_by_kind(cursor_canon, :cursor_struct) }
 		let (:unspecified_references) { struct_cursor.references }
 		let (:specified_references) { struct_cursor.references(fixture_path("canonical.c")) }
 

@@ -8,7 +8,7 @@
 
 describe Comment do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("docs.cc")).cursor }
-	let (:comment) { find_first(cursor, :cursor_function).comment }
+	let (:comment) { find_by_kind(cursor, :cursor_function).comment }
 
 	it "can be obtained from a cursor" do
 		expect(comment).to be_kind_of(Comment)

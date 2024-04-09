@@ -19,20 +19,17 @@ module ClangSpecHelper
 		File.join File.expand_path("ffi/clang/fixtures", __dir__), path
 	end
 
-	def find_all(cursor, kind)
-		cursor.find_all(kind)
+	def find_all_by_kind(cursor, kind)
+		cursor.find_by_kind(true, kind)
 	end
 
-	def find_first(cursor, kind)
-		cursor.find_first(kind)
-	end
-
-	def find_all_matching(cursor, &term)
-		cursor.filter(&term)
+	def find_by_kind(cursor, kind)
+		cursor.find_by_kind(true, kind).first
 	end
 
 	def find_matching(cursor, &term)
-		cursor.filter(&term).first
+		child, parent = cursor.find(&term)
+		child
 	end
 end
 

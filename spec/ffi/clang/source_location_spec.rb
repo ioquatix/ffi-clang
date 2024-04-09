@@ -11,7 +11,7 @@ describe SourceLocation do
 	let(:translation_unit_location) { translation_unit.cursor.location }
 	let(:diagnostic_location) { translation_unit.diagnostics.first.location }
 	let(:loc1_translation_unit) { Index.new.parse_translation_unit(fixture_path("location1.c")) }
-	let(:loc1_cursor) { find_first(loc1_translation_unit.cursor, :cursor_function) }
+	let(:loc1_cursor) { find_by_kind(loc1_translation_unit.cursor, :cursor_function) }
 	let(:docs_cursor) { Index.new.parse_translation_unit(fixture_path("docs.c")).cursor }
 
 	it "should have a nil File if the SourceLocation is for a Translation Unit" do
