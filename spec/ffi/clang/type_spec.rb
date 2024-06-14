@@ -6,7 +6,7 @@
 # Copyright, 2013, by Takeshi Watanabe.
 # Copyright, 2014, by Masahiro Sano.
 
-describe Type do
+describe FFI::Clang::Types::Type do
 	let(:cursor) { Index.new.parse_translation_unit(fixture_path("a.c")).cursor }
 	let(:cursor_cxx) { Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor }
 	let(:cursor_list) { Index.new.parse_translation_unit(fixture_path("list.c")).cursor }
@@ -15,7 +15,7 @@ describe Type do
 	it "can tell us about the main function" do
 		expect(type.variadic?).to equal(false)
 
-		expect(type.num_arg_types).to equal(2)
+		expect(type.args_size).to equal(2)
 		expect(type.arg_type(0).spelling).to eq("int")
 		expect(type.arg_type(1).spelling).to eq("const char *")
 		expect(type.result_type.spelling).to eq("int")
@@ -36,7 +36,7 @@ describe Type do
       }.type.canonical }
 
     it 'extracts typedef' do
-      expect(canonical_type).to be_kind_of(Type)
+      expect(canonical_type).to be_kind_of(Types::Pointer)
       expect(canonical_type.kind).to be(:type_pointer)
       expect(canonical_type.spelling).to eq('const int *')
     end
@@ -48,7 +48,7 @@ describe Type do
       }.type.canonical.pointee }
 
     it 'gets pointee type of pointer, C++ reference' do
-      expect(pointee_type).to be_kind_of(Type)
+      expect(pointee_type).to be_kind_of(Types::Type)
       expect(pointee_type.kind).to be(:type_int)
       expect(pointee_type.spelling).to eq('const int')
     end
@@ -98,7 +98,7 @@ describe Type do
       }.type }
 
     it 'returns the element type of the array type' do
-      expect(array_type.element_type).to be_kind_of(Type)
+      expect(array_type.element_type).to be_kind_of(Types::Type)
       expect(array_type.element_type.kind).to eq(:type_int)
     end
   end
@@ -109,7 +109,7 @@ describe Type do
       }.type }
 
     it 'returns the number of elements of the array' do
-      expect(array_type.num_elements).to eq(8)
+      expect(array_type.size).to eq(8)
     end
   end
 
@@ -119,8 +119,8 @@ describe Type do
       }.type }
 
     it 'returns the array element type of the array type' do
-      expect(array_type.array_element_type).to be_kind_of(Type)
-      expect(array_type.array_element_type.kind).to eq(:type_int)
+      expect(array_type.element_type).to be_kind_of(Types::Type)
+      expect(array_type.element_type.kind).to eq(:type_int)
     end
   end
 
@@ -130,7 +130,7 @@ describe Type do
       }.type }
 
     it 'returns the number of elements of the array' do
-      expect(array_type.array_size).to eq(8)
+      expect(array_type.size).to eq(8)
     end
   end
 
@@ -207,7 +207,7 @@ describe Type do
       }.type }
 
     it 'returns the class type of the member pointer type' do
-      expect(member_pointer.class_type).to be_kind_of(Type)
+      expect(member_pointer.class_type).to be_kind_of(Types::Record)
       expect(member_pointer.class_type.kind).to be(:type_record)
       expect(member_pointer.class_type.spelling).to eq('A')
     end
