@@ -570,7 +570,7 @@ describe Cursor do
 		let (:field) { find_by_kind(cursor, :cursor_field_decl) }
 
 		it "returns type for the cursor" do
-			expect(field.type).to be_kind_of(Type)
+			expect(field.type).to be_kind_of(Types::Type)
 			expect(field.type.kind).to equal(:type_int)
 		end
 	end
@@ -579,7 +579,7 @@ describe Cursor do
 		let (:typedef) { find_by_kind(cursor_cxx, :cursor_typedef_decl) }
 
 		it "returns type that the cursor type is underlying" do
-			expect(typedef.underlying_type).to be_kind_of(Type)
+			expect(typedef.underlying_type).to be_kind_of(Types::Pointer)
 			expect(typedef.underlying_type.kind).to equal(:type_pointer)
 		end
 	end
@@ -620,7 +620,7 @@ describe Cursor do
 				child.kind == :cursor_enum_decl and child.spelling == 'normal_enum' } }
 
 		it "returns the integer type of the enum declaration" do
-			expect(enum.enum_type).to be_kind_of(Type)
+			expect(enum.enum_type).to be_kind_of(Types::Type)
 			expect(enum.enum_type.kind).to be(:type_uint)
 		end
 	end
@@ -703,7 +703,7 @@ describe Cursor do
 				child.kind == :cursor_function and child.spelling == 'f_non_variadic' } }
 
 		it "result the result type of the function" do
-			expect(func.result_type).to be_kind_of(Type)
+			expect(func.result_type).to be_kind_of(Types::Type)
 			expect(func.result_type.kind).to be(:type_void)
 		end
 	end

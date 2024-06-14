@@ -20,7 +20,6 @@ require_relative 'printing_policy'
 require_relative 'source_location'
 require_relative 'source_range'
 require_relative 'comment'
-require_relative 'type'
 
 module FFI
 	module Clang
@@ -173,15 +172,15 @@ module FFI
 			end
 
 			def type
-				Type.new Lib.get_cursor_type(@cursor), @translation_unit
+				Types::Type.create Lib.get_cursor_type(@cursor), @translation_unit
 			end
 
 			def result_type
-				Type.new Lib.get_cursor_result_type(@cursor), @translation_unit
+				Types::Type.create Lib.get_cursor_result_type(@cursor), @translation_unit
 			end
 
 			def underlying_type
-				Type.new Lib.get_typedef_decl_underlying_type(@cursor), @translation_unit
+				Types::Type.create Lib.get_typedef_decl_underlying_type(@cursor), @translation_unit
 			end
 
 			def virtual_base?
@@ -221,7 +220,7 @@ module FFI
 			end
 
 			def enum_type
-				Type.new Lib.get_enum_decl_integer_type(@cursor), @translation_unit
+				Types::Type.create Lib.get_enum_decl_integer_type(@cursor), @translation_unit
 			end
 
 			def specialized_template
@@ -299,7 +298,24 @@ module FFI
 				Lib.visit_children(@cursor, adapter, nil)
 			end
 
+      def ancestors_by_kind(*kinds)
+        result = Array.new
+
+        parent = self
+        while parent != self.semantic_parent
+          parent = self.semantic_parent
+          if kinds.include?(parent.kind)
+            result << parent
+          end
+        end
+        result
+      end
+
 			def find_by_kind(recurse, *kinds)
+        unless (recurse == nil || recurse == true || recurse == false)
+          raise("Recurse parameter must be nil or a boolean value. Value was: #{recurse}")
+        end
+
 				result = Array.new
 				self.each(recurse) do |child, parent|
 					if kinds.include?(child.kind)
