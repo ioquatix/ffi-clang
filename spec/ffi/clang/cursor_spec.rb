@@ -673,6 +673,21 @@ describe Cursor do
 		end
 	end
 
+	describe '#qualified_name' do
+		let(:qualified) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_struct and child.spelling == 'B' } }
+		let(:base_class)  { find_matching(qualified) { |child, parent|
+			child.kind == :cursor_cxx_base_specifier } }
+
+		it "returns a qualified name for struct" do
+			expect(qualified.qualified_name).to eq("B")
+		end
+
+		it "throws error for base class qualified name" do
+			expect{base_class.qualified_name}.to raise_error(ArgumentError)
+		end
+	end
+
 	describe '#objc_type_encoding' do
 		#TODO
 	end
