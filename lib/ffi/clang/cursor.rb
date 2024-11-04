@@ -146,6 +146,9 @@ module FFI
 
 			def qualified_name
 				if self.kind != :cursor_translation_unit
+					if self.semantic_parent.kind == :cursor_invalid_file
+						raise(ArgumentError, "Invalid semantic parent: #{self}")
+					end
 					result = self.semantic_parent.qualified_name
 					result ? "#{result}::#{self.spelling}" : self.spelling
 				end
