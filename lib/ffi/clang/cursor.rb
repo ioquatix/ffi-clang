@@ -301,6 +301,10 @@ module FFI
 				Lib.visit_children(@cursor, adapter, nil)
 			end
 
+			def visit_children(&block)
+				each(false, &block)
+			end
+
       def ancestors_by_kind(*kinds)
         result = Array.new
 
