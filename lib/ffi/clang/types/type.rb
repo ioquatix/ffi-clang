@@ -14,7 +14,7 @@ module FFI
 			class Type
 				attr_reader :type, :translation_unit
 
-				# Just hard code the types - they don't likely to change
+				# Just hard code the types - they are not likely to change
 				def self.create(cxtype, translation_unit)
 					case cxtype[:kind]
 						when :type_pointer, :type_block_pointer, :type_obj_c_object_pointer, :type_member_pointer
@@ -83,6 +83,10 @@ module FFI
 
 				def declaration
 					Cursor.new Lib.get_type_declaration(@type), @translation_unit
+				end
+
+				def non_reference_type
+					Type.create Lib.get_non_reference_type(@type),@translation_unit
 				end
 
 				def ==(other)

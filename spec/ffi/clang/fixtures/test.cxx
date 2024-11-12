@@ -1,5 +1,6 @@
 struct A {
   virtual int func_a() = 0;
+  void takesARef(int& lValue, float&& rValue);
   int int_member_a;
 };
 

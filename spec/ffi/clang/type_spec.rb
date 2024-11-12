@@ -54,6 +54,26 @@ describe FFI::Clang::Types::Type do
     end
   end
 
+	describe '#function_type' do
+		let(:reference_type) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_cxx_method and child.spelling == 'takesARef'
+		}.type }
+
+		it 'iterates arg_types' do
+			expect(reference_type).to be_kind_of(Types::Function)
+			expect(reference_type.arg_types.to_a).to be_kind_of(Array)
+			expect(reference_type.arg_types.to_a.size).to eq(2)
+		end
+
+		it 'supports non-reference arg_types' do
+			args_types = reference_type.arg_types.to_a
+			expect(args_types[0].kind).to eq(:type_lvalue_ref)
+			expect(args_types[0].non_reference_type.kind).to eq(:type_int)
+			expect(args_types[1].kind).to eq(:type_rvalue_ref)
+			expect(args_types[1].non_reference_type.kind).to eq(:type_float)
+		end
+	end
+
   describe '#const_qualified?' do
     let(:pointer_type) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_typedef_decl and child.spelling == 'const_int_ptr'
