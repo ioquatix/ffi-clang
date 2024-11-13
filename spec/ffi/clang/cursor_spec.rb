@@ -149,6 +149,17 @@ describe Cursor do
 		end
 		expect(counter).not_to equal(0)
 	end
+	
+	describe "#visit_children" do
+		it "allows us to visit its children" do
+			counter = 0
+			cursor.visit_children do |cursor, parent|
+				counter += 1
+			end
+			
+			expect(counter).not_to equal(0)
+		end
+	end
 
 	describe "Null Cursor" do
 		it "can be a null cursor" do
