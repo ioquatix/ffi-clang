@@ -344,6 +344,10 @@ module FFI
 				Lib.get_cursor_linkage(@cursor)
 			end
 
+			def exception_specification
+				Lib.get_cursor_exception_specification_type(@cursor)
+			end
+
 			def availability
 				Lib.get_cursor_availability(@cursor)
 			end

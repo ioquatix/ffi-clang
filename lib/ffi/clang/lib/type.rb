@@ -169,6 +169,20 @@ module FFI
 				:layout_error_undeduced, -6
 			]
 
+			# Also defined in cursor.rb
+			enum :exception_specification_type, [
+				:none,
+				:dynamic_none,
+				:dynamic,
+				:ms_any,
+				:basic_noexcept,
+				:computed_noexcept,
+				:unevaluated,
+				:uninstantiated,
+				:unparsed,
+				:no_throw
+			]
+
 			class CXType < FFI::Struct
 				layout(
 					:kind, :kind,
@@ -206,6 +220,7 @@ module FFI
 			attach_function :type_get_cxx_ref_qualifier, :clang_Type_getCXXRefQualifier, [CXType.by_value], :ref_qualifier_kind
 
 			attach_function :get_fuction_type_calling_conv, :clang_getFunctionTypeCallingConv, [CXType.by_value], :calling_conv
+			attach_function :get_exception_specification_type, :clang_getExceptionSpecificationType, [CXType.by_value], :exception_specification_type
 
 			attach_function :equal_types, :clang_equalTypes, [CXType.by_value, CXType.by_value], :uint
 		end

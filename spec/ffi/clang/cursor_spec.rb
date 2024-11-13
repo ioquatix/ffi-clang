@@ -491,6 +491,48 @@ describe Cursor do
 		end
 	end
 
+	describe '#exception_specification' do
+		let(:exception_yes_1) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_cxx_method and child.spelling == 'exceptionYes1'
+		} }
+
+		it 'can create exceptions 1' do
+			expect(exception_yes_1.exception_specification).to be(:none)
+		end
+
+		let(:exception_yes_2) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_cxx_method and child.spelling == 'exceptionYes2'
+		} }
+
+		it 'can create exceptions 2' do
+			expect(exception_yes_2.exception_specification).to be(:computed_noexcept)
+		end
+
+		let(:exception_no_1) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_cxx_method and child.spelling == 'exceptionNo1'
+		} }
+
+		it 'cannot create exceptions 1' do
+			expect(exception_no_1.exception_specification).to be(:basic_noexcept)
+		end
+
+		let(:exception_no_2) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_cxx_method and child.spelling == 'exceptionNo2'
+		} }
+
+		it 'cannot create exceptions 2' do
+			expect(exception_no_2.exception_specification).to be(:computed_noexcept)
+		end
+
+		let(:exception_throw) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_cxx_method and child.spelling == 'exceptionThrow'
+		} }
+
+		it 'can create throw exceptions' do
+			expect(exception_throw.exception_specification).to be(:dynamic_none)
+		end
+	end
+
 	describe '#semantic_parent' do
 		let(:parent) { find_matching(cursor_cxx) { |child, parent|
 				child.kind == :cursor_cxx_method and child.spelling == 'func_d' and parent.spelling != 'D' } }

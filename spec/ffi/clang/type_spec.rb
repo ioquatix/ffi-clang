@@ -264,6 +264,48 @@ describe FFI::Clang::Types::Type do
     end
   end
 
+  describe '#exception_specification' do
+    let(:exception_yes_1) { find_matching(cursor_cxx) { |child, parent|
+      child.kind == :cursor_cxx_method and child.spelling == 'exceptionYes1'
+    }.type }
+
+    it 'can create exceptions 1' do
+      expect(exception_yes_1.exception_specification).to be(:none)
+    end
+
+    let(:exception_yes_2) { find_matching(cursor_cxx) { |child, parent|
+      child.kind == :cursor_cxx_method and child.spelling == 'exceptionYes2'
+    }.type }
+
+    it 'can create exceptions 2' do
+      expect(exception_yes_2.exception_specification).to be(:computed_noexcept)
+    end
+
+    let(:exception_no_1) { find_matching(cursor_cxx) { |child, parent|
+      child.kind == :cursor_cxx_method and child.spelling == 'exceptionNo1'
+    }.type }
+
+    it 'cannot create exceptions 1' do
+      expect(exception_no_1.exception_specification).to be(:basic_noexcept)
+    end
+
+    let(:exception_no_2) { find_matching(cursor_cxx) { |child, parent|
+      child.kind == :cursor_cxx_method and child.spelling == 'exceptionNo2'
+    }.type }
+
+    it 'cannot create exceptions 2' do
+      expect(exception_no_2.exception_specification).to be(:computed_noexcept)
+    end
+
+    let(:exception_throw) { find_matching(cursor_cxx) { |child, parent|
+      child.kind == :cursor_cxx_method and child.spelling == 'exceptionThrow'
+    }.type }
+
+    it 'can create throw exceptions' do
+      expect(exception_throw.exception_specification).to be(:dynamic_none)
+    end
+  end
+
   describe '#==' do
     let(:type_decl) { find_matching(cursor_cxx) { |child, parent|
         child.kind == :cursor_field_decl and child.spelling == 'int_member_a'
