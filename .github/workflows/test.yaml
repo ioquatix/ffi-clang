@@ -26,14 +26,14 @@ jobs:
           - "3.3"
 
         clang:
-          - "15.0"
+          - "17.0"
 
         experimental: [false]
         
         include:
           - os: ubuntu
             ruby: head
-            clang: "15.0"
+            clang: "17.0"
             experimental: true
     
     steps:
