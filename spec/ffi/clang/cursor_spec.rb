@@ -152,6 +152,7 @@ describe Cursor do
 	
 	describe "#visit_children" do
 		it "allows us to visit its children" do
+			counter = 0
 			cursor.visit_children do |cursor, parent|
 				counter += 1
 			end
