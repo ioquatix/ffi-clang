@@ -33,6 +33,10 @@ module FFI
 				def calling_conv
 					Lib.get_fuction_type_calling_conv(@type)
 				end
+
+				def exception_specification
+					Lib.get_exception_specification_type(@type)
+				end
 			end
 		end
 	end

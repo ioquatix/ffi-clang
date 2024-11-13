@@ -1,6 +1,11 @@
 struct A {
   virtual int func_a() = 0;
   void takesARef(int& lValue, float&& rValue);
+  void exceptionYes1();
+  void exceptionNo1() noexcept;
+  void exceptionYes2() noexcept(false);
+  void exceptionNo2() noexcept(true);
+  void exceptionThrow() throw;
   int int_member_a;
 };
 

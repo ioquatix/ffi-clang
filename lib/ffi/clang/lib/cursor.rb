@@ -319,6 +319,19 @@ module FFI
 				:external, 4,
 			]
 
+			enum :exception_specification_type, [
+				:none,
+				:dynamic_none,
+				:dynamic,
+				:ms_any,
+				:basic_noexcept,
+				:computed_noexcept,
+				:unevaluated,
+				:uninstantiated,
+				:unparsed,
+				:no_throw
+			]
+
 			class CXCursor < FFI::Struct
 				layout(
 					:kind, :cursor_kind,
@@ -454,6 +467,7 @@ module FFI
 
 			attach_function :get_cursor_availability, :clang_getCursorAvailability, [CXCursor.by_value], :availability
 			attach_function :get_cursor_linkage, :clang_getCursorLinkage, [CXCursor.by_value], :linkage_kind
+			attach_function :get_cursor_exception_specification_type, :clang_getCursorExceptionSpecificationType, [CXCursor.by_value], :exception_specification_type
 			attach_function :get_included_file, :clang_getIncludedFile, [CXCursor.by_value], :CXFile
 			attach_function :get_cursor_hash, :clang_hashCursor, [CXCursor.by_value], :uint
 
