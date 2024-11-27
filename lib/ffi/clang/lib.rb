@@ -27,26 +27,10 @@ module FFI
 			
 			# If we aren't building for a specific version (e.g. travis) try to find llvm-config
 			unless ENV['LLVM_VERSION'] 
-				 llvm_config ||= MakeMakefile.find_executable0("llvm-config")
+				llvm_config ||= MakeMakefile.find_executable("llvm-config")
 			end
 
 			libs = []
-			begin
-				xcode_dir = `xcode-select -p`.chomp
-				%W[
-					#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib
-					#{xcode_dir}/usr/lib/libclang.dylib
-				].each do |f|
-					if File.exist? f
-						libs << f
-						break
-					end
-				end
-			rescue Errno::ENOENT
-				# Ignore
-			end
-
-			libs << "clang"
 
 			if ENV['LIBCLANG']
 				libs << ENV['LIBCLANG']
@@ -64,6 +48,23 @@ module FFI
 					libs << llvm_library_dir + '/libclang.so'
 				end
 			end
+
+			begin
+				xcode_dir = `xcode-select -p`.chomp
+				%W[
+					#{xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib
+					#{xcode_dir}/usr/lib/libclang.dylib
+				].each do |f|
+					if File.exist? f
+						libs << f
+						break
+					end
+				end
+			rescue Errno::ENOENT
+				# Ignore
+			end
+
+			libs << "clang"
 
 			ffi_lib libs
 
