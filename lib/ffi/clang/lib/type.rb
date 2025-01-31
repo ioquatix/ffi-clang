@@ -192,6 +192,7 @@ module FFI
 
 			attach_function :get_type_kind_spelling, :clang_getTypeKindSpelling, [:kind], CXString.by_value
 			attach_function :get_type_spelling, :clang_getTypeSpelling, [CXType.by_value], CXString.by_value
+			attach_function :get_named_type, :clang_Type_getNamedType, [CXType.by_value], CXType.by_value
 
 			attach_function :is_function_type_variadic, :clang_isFunctionTypeVariadic, [CXType.by_value], :uint
 			attach_function :is_pod_type, :clang_isPODType, [CXType.by_value], :uint
