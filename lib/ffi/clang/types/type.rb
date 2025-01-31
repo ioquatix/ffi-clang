@@ -53,6 +53,10 @@ module FFI
 					Lib.extract_string Lib.get_type_spelling(@type)
 				end
 
+				def canonical
+					Type.create Lib.get_canonical_type(@type), @translation_unit
+				end
+
 				def pod?
 					Lib.is_pod_type(@type) != 0
 				end
