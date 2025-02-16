@@ -37,6 +37,8 @@ Due to issues figuring out which library to use, we require you to manually spec
 
     LLVM_CONFIG=llvm-config-mp-3.4 rake
 
+## Releases
+
 ## Contributing
 
 We welcome contributions to this project.

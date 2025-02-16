@@ -14,10 +14,15 @@ gem "rake"
 group :maintenance, optional: true do
 	gem "bake-gem"
 	gem "bake-modernize"
+	gem "bake-releases"
+	
+	gem "utopia-project"
 end
 
 group :test do
-	gem "bake-test"
 	gem "rspec", ">= 3.4.0"
 	gem 'simplecov'
+	gem "decode"
+	
+	gem "bake-test"
 end
