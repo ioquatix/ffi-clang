@@ -45,9 +45,10 @@ jobs:
         bundler-cache: true
     
     - name: Install LLVM and Clang
-      uses: KyleMayes/install-llvm-action@v2
-      with:
-        version: ${{matrix.clang}}
+      run: sudo apt-get install -y llvm llvm-dev clang libclang1 libclang-dev
+    #   uses: KyleMayes/install-llvm-action@v2
+    #   with:
+    #     version: ${{matrix.clang}}
     
     - name: Run tests
       timeout-minutes: 10
