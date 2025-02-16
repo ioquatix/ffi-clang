@@ -8,29 +8,6 @@
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2014, by Masahiro Sano.
 
-require 'ffi'
-require 'rbconfig'
-
-module FFI::Clang
-	class Error < StandardError
-	end
-
-	def self.platform
-		os = RbConfig::CONFIG["host_os"]
-
-		case os
-		when /darwin/
-			:darwin
-		when /linux/
-			:linux
-		when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-			:windows
-		else
-			os
-		end
-	end
-end
-
 # Load the shared object:
 require_relative 'clang/lib'
 
@@ -55,3 +32,10 @@ require_relative 'clang/types/pointer'
 require_relative 'clang/types/record'
 require_relative 'clang/types/type_def'
 require_relative 'clang/types/vector'
+
+# @namespace
+module FFI
+	# @namespace
+	module Clang
+	end
+end

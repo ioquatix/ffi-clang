@@ -15,7 +15,11 @@
 # Copyright, 2020, by Zete Lui.
 # Copyright, 2023, by Charlie Savage.
 
-require 'mkmf'
+require "ffi"
+require "mkmf"
+
+require_relative "platform"
+require_relative "error"
 
 module FFI
 	module Clang
