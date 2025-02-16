@@ -11,6 +11,7 @@
 # Copyright, 2023, by Charlie Savage.
 
 require_relative 'lib/index'
+require_relative "error"
 
 module FFI
 	module Clang

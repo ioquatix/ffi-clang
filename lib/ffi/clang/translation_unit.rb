@@ -15,6 +15,7 @@ require_relative 'lib/inclusions'
 require_relative 'cursor'
 require_relative 'file'
 require_relative 'token'
+require_relative 'error'
 
 module FFI
 	module Clang
