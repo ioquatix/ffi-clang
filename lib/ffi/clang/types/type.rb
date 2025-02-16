@@ -90,7 +90,15 @@ module FFI
 				end
 
 				def non_reference_type
-					Type.create Lib.get_non_reference_type(@type),@translation_unit
+					Type.create Lib.get_non_reference_type(@type), @translation_unit
+				end
+
+				def template_argument_type(index)
+					Type.create Lib.get_template_argument_as_type(@type, index), @translation_unit
+				end
+
+				def num_template_arguments
+					Lib.get_num_template_arguments(@type)
 				end
 
 				def ==(other)
