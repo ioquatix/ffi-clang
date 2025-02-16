@@ -2,8 +2,8 @@ module FFI
 	module Clang
 		module Types
 			class Elaborated < Type
-				def canonical
-					Type.create Lib.get_canonical_type(@type), @translation_unit
+				def named_type
+					Type.create Lib.get_named_type(@type), @translation_unit
 				end
 
 				# Example anonymous union where `u` is an elaborated type
