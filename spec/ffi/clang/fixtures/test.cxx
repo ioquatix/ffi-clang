@@ -66,3 +66,11 @@ template <typename T> T use_func_overloaded() { return func_overloaded<T>(); };
 int use_overloaded_int_a = func_overloaded<int>();
 
 void availability_func(void) __attribute__((availability(macosx,introduced=10.4.1,deprecated=10.6,obsoleted=10.7)));
+
+namespace Outer
+{
+	namespace Inner
+	{
+		struct Nested();
+	}
+}

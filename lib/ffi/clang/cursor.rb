@@ -149,8 +149,8 @@ module FFI
 					if self.semantic_parent.kind == :cursor_invalid_file
 						raise(ArgumentError, "Invalid semantic parent: #{self}")
 					end
-					result = self.semantic_parent.qualified_name
-					result ? "#{result}::#{self.display_name}" : self.spelling
+					result = self.semantic_parent.qualified_display_name
+					result ? "#{result}::#{self.display_name}" : self.display_name
 				end
 			end
 
