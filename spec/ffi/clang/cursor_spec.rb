@@ -741,6 +741,15 @@ describe Cursor do
 		end
 	end
 
+	describe '#qualified_display_name' do
+		let(:qualified) { find_matching(cursor_cxx) { |child, parent|
+			child.kind == :cursor_struct and child.spelling == 'Nested' } }
+
+		it "returns a qualified display name for struct" do
+			expect(qualified.qualified_display_name).to eq("Outer::Inner::Nested")
+		end
+	end
+
 	describe '#objc_type_encoding' do
 		#TODO
 	end
