@@ -144,6 +144,16 @@ module FFI
 				Lib.extract_string Lib.get_cursor_display_name(@cursor)
 			end
 
+			def qualified_display_name
+				if self.kind != :cursor_translation_unit
+					if self.semantic_parent.kind == :cursor_invalid_file
+						raise(ArgumentError, "Invalid semantic parent: #{self}")
+					end
+					result = self.semantic_parent.qualified_name
+					result ? "#{result}::#{self.display_name}" : self.spelling
+				end
+			end
+
 			def qualified_name
 				if self.kind != :cursor_translation_unit
 					if self.semantic_parent.kind == :cursor_invalid_file
