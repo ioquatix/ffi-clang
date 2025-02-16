@@ -10,7 +10,7 @@ env:
 
 jobs:
   test:
-    name: ${{matrix.ruby}} on ${{matrix.os}} clang ${{matrix.clang}}
+    name: ${{matrix.ruby}} on ${{matrix.os}}
     runs-on: ${{matrix.os}}-latest
     continue-on-error: ${{matrix.experimental}}
     
@@ -18,24 +18,15 @@ jobs:
       matrix:
         os:
           - ubuntu
-          # - macos
         
         ruby:
           - "3.1"
           - "3.2"
           - "3.3"
           - "3.4"
-
-        clang:
-          - "18.0"
-
-        experimental: [false]
+          - "head"
         
-        include:
-          - os: ubuntu
-            ruby: head
-            clang: "18.0"
-            experimental: true
+        experimental: [false]
     
     steps:
     - uses: actions/checkout@v4
@@ -46,9 +37,6 @@ jobs:
     
     - name: Install LLVM and Clang
       run: sudo apt-get install -y llvm llvm-dev clang libclang1 libclang-dev
-    #   uses: KyleMayes/install-llvm-action@v2
-    #   with:
-    #     version: ${{matrix.clang}}
     
     - name: Run tests
       timeout-minutes: 10
