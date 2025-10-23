@@ -3,12 +3,12 @@
 # Released under the MIT License.
 # Copyright, 2010, by Jari Bakken.
 # Copyright, 2012, by Hal Brodigan.
-# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2014, by Masahiro Sano.
 
-require_relative 'string'
-require_relative 'translation_unit'
+require_relative "string"
+require_relative "translation_unit"
 
 module FFI
 	module Clang
@@ -22,7 +22,7 @@ module FFI
 					:length, :ulong
 				)
 			end
-
+			
 			# FFI struct representing a unique file identifier.
 			# @private
 			class CXFileUniqueID < FFI::Struct
@@ -32,9 +32,9 @@ module FFI
 					:modification, :ulong_long
 				)
 			end
-
+			
 			typedef :pointer, :CXFile
-
+			
 			attach_function :get_file, :clang_getFile, [:CXTranslationUnit, :string], :CXFile
 			attach_function :get_file_name, :clang_getFileName, [:CXFile], CXString.by_value
 			attach_function :get_file_time, :clang_getFileTime, [:CXFile], :time_t

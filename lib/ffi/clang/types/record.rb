@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2024, by Charlie Savage.
+# Copyright, 2025, by Samuel Williams.
+
 module FFI
 	module Clang
 		module Types
@@ -9,24 +15,24 @@ module FFI
 				def offsetof(field)
 					Lib.type_get_offset_of(@type, field)
 				end
-
+				
 				# Check if this is an anonymous record.
 				# @returns [Boolean] True if this record is unnamed/anonymous.
 				def anonymous?
 					self.spelling.match(/unnamed/)
 				end
-
+				
 				# Get the kind of record (struct or union).
 				# @returns [Symbol] Either :struct or :union.
 				# @raises [RuntimeError] If the record type cannot be determined.
 				def record_type
 					case self.spelling
-						when /struct/
-							:struct
-						when /union/
-							:union
-						else
-							raise("Unknown record type: #{self.spelling}")
+					when /struct/
+						:struct
+					when /union/
+						:union
+					else
+						raise("Unknown record type: #{self.spelling}")
 					end
 				end
 			end

@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2024, by Charlie Savage.
+# Copyright, 2025, by Samuel Williams.
+
 module FFI
 	module Clang
 		module Types
@@ -9,13 +15,13 @@ module FFI
 				def pointee
 					Type.create Lib.get_pointee_type(@type), @translation_unit
 				end
-
+				
 				# Check if this is a function pointer.
 				# @returns [Boolean] True if this pointer points to a function.
 				def function?
 					self.pointee.is_a?(Types::Function)
 				end
-
+				
 				# Get the class type for member pointers.
 				# @returns [Type, nil] The class type if this is a member pointer, nil otherwise.
 				def class_type
@@ -25,18 +31,18 @@ module FFI
 						nil
 					end
 				end
-
+				
 				# Check if this pointer references a forward declaration.
 				# @returns [Boolean] True if this pointer points to a forward-declared type.
 				def forward_declaration?
 					# Is this a pointer to a record (struct or union) that referenced
 					# a forward declaration at the point of its inclusion in the translation unit?
 					if !self.function? && self.pointee.is_a?(Types::Elaborated) &&
-						 self.pointee.canonical.is_a?(Types::Record)
-
+							self.pointee.canonical.is_a?(Types::Record)
+						
 						# Get the universal symbol reference
 						usr = self.pointee.canonical.declaration.usr
-
+						
 						# Now does that same usr occur earlier in the file?
 						first_declaration, _ = self.translation_unit.cursor.find do |child, parent|
 							child.usr == usr

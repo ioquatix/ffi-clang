@@ -3,19 +3,19 @@
 # Released under the MIT License.
 # Copyright, 2010, by Jari Bakken.
 # Copyright, 2012, by Hal Brodigan.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2024, by Charlie Savage.
 
 module FFI
 	module Clang
 		module Lib
 			typedef :pointer, :CXIndex
-
+			
 			# Source code index:
 			attach_function :create_index, :clang_createIndex, [:int, :int], :CXIndex
 			attach_function :dispose_index, :clang_disposeIndex, [:CXIndex], :void
-
-			if Clang.clang_version >= Gem::Version.new('17.0.0')
+			
+			if Clang.clang_version >= Gem::Version.new("17.0.0")
 				# FFI struct for index creation options (libclang 17.0.0+).
 				# @private
 				class CXIndexOptions < FFI::Struct
@@ -31,7 +31,7 @@ module FFI
 						:invocation_emission_path, :string
 					)
 				end
-
+				
 				attach_function :create_index_with_options, :clang_createIndexWithOptions, [CXIndexOptions.by_ref], :CXIndex
 			end
 		end

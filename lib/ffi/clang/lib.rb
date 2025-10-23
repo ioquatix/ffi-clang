@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2010-2012, by Jari Bakken.
 # Copyright, 2012, by Hal Brodigan.
-# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2013-2014, by Carlos Martín Nieto.
 # Copyright, 2013, by Takeshi Watanabe.
 # Copyright, 2014, by Masahiro Sano.
@@ -14,6 +14,7 @@
 # Copyright, 2019, by Dominic Sisnero.
 # Copyright, 2020, by Zete Lui.
 # Copyright, 2023, by Charlie Savage.
+# Copyright, 2024, by msepga.
 
 require "ffi"
 require "mkmf"
@@ -28,32 +29,32 @@ module FFI
 			extend FFI::Library
 			
 			# Use LLVM_CONFIG if it was explicitly specified:
-			llvm_config = ENV['LLVM_CONFIG']
+			llvm_config = ENV["LLVM_CONFIG"]
 			
 			# If we aren't building for a specific version (e.g. travis) try to find llvm-config
-			unless ENV['LLVM_VERSION'] 
+			unless ENV["LLVM_VERSION"] 
 				llvm_config ||= MakeMakefile.find_executable("llvm-config")
 			end
-
+			
 			libs = []
-
-			if ENV['LIBCLANG']
-				libs << ENV['LIBCLANG']
+			
+			if ENV["LIBCLANG"]
+				libs << ENV["LIBCLANG"]
 			elsif llvm_config
 				llvm_library_dir = `#{llvm_config} --libdir`.chomp
 				platform = FFI::Clang.platform
 				
 				case platform
 				when :darwin
-					libs << llvm_library_dir + '/libclang.dylib'
+					libs << llvm_library_dir + "/libclang.dylib"
 				when :windows
 					llvm_bin_dir = `#{llvm_config} --bindir`.chomp
-					libs << llvm_bin_dir + '/libclang.dll'
+					libs << llvm_bin_dir + "/libclang.dll"
 				else
-					libs << llvm_library_dir + '/libclang.so'
+					libs << llvm_library_dir + "/libclang.so"
 				end
 			end
-
+			
 			begin
 				xcode_dir = `xcode-select -p`.chomp
 				%W[
@@ -68,11 +69,11 @@ module FFI
 			rescue Errno::ENOENT
 				# Ignore
 			end
-
+			
 			libs << "clang"
-
+			
 			ffi_lib libs
-
+			
 			# Convert an options hash to a bitmask for libclang enums.
 			# @parameter enum [FFI::Enum] The enum type.
 			# @parameter opts [Array(Symbol)] The array of option symbols.
@@ -80,18 +81,18 @@ module FFI
 			# @raises [Error] If an unknown option is provided.
 			def self.bitmask_from(enum, opts)
 				bitmask = 0
-
+				
 				opts.each do |symbol|
 					if int = enum[symbol]
 						bitmask |= int
 					else
-  						raise Error, "unknown option: #{symbol}, expected one of #{enum.symbols}"
+						raise Error, "unknown option: #{symbol}, expected one of #{enum.symbols}"
 					end
 				end
-
+				
 				bitmask
 			end
-
+			
 			# Convert a bitmask to an array of option symbols.
 			# @parameter enum [FFI::Enum] The enum type.
 			# @parameter bitmask [Integer] The bitmask to convert.

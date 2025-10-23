@@ -2,10 +2,10 @@
 
 # Released under the MIT License.
 # Copyright, 2013, by Garry Marshall.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2014, by Masahiro Sano.
 
-require_relative 'source_location'
+require_relative "source_location"
 
 module FFI
 	module Clang
@@ -19,7 +19,7 @@ module FFI
 					:end_int_data, :uint
 				)
 			end
-
+			
 			attach_function :get_null_range, :clang_getNullRange, [], CXSourceLocation.by_value
 			attach_function :get_range, :clang_getRange, [CXSourceLocation.by_value, CXSourceLocation.by_value], CXSourceRange.by_value
 			attach_function :get_range_start, :clang_getRangeStart, [CXSourceRange.by_value], CXSourceLocation.by_value

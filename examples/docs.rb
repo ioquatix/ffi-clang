@@ -2,17 +2,17 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2016-2022, by Samuel Williams.
+# Copyright, 2016-2025, by Samuel Williams.
 
-require 'rainbow'
-require 'ffi/clang'
+require "rainbow"
+require "ffi/clang"
 
 index = FFI::Clang::Index.new
 
 # clang -Xclang -ast-dump -fsyntax-only ./examples/docs.cpp
 
 def title(declaration)
-	puts ["Symbol:", Rainbow(declaration.spelling).blue.bright, "Type:", Rainbow(declaration.type.spelling).green, declaration.kind.to_s].join(' ')
+	puts ["Symbol:", Rainbow(declaration.spelling).blue.bright, "Type:", Rainbow(declaration.type.spelling).green, declaration.kind.to_s].join(" ")
 end
 
 ARGV.each do |path|

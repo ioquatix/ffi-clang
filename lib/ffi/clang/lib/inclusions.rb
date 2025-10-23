@@ -2,10 +2,10 @@
 
 # Released under the MIT License.
 # Copyright, 2014, by Greg Hazel.
-# Copyright, 2014-2022, by Samuel Williams.
+# Copyright, 2014-2025, by Samuel Williams.
 
-require_relative 'file'
-require_relative 'source_location'
+require_relative "file"
+require_relative "source_location"
 
 module FFI
 	module Clang

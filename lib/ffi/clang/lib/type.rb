@@ -2,11 +2,11 @@
 
 # Released under the MIT License.
 # Copyright, 2013, by Carlos Martín Nieto.
-# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2013, by Takeshi Watanabe.
 # Copyright, 2013-2014, by Masahiro Sano.
 # Copyright, 2014, by Niklas Therning.
-# Copyright, 2024, by Charlie Savage.
+# Copyright, 2024-2025, by Charlie Savage.
 
 module FFI
 	module Clang
@@ -126,7 +126,7 @@ module FFI
 				:type_atomic, 177,
 				:type_btf_tag_attributed, 178
 			]
-
+			
 			enum :calling_conv, [
 				:calling_conv_default, 0,
 				:calling_conv_c, 1,
@@ -153,13 +153,13 @@ module FFI
 				:calling_conv_invalid, 100,
 				:calling_conv_unexposed, 200
 			]
-
+			
 			enum :ref_qualifier_kind, [
 				:ref_qualifier_none, 0,
 				:ref_qualifier_lvalue, 1,
 				:ref_qualifier_rvalue, 2,
 			]
-
+			
 			enum :layout_error, [
 				:layout_error_invalid, -1,
 				:layout_error_incomplete, -2,
@@ -168,7 +168,7 @@ module FFI
 				:layout_error_invalid_field_name, -5,
 				:layout_error_undeduced, -6
 			]
-
+			
 			# Also defined in cursor.rb
 			enum :exception_specification_type, [
 				:none,
@@ -182,7 +182,7 @@ module FFI
 				:unparsed,
 				:no_throw
 			]
-
+			
 			# FFI struct representing a type in libclang.
 			# @private
 			class CXType < FFI::Struct
@@ -191,40 +191,40 @@ module FFI
 					:data, [:pointer, 2]
 				)
 			end
-
+			
 			attach_function :get_type_kind_spelling, :clang_getTypeKindSpelling, [:kind], CXString.by_value
 			attach_function :get_type_spelling, :clang_getTypeSpelling, [CXType.by_value], CXString.by_value
 			attach_function :get_named_type, :clang_Type_getNamedType, [CXType.by_value], CXType.by_value
-
+			
 			attach_function :is_function_type_variadic, :clang_isFunctionTypeVariadic, [CXType.by_value], :uint
 			attach_function :is_pod_type, :clang_isPODType, [CXType.by_value], :uint
-
+			
 			attach_function :get_pointee_type, :clang_getPointeeType, [CXType.by_value], CXType.by_value
 			attach_function :get_result_type, :clang_getResultType, [CXType.by_value], CXType.by_value
 			attach_function :get_canonical_type, :clang_getCanonicalType, [CXType.by_value], CXType.by_value
-
+			
 			attach_function :type_get_class_type, :clang_Type_getClassType, [CXType.by_value], CXType.by_value
-
+			
 			attach_function :is_const_qualified_type, :clang_isConstQualifiedType, [CXType.by_value], :uint
 			attach_function :is_volatile_qualified_type, :clang_isVolatileQualifiedType, [CXType.by_value], :uint
 			attach_function :is_restrict_qualified_type, :clang_isRestrictQualifiedType, [CXType.by_value], :uint
-
+			
 			attach_function :get_num_arg_types, :clang_getNumArgTypes, [CXType.by_value], :int
 			attach_function :get_arg_type, :clang_getArgType, [CXType.by_value, :uint], CXType.by_value
 			attach_function :get_num_elements, :clang_getNumElements, [CXType.by_value], :long_long
 			attach_function :get_element_type, :clang_getElementType, [CXType.by_value], CXType.by_value
 			attach_function :get_array_size, :clang_getArraySize, [CXType.by_value], :long_long
 			attach_function :get_array_element_type ,:clang_getArrayElementType, [CXType.by_value], CXType.by_value
-
+			
 			attach_function :type_get_align_of, :clang_Type_getAlignOf, [CXType.by_value], :long_long
 			attach_function :type_get_size_of, :clang_Type_getSizeOf, [CXType.by_value], :long_long
 			attach_function :type_get_offset_of, :clang_Type_getOffsetOf, [CXType.by_value, :string], :long_long
-
+			
 			attach_function :type_get_cxx_ref_qualifier, :clang_Type_getCXXRefQualifier, [CXType.by_value], :ref_qualifier_kind
-
+			
 			attach_function :get_fuction_type_calling_conv, :clang_getFunctionTypeCallingConv, [CXType.by_value], :calling_conv
 			attach_function :get_exception_specification_type, :clang_getExceptionSpecificationType, [CXType.by_value], :exception_specification_type
-
+			
 			attach_function :equal_types, :clang_equalTypes, [CXType.by_value, CXType.by_value], :uint
 		end
 	end

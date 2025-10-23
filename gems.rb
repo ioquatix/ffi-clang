@@ -2,10 +2,10 @@
 
 # Released under the MIT License.
 # Copyright, 2010, by Jari Bakken.
-# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2020, by Zete Lui.
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 gemspec
 
@@ -23,8 +23,12 @@ end
 
 group :test do
 	gem "rspec", ">= 3.4.0"
-	gem 'simplecov'
+	gem "simplecov"
 	gem "decode"
+	
+	gem "rubocop"
+	gem "rubocop-md"
+	gem "rubocop-socketry"
 	
 	gem "bake-test"
 end

@@ -2,17 +2,17 @@
 
 # Released under the MIT License.
 # Copyright, 2014, by Masahiro Sano.
-# Copyright, 2014-2022, by Samuel Williams.
+# Copyright, 2014-2025, by Samuel Williams.
 # Copyright, 2024, by Charlie Savage.
 
-require_relative 'cursor'
-require_relative 'diagnostic'
+require_relative "cursor"
+require_relative "diagnostic"
 
 module FFI
 	module Clang
 		module Lib
 			typedef :pointer, :CXCompletionString
-
+			
 			# FFI struct representing a single code completion result from libclang.
 			# @private
 			class CXCompletionResult < FFI::Struct
@@ -21,7 +21,7 @@ module FFI
 					:string, :CXCompletionString,
 				)
 			end
-
+			
 			# FFI struct representing the results of code completion from libclang.
 			# @private
 			class CXCodeCompleteResults < FFI::Struct
@@ -30,7 +30,7 @@ module FFI
 					:num, :uint,
 				)
 			end
-
+			
 			enum :completion_chunk_kind, [
 				:optional,
 				:typed_text,
@@ -54,13 +54,13 @@ module FFI
 				:horizontal_space,
 				:vertical_space
 			]
-
+			
 			CodeCompleteFlags = enum :code_complete_flags, [
 				:include_macros, 0x01,
 				:include_code_patterns, 0x02,
 				:include_brief_comments, 0x04
 			]
-
+			
 			CompletionContext = enum :completion_context, [
 				:unexposed, 0,
 				:any_type, 1 << 0,
@@ -87,7 +87,7 @@ module FFI
 				:natural_language, 1 << 21,
 				:unknown, ((1 << 22) - 1),
 			]
-
+			
 			# CXCompletionString functions
 			attach_function :get_completion_chunk_kind, :clang_getCompletionChunkKind, [:CXCompletionString, :uint], :completion_chunk_kind
 			attach_function :get_completion_text, :clang_getCompletionChunkText, [:CXCompletionString, :uint], CXString.by_value
@@ -99,7 +99,7 @@ module FFI
 			attach_function :get_completion_annotation, :clang_getCompletionAnnotation, [:CXCompletionString, :uint], CXString.by_value
 			attach_function :get_completion_parent, :clang_getCompletionParent, [:CXCompletionString, :pointer], CXString.by_value
 			attach_function :get_completion_brief_comment, :clang_getCompletionBriefComment, [:CXCompletionString], CXString.by_value
-
+			
 			# CXCodeCompleteResults functions
 			attach_function :get_code_complete_get_num_diagnostics, :clang_codeCompleteGetNumDiagnostics, [CXCodeCompleteResults.by_ref], :uint
 			attach_function :get_code_complete_get_diagnostic, :clang_codeCompleteGetDiagnostic, [CXCodeCompleteResults.by_ref, :uint], :CXDiagnostic
@@ -107,7 +107,7 @@ module FFI
 			attach_function :get_code_complete_get_container_kind, :clang_codeCompleteGetContainerKind, [CXCodeCompleteResults.by_ref, :pointer], :cursor_kind
 			attach_function :get_code_complete_get_container_usr, :clang_codeCompleteGetContainerUSR, [CXCodeCompleteResults.by_ref], CXString.by_value
 			attach_function :get_code_complete_get_objc_selector, :clang_codeCompleteGetObjCSelector, [CXCodeCompleteResults.by_ref], CXString.by_value
-
+			
 			# Other functions
 			attach_function :code_complete_at, :clang_codeCompleteAt, [:CXTranslationUnit, :string, :uint, :uint, :pointer, :uint, :uint], CXCodeCompleteResults.by_ref
 			attach_function :dispose_code_complete_results, :clang_disposeCodeCompleteResults, [CXCodeCompleteResults.by_ref], :void
