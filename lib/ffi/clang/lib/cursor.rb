@@ -2,7 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2013, by Garry Marshall.
-# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2013, by Dave Wilkinson.
 # Copyright, 2013, by Takeshi Watanabe.
@@ -13,17 +13,17 @@
 # Copyright, 2020, by Zete Lui.
 # Copyright, 2023-2024, by Charlie Savage.
 
-require_relative 'translation_unit'
-require_relative 'diagnostic'
-require_relative 'comment'
-require_relative 'type'
+require_relative "translation_unit"
+require_relative "diagnostic"
+require_relative "comment"
+require_relative "type"
 
 module FFI
 	module Clang
 		module Lib
 			# In Clang 15 the enum value changed from 300 to 350!
-			CUSOR_TRANSLATION_UNIT = Clang.clang_version < Gem::Version.new('15.0.0') ? 300 : 350
-
+			CUSOR_TRANSLATION_UNIT = Clang.clang_version < Gem::Version.new("15.0.0") ? 300 : 350
+			
 			enum :cursor_kind, [
 				:cursor_unexposed_decl, 1,
 				:cursor_struct, 2,
@@ -296,21 +296,21 @@ module FFI
 				# :cursor_last_extra_decl, :cursor_friend_decl,
 				:cursor_overload_candidate, 700
 			]
-
+			
 			enum :access_specifier, [
 				:invalid, 0,
 				:public, 1,
 				:protected, 2,
 				:private, 3
 			]
-
+			
 			enum :availability, [
 				:available, 0,
 				:deprecated, 1,
 				:not_available, 2,
 				:not_accesible, 3
 			]
-
+			
 			enum :linkage_kind, [
 				:invalid, 0,
 				:no_linkage, 1,
@@ -318,7 +318,7 @@ module FFI
 				:unique_external, 3,
 				:external, 4,
 			]
-
+			
 			enum :exception_specification_type, [
 				:none,
 				:dynamic_none,
@@ -331,7 +331,7 @@ module FFI
 				:unparsed,
 				:no_throw
 			]
-
+			
 			# FFI struct representing a cursor in the libclang AST.
 			# @private
 			class CXCursor < FFI::Struct
@@ -341,7 +341,7 @@ module FFI
 					:data, [:pointer, 3]
 				)
 			end
-
+			
 			# FFI struct representing a version number with major, minor, and subminor components.
 			# @private
 			class CXVersion < FFI::Struct
@@ -350,38 +350,38 @@ module FFI
 					:minor, :int,
 					:subminor, :int,
 				)
-
+				
 				# Get the major version number.
 				# @returns [Integer] The major version.
 				def major
 					self[:major]
 				end
-
+				
 				# Get the minor version number.
 				# @returns [Integer] The minor version.
 				def minor
 					self[:minor]
 				end
-
+				
 				# Get the subminor version number.
 				# @returns [Integer] The subminor version.
 				def subminor
 					self[:subminor]
 				end
-
+				
 				# Get the version as a string.
 				# @returns [String] The version string (e.g., "1.2.3").
 				def version_string
 					[major, minor, subminor].reject{|v| v < 0}.map(&:to_s).join(".")
 				end
-
+				
 				# Convert to a string representation.
 				# @returns [String] The version string.
 				def to_s
 					version_string
 				end
 			end
-
+			
 			# FFI struct representing platform-specific availability information.
 			# @private
 			class CXPlatformAvailability < FFI::Struct
@@ -394,9 +394,9 @@ module FFI
 					:message, CXString,
 				)
 			end
-
+			
 			enum :visitor_result, [:break, :continue]
-
+			
 			# FFI struct for visiting cursors and ranges.
 			# @private
 			class CXCursorAndRangeVisitor < FFI::Struct
@@ -405,44 +405,44 @@ module FFI
 					:visit, callback([:pointer, CXCursor.by_value, CXSourceRange.by_value], :visitor_result),
 				)
 			end
-
+			
 			enum :cxx_access_specifier, [:invalid, :public, :protected, :private]
 			attach_function :get_cxx_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :cxx_access_specifier
-
+			
 			attach_function :get_enum_value, :clang_getEnumConstantDeclValue, [CXCursor.by_value], :long_long
 			attach_function :get_enum_unsigned_value, :clang_getEnumConstantDeclUnsignedValue, [CXCursor.by_value], :ulong_long
-
+			
 			attach_function :is_virtual_base, :clang_isVirtualBase, [CXCursor.by_value], :uint
 			attach_function :is_dynamic_call, :clang_Cursor_isDynamicCall, [CXCursor.by_value], :uint
 			attach_function :is_variadic, :clang_Cursor_isVariadic, [CXCursor.by_value], :uint
-
+			
 			attach_function :is_definition, :clang_isCursorDefinition, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_static, :clang_CXXMethod_isStatic, [CXCursor.by_value], :uint
 			attach_function :cxx_method_is_virtual, :clang_CXXMethod_isVirtual, [CXCursor.by_value], :uint
-
+			
 			attach_function :cxx_method_is_pure_virtual, :clang_CXXMethod_isPureVirtual, [CXCursor.by_value], :uint
 			
 			attach_function :cxx_get_access_specifier, :clang_getCXXAccessSpecifier, [CXCursor.by_value], :access_specifier
 			
 			enum :language_kind, [:invalid, :c, :obj_c, :c_plus_plus]
 			attach_function :get_language, :clang_getCursorLanguage, [CXCursor.by_value], :language_kind
-
+			
 			attach_function :get_canonical_cursor, :clang_getCanonicalCursor, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_cursor_definition, :clang_getCursorDefinition, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_specialized_cursor_template, :clang_getSpecializedCursorTemplate, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_template_cursor_kind, :clang_getTemplateCursorKind, [CXCursor.by_value], :cursor_kind
-
+			
 			attach_function :get_translation_unit_cursor, :clang_getTranslationUnitCursor, [:CXTranslationUnit], CXCursor.by_value
 			attach_function :cursor_get_translation_unit, :clang_Cursor_getTranslationUnit, [CXCursor.by_value], :CXTranslationUnit
-
+			
 			attach_function :get_null_cursor, :clang_getNullCursor, [], CXCursor.by_value
-
+			
 			attach_function :cursor_is_null, :clang_Cursor_isNull, [CXCursor.by_value], :int
-
+			
 			attach_function :cursor_get_comment_range, :clang_Cursor_getCommentRange, [CXCursor.by_value], CXSourceRange.by_value
 			attach_function :cursor_get_raw_comment_text, :clang_Cursor_getRawCommentText, [CXCursor.by_value], CXString.by_value
 			attach_function :cursor_get_parsed_comment, :clang_Cursor_getParsedComment, [CXCursor.by_value], CXComment.by_value
-
+			
 			attach_function :get_cursor, :clang_getCursor, [:CXTranslationUnit, CXSourceLocation.by_value], CXCursor.by_value
 			attach_function :get_cursor_location, :clang_getCursorLocation, [CXCursor.by_value], CXSourceLocation.by_value
 			attach_function :get_cursor_extent, :clang_getCursorExtent, [CXCursor.by_value], CXSourceRange.by_value
@@ -450,9 +450,9 @@ module FFI
 			attach_function :get_cursor_spelling, :clang_getCursorSpelling, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_usr, :clang_getCursorUSR, [CXCursor.by_value], CXString.by_value
 			attach_function :get_cursor_kind_spelling, :clang_getCursorKindSpelling, [:cursor_kind], CXString.by_value
-
+			
 			attach_function :are_equal, :clang_equalCursors, [CXCursor.by_value, CXCursor.by_value], :uint
-
+			
 			attach_function :is_declaration, :clang_isDeclaration, [:cursor_kind], :uint
 			attach_function :is_reference, :clang_isReference, [:cursor_kind], :uint
 			attach_function :is_expression, :clang_isExpression, [:cursor_kind], :uint
@@ -462,15 +462,15 @@ module FFI
 			attach_function :is_translation_unit, :clang_isTranslationUnit, [:cursor_kind], :uint
 			attach_function :is_preprocessing, :clang_isPreprocessing, [:cursor_kind], :uint
 			attach_function :is_unexposed, :clang_isUnexposed, [:cursor_kind], :uint
-
+			
 			enum :child_visit_result, [:break, :continue, :recurse]
-
+			
 			callback :visit_children_function, [CXCursor.by_value, CXCursor.by_value, :pointer], :child_visit_result
 			attach_function :visit_children, :clang_visitChildren, [CXCursor.by_value, :visit_children_function, :pointer], :uint
-
+			
 			enum :result, [:success, :invalid, :visit_break]
 			attach_function :find_references_in_file, :clang_findReferencesInFile, [CXCursor.by_value, :CXFile, CXCursorAndRangeVisitor.by_value], :result
-
+			
 			attach_function :get_cursor_type, :clang_getCursorType, [CXCursor.by_value], CXType.by_value
 			attach_function :cursor_is_anonymous, :clang_Cursor_isAnonymous, [CXCursor.by_value], :uint
 			attach_function :cursor_is_anonymous_record_decl, :clang_Cursor_isAnonymousRecordDecl, [CXCursor.by_value], :uint
@@ -478,36 +478,36 @@ module FFI
 			attach_function :get_typedef_decl_underlying_type, :clang_getTypedefDeclUnderlyingType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_enum_decl_integer_type, :clang_getEnumDeclIntegerType, [CXCursor.by_value], CXType.by_value
 			attach_function :get_type_declaration, :clang_getTypeDeclaration, [CXType.by_value], FFI::Clang::Lib::CXCursor.by_value
-
+			
 			attach_function :get_cursor_referenced, :clang_getCursorReferenced, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_cursor_semantic_parent, :clang_getCursorSemanticParent, [CXCursor.by_value], CXCursor.by_value
 			attach_function :get_cursor_lexical_parent, :clang_getCursorLexicalParent, [CXCursor.by_value], CXCursor.by_value
-
+			
 			attach_function :get_cursor_availability, :clang_getCursorAvailability, [CXCursor.by_value], :availability
 			attach_function :get_cursor_linkage, :clang_getCursorLinkage, [CXCursor.by_value], :linkage_kind
 			attach_function :get_cursor_exception_specification_type, :clang_getCursorExceptionSpecificationType, [CXCursor.by_value], :exception_specification_type
 			attach_function :get_included_file, :clang_getIncludedFile, [CXCursor.by_value], :CXFile
 			attach_function :get_cursor_hash, :clang_hashCursor, [CXCursor.by_value], :uint
-
+			
 			attach_function :is_bit_field,:clang_Cursor_isBitField, [CXCursor.by_value], :uint
 			attach_function :get_field_decl_bit_width, :clang_getFieldDeclBitWidth, [CXCursor.by_value], :int
-
+			
 			attach_function :get_overloaded_decl, :clang_getOverloadedDecl, [CXCursor.by_value, :uint], CXCursor.by_value
 			attach_function :get_num_overloaded_decls, :clang_getNumOverloadedDecls, [CXCursor.by_value], :uint
-
+			
 			attach_function :cursor_get_argument, :clang_Cursor_getArgument, [CXCursor.by_value, :uint], CXCursor.by_value
 			attach_function :cursor_get_num_arguments, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
-
+			
 			attach_function :get_decl_objc_type_encoding, :clang_getDeclObjCTypeEncoding, [CXCursor.by_value], CXString.by_value
-
+			
 			attach_function :get_cursor_platform_availability, :clang_getCursorPlatformAvailability, [CXCursor.by_value, :pointer, :pointer, :pointer, :pointer, :pointer, :int], :int
 			attach_function :dispose_platform_availability, :clang_disposeCXPlatformAvailability, [:pointer], :void
-
+			
 			attach_function :get_overridden_cursors, :clang_getOverriddenCursors, [CXCursor.by_value, :pointer, :pointer], :void
 			attach_function :dispose_overridden_cursors, :clang_disposeOverriddenCursors, [:pointer], :void
-
+			
 			attach_function :get_num_args, :clang_Cursor_getNumArguments, [CXCursor.by_value], :int
-
+			
 			attach_function :is_converting_constructor, :clang_CXXConstructor_isConvertingConstructor, [CXCursor.by_value], :uint
 			attach_function :is_copy_constructor, :clang_CXXConstructor_isCopyConstructor, [CXCursor.by_value], :uint
 			attach_function :is_default_constructor, :clang_CXXConstructor_isDefaultConstructor, [CXCursor.by_value], :uint
@@ -517,18 +517,18 @@ module FFI
 			attach_function :is_abstract, :clang_CXXRecord_isAbstract, [CXCursor.by_value], :uint
 			attach_function :is_enum_scoped, :clang_EnumDecl_isScoped, [CXCursor.by_value], :uint
 			attach_function :is_const, :clang_CXXMethod_isConst, [CXCursor.by_value], :uint
-
-			if Clang.clang_version >= Gem::Version.new('16.0.0')
+			
+			if Clang.clang_version >= Gem::Version.new("16.0.0")
 				attach_function :get_unqualified_type, :clang_getUnqualifiedType, [CXType.by_value], CXType.by_value
 				attach_function :get_non_reference_type, :clang_getNonReferenceType, [CXType.by_value], CXType.by_value
 				attach_function :is_deleted, :clang_CXXMethod_isDeleted, [CXCursor.by_value], :uint
 				attach_function :is_copy_assignment_operator, :clang_CXXMethod_isCopyAssignmentOperator, [CXCursor.by_value], :uint
 				attach_function :is_move_assignment_operator, :clang_CXXMethod_isMoveAssignmentOperator, [CXCursor.by_value], :uint
 			end
-
-			if Clang.clang_version >= Gem::Version.new('17.0.0')
+			
+			if Clang.clang_version >= Gem::Version.new("17.0.0")
 				attach_function :is_explicit, :clang_CXXMethod_isExplicit, [CXCursor.by_value], :uint
-
+				
 				enum :binary_operator_kind, [
 					:binary_operator_invalid,
 					:binary_operator_ptr_mem_d,
@@ -565,10 +565,10 @@ module FFI
 					:binary_operator_or_assign,
 					:binary_operator_comma
 				]
-
+				
 				attach_function :get_binary_operator_kind_spelling, :clang_getBinaryOperatorKindSpelling, [:binary_operator_kind], CXString.by_value
 				attach_function :get_cursor_binary_operator_kind, :clang_getCursorBinaryOperatorKind, [CXCursor.by_value], :binary_operator_kind
-
+				
 				enum :unary_operator_kind, [
 					:unary_operator_Invalid,
 					:unary_operator_PostInc,
@@ -586,7 +586,7 @@ module FFI
 					:unary_operator_Extension,
 					:unary_operator_Coawait
 				]
-
+				
 				attach_function :get_unary_operator_kind_spelling, :clang_getUnaryOperatorKindSpelling, [:unary_operator_kind], CXString.by_value
 				attach_function :get_cursor_unary_operator_kind, :clang_getCursorUnaryOperatorKind, [CXCursor.by_value], :unary_operator_kind
 			end

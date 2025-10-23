@@ -2,7 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2014, by Masahiro Sano.
-# Copyright, 2014-2022, by Samuel Williams.
+# Copyright, 2014-2025, by Samuel Williams.
 
 module FFI
 	module Clang
@@ -15,7 +15,7 @@ module FFI
 					:ptr_data, :pointer,
 				)
 			end
-
+			
 			# FFI pointer wrapper for token arrays that tracks size and translation unit.
 			# @private
 			class TokensPointer < FFI::Pointer
@@ -36,7 +36,7 @@ module FFI
 					@translation_unit = translation_unit
 				end
 			end
-
+			
 			enum :token_kind, [
 				:punctuation,
 				:keyword,
@@ -44,7 +44,7 @@ module FFI
 				:literal,
 				:comment,
 			]
-
+			
 			attach_function :get_token_kind, :clang_getTokenKind, [CXToken.by_value], :token_kind
 			attach_function :get_token_spelliing, :clang_getTokenSpelling, [:CXTranslationUnit, CXToken.by_value], CXString.by_value
 			attach_function :get_token_location, :clang_getTokenLocation, [:CXTranslationUnit, CXToken.by_value], CXSourceLocation.by_value

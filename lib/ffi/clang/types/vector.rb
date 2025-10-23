@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2024, by Charlie Savage.
+# Copyright, 2025, by Samuel Williams.
+
 module FFI
 	module Clang
 		module Types
@@ -9,7 +15,7 @@ module FFI
 				def element_type
 					Type.create Lib.get_element_type(@type), @translation_unit
 				end
-
+				
 				# Get the number of elements in this vector.
 				# @returns [Integer] The number of elements.
 				def size

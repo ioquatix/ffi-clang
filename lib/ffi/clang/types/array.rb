@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2024, by Charlie Savage.
+# Copyright, 2025, by Samuel Williams.
+
 module FFI
 	module Clang
 		# Type system classes for representing C/C++ types.
@@ -11,7 +17,7 @@ module FFI
 				def element_type
 					Type.create Lib.get_array_element_type(@type), @translation_unit
 				end
-
+				
 				# Get the size of this array.
 				# @returns [Integer] The number of elements in the array, or -1 if the size is not available.
 				def size

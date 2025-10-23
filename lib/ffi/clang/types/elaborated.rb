@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2024-2025, by Charlie Savage.
+# Copyright, 2025, by Samuel Williams.
+
 module FFI
 	module Clang
 		module Types
@@ -9,7 +15,7 @@ module FFI
 				def named_type
 					Type.create Lib.get_named_type(@type), @translation_unit
 				end
-
+				
 				# Check if this is an anonymous elaborated type.
 				# Example anonymous union where `u` is an elaborated type:
 				#
@@ -23,7 +29,7 @@ module FFI
 				def anonymous?
 					self.declaration.anonymous?
 				end
-
+				
 				# Check if this elaborated type is a pointer in its canonical form.
 				# @returns [Boolean] True if the canonical type is a pointer.
 				def pointer?

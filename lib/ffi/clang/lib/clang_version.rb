@@ -2,9 +2,9 @@
 
 # Released under the MIT License.
 # Copyright, 2014, by Masahiro Sano.
-# Copyright, 2014-2022, by Samuel Williams.
+# Copyright, 2014-2025, by Samuel Williams.
 
-require_relative 'string'
+require_relative "string"
 
 module FFI
 	module Clang

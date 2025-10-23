@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2013-2022, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 
-require 'teapot'
+require "teapot"
 
 task :default do
 	controller = Teapot::Controller.new(__dir__)

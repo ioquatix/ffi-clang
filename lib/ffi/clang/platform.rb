@@ -1,14 +1,9 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2010-2011, by Jari Bakken.
-# Copyright, 2012, by Hal Brodigan.
-# Copyright, 2013-2022, by Samuel Williams.
-# Copyright, 2013, by Garry Marshall.
-# Copyright, 2013, by Carlos Martín Nieto.
-# Copyright, 2014, by Masahiro Sano.
+# Copyright, 2025, by Samuel Williams.
 
-require 'rbconfig'
+require "rbconfig"
 
 module FFI
 	module Clang
@@ -23,7 +18,7 @@ module FFI
 			when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
 				:windows
 			else
-				RUBY_PLATFORM.split('-').last
+				RUBY_PLATFORM.split("-").last
 			end
 		end
 	end

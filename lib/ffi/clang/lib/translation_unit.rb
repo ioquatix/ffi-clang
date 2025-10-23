@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2013-2024, by Samuel Williams.
+# Copyright, 2013-2025, by Samuel Williams.
 # Copyright, 2014, by Masahiro Sano.
 # Copyright, 2019, by Hayden Purdy.
 # Copyright, 2022, by Motonori Iwamuro.
 # Copyright, 2023, by Charlie Savage.
 
-require_relative 'index'
+require_relative "index"
 
 module FFI
 	module Clang
 		module Lib
 			typedef :pointer, :CXTranslationUnit
-
+			
 			TranslationUnitFlags = enum [
 				:none, 0x0,
 				:detailed_preprocessing_record, 0x01,
@@ -33,22 +33,22 @@ module FFI
 				:ignore_non_errors_from_included_files, 0x4000,
 				:retain_excluded_conditional_blocks, 0x8000,
 			]
-
+			
 			SaveTranslationUnitFlags = enum [
 				:save_translation_unit_none, 0x0,
 			]
-
+			
 			SaveError = enum [
 				:none, 0,
 				:unknown, 1,
 				:translation_errors, 2,
 				:invalid_translation_unit, 3
 			]
-
+			
 			ReparseFlags = enum [
 				:none, 0x0,
 			]
-
+			
 			enum :resource_usage_kind, [
 				:ast, 1,
 				:identifiers, 2,
@@ -65,7 +65,7 @@ module FFI
 				:sourcemanager_data_structures, 13,
 				:preprocessor_header_search, 14,
 			]
-
+			
 			ErrorCodes = enum [
 				:cx_error_success, 0,
 				:cx_error_failure, 1,
@@ -73,7 +73,7 @@ module FFI
 				:cx_error_invalid_arguments, 3,
 				:cx_error_ast_read_error, 4,
 			]
-
+			
 			# FFI struct representing translation unit resource usage.
 			# @private
 			class CXTUResourceUsage < FFI::Struct
@@ -83,7 +83,7 @@ module FFI
 					:entries, :pointer
 				)
 			end
-
+			
 			# FFI struct representing a single resource usage entry.
 			# @private
 			class CXTUResourceUsageEntry < FFI::Struct
@@ -92,20 +92,20 @@ module FFI
 					:amount, :ulong,
 				)
 			end
-
+			
 			# Source code translation units:
 			attach_function :parse_translation_unit, :clang_parseTranslationUnit, [:CXIndex, :string, :pointer, :int, :pointer, :uint, :uint], :CXTranslationUnit
 			attach_function :parse_translation_unit2, :clang_parseTranslationUnit2, [:CXIndex, :string, :pointer, :int, :pointer, :uint, :uint, :pointer], ErrorCodes
 			attach_function :create_translation_unit, :clang_createTranslationUnit, [:CXIndex, :string], :CXTranslationUnit
 			attach_function :dispose_translation_unit, :clang_disposeTranslationUnit, [:CXTranslationUnit], :void
 			attach_function :get_translation_unit_spelling, :clang_getTranslationUnitSpelling, [:CXTranslationUnit], CXString.by_value
-
+			
 			attach_function :default_editing_translation_unit_options, :clang_defaultEditingTranslationUnitOptions, [], :uint
 			attach_function :default_save_options, :clang_defaultSaveOptions, [:CXTranslationUnit], :uint
 			attach_function :save_translation_unit, :clang_saveTranslationUnit, [:CXTranslationUnit, :string, :uint], :int
 			attach_function :default_reparse_options, :clang_defaultReparseOptions, [:CXTranslationUnit], :uint
 			attach_function :reparse_translation_unit, :clang_reparseTranslationUnit, [:CXTranslationUnit, :uint, :pointer, :uint], :int
-
+			
 			attach_function :resource_usage, :clang_getCXTUResourceUsage, [:CXTranslationUnit], CXTUResourceUsage.by_value
 			attach_function :dispose_resource_usage, :clang_disposeCXTUResourceUsage, [CXTUResourceUsage.by_value], :void
 			attach_function :resource_usage_name, :clang_getTUResourceUsageName, [:resource_usage_kind], :string

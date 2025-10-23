@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2016-2024, by Samuel Williams.
+# Copyright, 2016-2025, by Samuel Williams.
 # Copyright, 2023, by Charlie Savage.
 
-require_relative 'lib/clang_version'
+require_relative "lib/clang_version"
 
 module FFI
 	module Clang
@@ -13,7 +13,7 @@ module FFI
 		def self.clang_version_string
 			Lib.extract_string Lib.get_clang_version
 		end
-
+		
 		# Get the libclang version as a Gem::Version object.
 		# @returns [Gem::Version] The parsed version.
 		def self.clang_version
