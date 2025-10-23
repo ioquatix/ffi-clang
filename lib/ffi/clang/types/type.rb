@@ -129,7 +129,15 @@ module FFI
 				# For reference types, returns the type that is being referenced.
 				# @returns [Type] The non-reference type.
 				def non_reference_type
-					Type.create Lib.get_non_reference_type(@type),@translation_unit
+					Type.create Lib.get_non_reference_type(@type), @translation_unit
+				end
+
+				def template_argument_type(index)
+					Type.create Lib.get_template_argument_as_type(@type, index), @translation_unit
+				end
+
+				def num_template_arguments
+					Lib.get_num_template_arguments(@type)
 				end
 				
 				# Compare this type with another for equality.
