@@ -20,16 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-Traverse the AST in the given file:
-
-    index = Index.new
-    translation_unit = index.parse_translation_unit("list.c")
-    cursor = translation_unit.cursor
-    cursor.visit_children do |cursor, parent|
-    	puts "#{cursor.kind} #{cursor.spelling.inspect}"
-    	
-    	next :recurse 
-    end
+Please see the [project documentation](https://ioquatix.github.io/ffi-clang/) for more details.
 
 ### Library Version
 
@@ -38,6 +29,12 @@ Due to issues figuring out which library to use, we require you to manually spec
     LLVM_CONFIG=llvm-config-mp-3.4 rake
 
 ## Releases
+
+Please see the [project releases](https://ioquatix.github.io/ffi-clang/releases/index) for all releases.
+
+### v0.14.0
+
+  - Helper method that returns a curors's <code class="language-ruby">FFI::Clang::Cursor\#qualified\_display\_name</code>.
 
 ## Contributing
 
