@@ -10,6 +10,8 @@ require_relative 'source_location'
 module FFI
 	module Clang
 		module Lib
+			# FFI struct representing a source range in libclang.
+			# @private
 			class CXSourceRange < FFI::Struct
 				layout(
 					:ptr_data, [:pointer, 2],

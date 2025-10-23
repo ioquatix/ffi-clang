@@ -7,15 +7,25 @@
 
 module FFI
 	module Clang
+		# Represents an unsaved file with in-memory contents for parsing.
 		class UnsavedFile
+			# Initialize an unsaved file with filename and contents.
+			# @parameter filename [String] The path to the unsaved file.
+			# @parameter contents [String] The in-memory contents of the file.
 			def initialize(filename, contents)
 				@filename = filename
 				@contents = contents
 			end
 
-			attr_accessor :filename, :contents
+			# @attribute [String] The path to the unsaved file.
+			attr_accessor :filename
+			
+			# @attribute [String] The in-memory contents of the file.
+			attr_accessor :contents
 
-
+			# Convert an array of unsaved files to a libclang pointer structure.
+			# @parameter unsaved [Array(UnsavedFile)] The array of unsaved files.
+			# @returns [FFI::MemoryPointer | Nil] A pointer to the unsaved file structures, or `nil` if empty.
 			def self.unsaved_pointer_from(unsaved)
 				return nil if unsaved.length == 0
 

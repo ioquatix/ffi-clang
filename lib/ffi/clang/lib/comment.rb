@@ -9,6 +9,8 @@
 module FFI
 	module Clang
 		module Lib
+			# FFI struct representing a comment in the libclang AST.
+			# @private
 			class CXComment < FFI::Struct
 				layout(
 					:ast_node, :pointer,

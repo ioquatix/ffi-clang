@@ -32,10 +32,3 @@ require_relative 'clang/types/pointer'
 require_relative 'clang/types/record'
 require_relative 'clang/types/type_def'
 require_relative 'clang/types/vector'
-
-# @namespace
-module FFI
-	# @namespace
-	module Clang
-	end
-end

@@ -10,6 +10,8 @@ require_relative 'file'
 module FFI
 	module Clang
 		module Lib
+			# FFI struct representing a source location in libclang.
+			# @private
 			class CXSourceLocation < FFI::Struct
 				layout(
 					:ptr_data, [:pointer, 2],

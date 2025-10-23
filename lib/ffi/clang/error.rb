@@ -8,10 +8,9 @@
 # Copyright, 2013, by Carlos Martín Nieto.
 # Copyright, 2014, by Masahiro Sano.
 
-# @namespace
 module FFI
-	# @namespace
 	module Clang
+		# Represents an error that occurred during libclang operations.
 		class Error < StandardError
 		end
 	end

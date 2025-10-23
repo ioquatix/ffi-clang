@@ -23,6 +23,7 @@ require_relative "error"
 
 module FFI
 	module Clang
+		# @namespace
 		module Lib
 			extend FFI::Library
 			
@@ -72,6 +73,11 @@ module FFI
 
 			ffi_lib libs
 
+			# Convert an options hash to a bitmask for libclang enums.
+			# @parameter enum [FFI::Enum] The enum type.
+			# @parameter opts [Array(Symbol)] The array of option symbols.
+			# @returns [Integer] The bitmask representing the options.
+			# @raises [Error] If an unknown option is provided.
 			def self.bitmask_from(enum, opts)
 				bitmask = 0
 
@@ -86,6 +92,11 @@ module FFI
 				bitmask
 			end
 
+			# Convert a bitmask to an array of option symbols.
+			# @parameter enum [FFI::Enum] The enum type.
+			# @parameter bitmask [Integer] The bitmask to convert.
+			# @returns [Array(Symbol)] The array of option symbols.
+			# @raises [Error] If unknown bits are set in the bitmask.
 			def self.opts_from(enum, bitmask)
 				bit = 1
 				result = []

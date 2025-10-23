@@ -13,6 +13,8 @@ module FFI
 		module Lib
 			typedef :pointer, :CXCompletionString
 
+			# FFI struct representing a single code completion result from libclang.
+			# @private
 			class CXCompletionResult < FFI::Struct
 				layout(
 					:kind, :cursor_kind,
@@ -20,6 +22,8 @@ module FFI
 				)
 			end
 
+			# FFI struct representing the results of code completion from libclang.
+			# @private
 			class CXCodeCompleteResults < FFI::Struct
 				layout(
 					:results, :pointer,
