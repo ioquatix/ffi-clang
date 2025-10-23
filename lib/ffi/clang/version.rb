@@ -5,7 +5,9 @@
 # Copyright, 2012, by Hal Brodigan.
 # Copyright, 2013-2024, by Samuel Williams.
 
+# @namespace
 module FFI
+	# @namespace
 	module Clang
 		VERSION = "0.13.0"
 	end

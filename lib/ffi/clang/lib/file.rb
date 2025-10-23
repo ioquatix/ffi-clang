@@ -13,6 +13,8 @@ require_relative 'translation_unit'
 module FFI
 	module Clang
 		module Lib
+			# FFI struct representing an unsaved file for parsing.
+			# @private
 			class CXUnsavedFile < FFI::Struct
 				layout(
 					:filename, :pointer,
@@ -21,6 +23,8 @@ module FFI
 				)
 			end
 
+			# FFI struct representing a unique file identifier.
+			# @private
 			class CXFileUniqueID < FFI::Struct
 				layout(
 					:device, :ulong_long,

@@ -183,6 +183,8 @@ module FFI
 				:no_throw
 			]
 
+			# FFI struct representing a type in libclang.
+			# @private
 			class CXType < FFI::Struct
 				layout(
 					:kind, :kind,

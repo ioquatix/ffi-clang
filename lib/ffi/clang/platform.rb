@@ -10,10 +10,10 @@
 
 require 'rbconfig'
 
-# @namespace
 module FFI
-	# @namespace
 	module Clang
+		# Get the current platform identifier.
+		# @returns [Symbol] The platform identifier (`:darwin`, `:linux`, `:windows`, or a custom platform string).
 		def self.platform
 			case RUBY_PLATFORM
 			when /darwin/

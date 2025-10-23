@@ -74,6 +74,8 @@ module FFI
 				:cx_error_ast_read_error, 4,
 			]
 
+			# FFI struct representing translation unit resource usage.
+			# @private
 			class CXTUResourceUsage < FFI::Struct
 				layout(
 					:data, :pointer,
@@ -82,6 +84,8 @@ module FFI
 				)
 			end
 
+			# FFI struct representing a single resource usage entry.
+			# @private
 			class CXTUResourceUsageEntry < FFI::Struct
 				layout(
 					:kind, :resource_usage_kind,

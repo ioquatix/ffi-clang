@@ -16,6 +16,8 @@ module FFI
 			attach_function :dispose_index, :clang_disposeIndex, [:CXIndex], :void
 
 			if Clang.clang_version >= Gem::Version.new('17.0.0')
+				# FFI struct for index creation options (libclang 17.0.0+).
+				# @private
 				class CXIndexOptions < FFI::Struct
 					layout(
 						:size, :uint,

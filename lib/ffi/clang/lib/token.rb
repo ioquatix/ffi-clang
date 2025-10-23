@@ -7,6 +7,8 @@
 module FFI
 	module Clang
 		module Lib
+			# FFI struct representing a token in libclang.
+			# @private
 			class CXToken < FFI::Struct
 				layout(
 					:int_data, [:uint, 4],
@@ -14,9 +16,20 @@ module FFI
 				)
 			end
 
+			# FFI pointer wrapper for token arrays that tracks size and translation unit.
+			# @private
 			class TokensPointer < FFI::Pointer
+				# @attribute [r] token_size
+				# 	@returns [Integer] The number of tokens.
+				# @attribute [r] translation_unit
+				# 	@returns [TranslationUnit] The translation unit these tokens belong to.
 				attr_reader :token_size
 				attr_reader :translation_unit
+				
+				# Create a new tokens pointer.
+				# @parameter ptr [FFI::Pointer] The pointer to the token array.
+				# @parameter token_size [Integer] The number of tokens.
+				# @parameter translation_unit [TranslationUnit] The translation unit.
 				def initialize(ptr, token_size, translation_unit)
 					super ptr
 					@token_size = token_size

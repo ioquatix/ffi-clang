@@ -332,6 +332,8 @@ module FFI
 				:no_throw
 			]
 
+			# FFI struct representing a cursor in the libclang AST.
+			# @private
 			class CXCursor < FFI::Struct
 				layout(
 					:kind, :cursor_kind,
@@ -340,6 +342,8 @@ module FFI
 				)
 			end
 
+			# FFI struct representing a version number with major, minor, and subminor components.
+			# @private
 			class CXVersion < FFI::Struct
 				layout(
 					:major, :int,
@@ -347,27 +351,39 @@ module FFI
 					:subminor, :int,
 				)
 
+				# Get the major version number.
+				# @returns [Integer] The major version.
 				def major
 					self[:major]
 				end
 
+				# Get the minor version number.
+				# @returns [Integer] The minor version.
 				def minor
 					self[:minor]
 				end
 
+				# Get the subminor version number.
+				# @returns [Integer] The subminor version.
 				def subminor
 					self[:subminor]
 				end
 
+				# Get the version as a string.
+				# @returns [String] The version string (e.g., "1.2.3").
 				def version_string
 					[major, minor, subminor].reject{|v| v < 0}.map(&:to_s).join(".")
 				end
 
+				# Convert to a string representation.
+				# @returns [String] The version string.
 				def to_s
 					version_string
 				end
 			end
 
+			# FFI struct representing platform-specific availability information.
+			# @private
 			class CXPlatformAvailability < FFI::Struct
 				layout(
 					:platform, CXString,
@@ -381,6 +397,8 @@ module FFI
 
 			enum :visitor_result, [:break, :continue]
 
+			# FFI struct for visiting cursors and ranges.
+			# @private
 			class CXCursorAndRangeVisitor < FFI::Struct
 				layout(
 					:context, :pointer,
