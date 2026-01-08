@@ -226,8 +226,14 @@ module FFI
 					if self.semantic_parent.kind == :cursor_invalid_file
 						raise(ArgumentError, "Invalid semantic parent: #{self}")
 					end
+					# Skip cursor_linkage_spec (extern "C" / extern "C++" blocks).
+					# These have empty spellings but are included in the semantic parent chain,
+					# which would otherwise produce invalid names like "::::ushort".
+					if self.kind == :cursor_linkage_spec
+						return self.semantic_parent.qualified_name
+					end
 					result = self.semantic_parent.qualified_name
-					result ? "#{result}::#{self.spelling}" : self.spelling
+					result && !result.empty? ? "#{result}::#{self.spelling}" : self.spelling
 				end
 			end
 			

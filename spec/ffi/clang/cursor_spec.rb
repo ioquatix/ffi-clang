@@ -1042,4 +1042,30 @@ describe Cursor do
 			expect(struct.anonymous?).to eq(true)
 		end
 	end
+	
+	describe "#qualified_name with linkage_spec" do
+		let(:cursor_linkage) do
+			Index.new.parse_translation_unit(fixture_path("linkage.hpp")).cursor
+		end
+		
+		let(:ushort_typedef) do
+			find_matching(cursor_linkage) do |child, parent|
+				child.kind == :cursor_typedef_decl and child.spelling == "ushort"
+			end
+		end
+		
+		let(:myfloat_typedef) do
+			find_matching(cursor_linkage) do |child, parent|
+				child.kind == :cursor_typedef_decl and child.spelling == "myfloat"
+			end
+		end
+		
+		it "skips extern C linkage spec for typedef in global scope" do
+			expect(ushort_typedef.qualified_name).to eq("ushort")
+		end
+		
+		it "preserves namespace but skips linkage spec for typedef in namespace" do
+			expect(myfloat_typedef.qualified_name).to eq("ns::myfloat")
+		end
+	end
 end
