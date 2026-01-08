@@ -226,6 +226,9 @@ module FFI
 			attach_function :get_exception_specification_type, :clang_getExceptionSpecificationType, [CXType.by_value], :exception_specification_type
 			
 			attach_function :equal_types, :clang_equalTypes, [CXType.by_value, CXType.by_value], :uint
+			
+			attach_function :get_num_template_arguments, :clang_Type_getNumTemplateArguments, [CXType.by_value], :int
+			attach_function :get_template_argument_as_type, :clang_Type_getTemplateArgumentAsType, [CXType.by_value, :uint], CXType.by_value
 		end
 	end
 end

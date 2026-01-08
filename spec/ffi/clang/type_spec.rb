@@ -11,6 +11,7 @@ describe FFI::Clang::Types::Type do
 	let(:cursor) {Index.new.parse_translation_unit(fixture_path("a.c")).cursor}
 	let(:cursor_cxx) {Index.new.parse_translation_unit(fixture_path("test.cxx")).cursor}
 	let(:cursor_list) {Index.new.parse_translation_unit(fixture_path("list.c")).cursor}
+	let(:cursor_templates) {Index.new.parse_translation_unit(fixture_path("templates.hpp")).cursor}
 	let(:type) {find_by_kind(cursor, :cursor_function).type}
 	
 	it "can tell us about the main function" do
@@ -379,6 +380,56 @@ describe FFI::Clang::Types::Type do
 		
 		it "checks if two types represent the same type" do
 			expect(type_decl == type_ref).to be true
+		end
+	end
+	
+	describe "#num_template_arguments" do
+		let(:template_type) do
+			find_matching(cursor_templates) do |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == "p"
+			end.type
+		end
+		
+		let(:non_template_type) do
+			find_matching(cursor_cxx) do |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == "int_member_a"
+			end.type
+		end
+		
+		it "returns the number of template arguments for a template type" do
+			expect(template_type.num_template_arguments).to eq(1)
+		end
+		
+		it "returns -1 for non-template types" do
+			expect(non_template_type.num_template_arguments).to eq(-1)
+		end
+	end
+	
+	describe "#template_argument_type" do
+		let(:template_with_incomplete) do
+			find_matching(cursor_templates) do |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == "p"
+			end.type
+		end
+		
+		let(:template_with_complete) do
+			find_matching(cursor_templates) do |child, parent|
+				child.kind == :cursor_field_decl and child.spelling == "data"
+			end.type
+		end
+		
+		it "returns the template argument type at the given index" do
+			arg_type = template_with_complete.template_argument_type(0)
+			expect(arg_type).to be_kind_of(Types::Type)
+			expect(arg_type.kind).to eq(:type_int)
+		end
+		
+		it "returns incomplete type for Ptr<Impl>" do
+			arg_type = template_with_incomplete.template_argument_type(0)
+			expect(arg_type).to be_kind_of(Types::Type)
+			expect(arg_type.kind).to eq(:type_elaborated)
+			expect(arg_type.declaration.kind).to eq(:cursor_class_decl)
+			expect(arg_type.declaration.spelling).to eq("Impl")
 		end
 	end
 end
